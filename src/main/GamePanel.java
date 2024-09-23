@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import tile.TileManager;
 
 /**
  *
@@ -33,14 +34,11 @@ public class GamePanel extends JPanel implements Runnable {
     //FPS
     private int fps = 60;
 
+    private TileManager tileM = new TileManager(this);
     private Thread gameThread;
     private KeyHandler keyH = new KeyHandler();
     private Player player = new Player(this, keyH);
 
-    //estableciendo la posicion por defecto del jugador
-    private int playerX = 100;
-    private int playerY = 100;
-    private int playerSpeed = 4;
 
     public GamePanel() {
 
@@ -111,6 +109,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
+        tileM.draw(g2);
+        
         player.draw(g2);
 
         g2.dispose();
