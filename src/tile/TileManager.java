@@ -28,10 +28,10 @@ public class TileManager {
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[10];
-        mapTileNum = new int[gp.getMaxScreenCol()][gp.getMaxScreenRow()];
+        mapTileNum = new int[gp.getMaxWorldCol()][gp.getMaxWorldRow()];
         
         getTileImage();
-        loadMap("/maps/map01.txt");
+        loadMap("/maps/world01.txt");
     }
     
     public void getTileImage(){
@@ -46,6 +46,15 @@ public class TileManager {
             
             tile[2] = new Tile();
             tile[2].setImage(ImageIO.read(getClass().getResourceAsStream("/tiles/water.png")));
+            
+            tile[3] = new Tile();
+            tile[3].setImage(ImageIO.read(getClass().getResourceAsStream("/tiles/earth.png")));
+            
+            tile[4] = new Tile();
+            tile[4].setImage(ImageIO.read(getClass().getResourceAsStream("/tiles/tree.png")));
+            
+            tile[5] = new Tile();
+            tile[5].setImage(ImageIO.read(getClass().getResourceAsStream("/tiles/sand.png")));
             
         }catch(IOException e){
             e.printStackTrace();
@@ -66,10 +75,10 @@ public class TileManager {
             int col = 0;
             int row = 0;
             
-            while(col < gp.getMaxScreenCol() && row < gp.getMaxScreenRow()){
+            while(col < gp.getMaxWorldCol() && row < gp.getMaxWorldRow()){
                 
                 String line = br.readLine();
-                while(col < gp.getMaxScreenCol()){
+                while(col < gp.getMaxWorldCol()){
                     
                     //line.split(" ") separa la linea segun el parametro que se le proporcione 
                     String numbers[] = line.split(" ");
@@ -79,7 +88,7 @@ public class TileManager {
                     
                     col++;
                 }
-                if(col == gp.getMaxScreenCol()){
+                if(col == gp.getMaxWorldCol()){
                     col = 0;
                     row++;
                 }
@@ -93,25 +102,34 @@ public class TileManager {
     
     public void draw(Graphics2D g2){
         
-        int col = 0;
-        int row = 0;
-        int x = 0;
-        int y = 0;
+        int worldCol = 0;
+        int worldRow = 0;
         
-        while(col < gp.getMaxScreenCol() && row < gp.getMaxScreenRow()){
+        while(worldCol < gp.getMaxWorldCol() && worldRow < gp.getMaxWorldRow()){
             
-            int tileNumber = mapTileNum[col][row];
+            int tileNumber = mapTileNum[worldCol][worldRow];
             
-            g2.drawImage(tile[tileNumber].getImage(), x, y, gp.getTileSize(), gp.getTileSize(), null);
+            int worldX = worldCol*gp.getTileSize();
+            int worldY = worldRow*gp.getTileSize();
             
-            col++;
-            x += gp.getTileSize();
+            //donde se van a dibujar las imagenes en la plantalla
+            int screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
+            int screenY = worldY - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
             
-            if(col == gp.getMaxScreenCol()){
-                col = 0;
-                x = 0;
-                row++;
-                y += gp.getTileSize();   
+            if(worldX + gp.getTileSize()> gp.getPlayer().getWorldX()-gp.getPlayer().getScreenX() &&
+                    worldX -  gp.getTileSize() < gp.getPlayer().getWorldX()+gp.getPlayer().getScreenX() &&
+                    worldY +  gp.getTileSize() > gp.getPlayer().getWorldY()-gp.getPlayer().getScreenY() &&
+                    worldY -  gp.getTileSize() < gp.getPlayer().getWorldY()+gp.getPlayer().getScreenY()){
+                
+                g2.drawImage(tile[tileNumber].getImage(), screenX, screenY,
+                        gp.getTileSize(), gp.getTileSize(), null);
+            }
+            
+            worldCol++;
+            
+            if(worldCol == gp.getMaxWorldCol()){
+                worldCol = 0;
+                worldRow++;
             }
         }
         

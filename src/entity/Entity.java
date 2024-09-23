@@ -12,8 +12,8 @@ import java.awt.image.BufferedImage;
  */
 public class Entity {
     
-    protected int x;
-    protected int y;
+    protected int worldX;
+    protected int worldY;
     protected int speed;
     
     protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
@@ -25,29 +25,29 @@ public class Entity {
     /**
      * @return the x
      */
-    public int getX() {
-        return x;
+    public int getWorldX() {
+        return worldX;
     }
 
     /**
      * @param x the x to set
      */
-    public void setX(int x) {
-        this.x = x;
+    public void setWorldX(int x) {
+        this.worldX = x;
     }
 
     /**
      * @return the y
      */
-    public int getY() {
-        return y;
+    public int getWorldY() {
+        return worldY;
     }
 
     /**
      * @param y the y to set
      */
-    public void setY(int y) {
-        this.y = y;
+    public void setWorldY(int y) {
+        this.worldY = y;
     }
 
     /**
