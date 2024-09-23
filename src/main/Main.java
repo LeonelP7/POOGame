@@ -19,6 +19,12 @@ public class Main {
         window.setResizable(false);
         window.setTitle("POOGame");
         
+        GamePanel gamePanel = new GamePanel();
+        window.add(gamePanel);
+        
+        //ajusta el tamaño de la ventana a las dimensiones de sus componentes(gamePanel)
+        window.pack();
+        
         window.setLocationRelativeTo(null);
         window.setVisible(true);
     }
