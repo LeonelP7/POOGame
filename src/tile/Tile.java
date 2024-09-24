@@ -13,7 +13,13 @@ import java.awt.image.BufferedImage;
 public class Tile {
     
     private BufferedImage image;
-    private boolean collision = false;
+    private boolean collision;
+
+    public Tile() {
+        collision = false;
+    }
+    
+    
 
     public void setImage(BufferedImage image) {
         this.image = image;

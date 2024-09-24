@@ -43,6 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
     private TileManager tileM = new TileManager(this);
     private Thread gameThread;
     private KeyHandler keyH = new KeyHandler();
+    private CollisionChecker cChecker = new CollisionChecker(this);
     private Player player = new Player(this, keyH);
 
 
@@ -173,6 +174,24 @@ public class GamePanel extends JPanel implements Runnable {
     public KeyHandler getKeyH() {
         return keyH;
     }
+
+    public CollisionChecker getcChecker() {
+        return cChecker;
+    }
+
+    public void setcChecker(CollisionChecker cChecker) {
+        this.cChecker = cChecker;
+    }
+
+    public TileManager getTileM() {
+        return tileM;
+    }
+
+    public void setTileM(TileManager tileM) {
+        this.tileM = tileM;
+    }
+    
+    
     
     
 

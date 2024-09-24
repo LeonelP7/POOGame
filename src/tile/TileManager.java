@@ -43,15 +43,18 @@ public class TileManager {
             
             tile[1] = new Tile();
             tile[1].setImage(ImageIO.read(getClass().getResourceAsStream("/tiles/wall.png")));
+            tile[1].setCollision(true);
             
             tile[2] = new Tile();
             tile[2].setImage(ImageIO.read(getClass().getResourceAsStream("/tiles/water.png")));
+            tile[2].setCollision(true);
             
             tile[3] = new Tile();
             tile[3].setImage(ImageIO.read(getClass().getResourceAsStream("/tiles/earth.png")));
             
             tile[4] = new Tile();
             tile[4].setImage(ImageIO.read(getClass().getResourceAsStream("/tiles/tree.png")));
+            tile[4].setCollision(true);
             
             tile[5] = new Tile();
             tile[5].setImage(ImageIO.read(getClass().getResourceAsStream("/tiles/sand.png")));
@@ -133,6 +136,30 @@ public class TileManager {
             }
         }
         
+    }
+
+    public GamePanel getGp() {
+        return gp;
+    }
+
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
+    }
+
+    public Tile[] getTile() {
+        return tile;
+    }
+
+    public void setTile(Tile[] tile) {
+        this.tile = tile;
+    }
+
+    public int[][] getMapTileNum() {
+        return mapTileNum;
+    }
+
+    public void setMapTileNum(int[][] mapTileNum) {
+        this.mapTileNum = mapTileNum;
     }
     
     

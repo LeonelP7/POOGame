@@ -6,6 +6,7 @@ package entity;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,7 +23,7 @@ public class Player extends Entity {
 
     private GamePanel gp;
     private KeyHandler keyH;
-    
+
     //variables para la posicion del jugador en la pantalla
     private final int screenX;
     private final int screenY;
@@ -30,17 +31,23 @@ public class Player extends Entity {
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
-        
-        screenX = gp.getScreenWidth()/2 - (gp.getTileSize()/2);
-        screenY = gp.getScreenHeight()/2 - (gp.getTileSize()/2);
+
+        screenX = gp.getScreenWidth() / 2 - (gp.getTileSize() / 2);
+        screenY = gp.getScreenHeight() / 2 - (gp.getTileSize() / 2);
+
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidArea.width = 32;
+        solidArea.width = 32;
 
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues() {
-        worldX = gp.getTileSize()*23;
-        worldY = gp.getTileSize()*21;
+        worldX = gp.getTileSize() * 23;
+        worldY = gp.getTileSize() * 21;
         speed = 4;
         direction = "down";
     }
@@ -70,16 +77,39 @@ public class Player extends Entity {
             //en java la esquina superior izquierda es x:0 y:0
             if (keyH.isUpPressed()) {
                 direction = "up";
-                worldY -= speed;
+
             } else if (keyH.isDownPressed()) {
                 direction = "down";
-                worldY += speed;
+                
             } else if (keyH.isLeftPressed()) {
                 direction = "left";
-                worldX -= speed;
+                
             } else if (keyH.isRightPressed()) {
                 direction = "right";
-                worldX += speed;
+               
+            }
+
+            //revisar la colision del tile
+            collisionOn = false;
+            gp.getcChecker().checkTile(this);
+
+            //si collisionOn es false, el jugador puede moverse
+            if (!collisionOn) {
+
+                switch (direction) {
+                    case "up":
+                        worldY -= speed;
+                        break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                    case "right":
+                         worldX += speed;
+                        break;
+                }
             }
 
             //esto hace que el sprite cambie cada 10 frames
@@ -147,7 +177,5 @@ public class Player extends Entity {
     public int getScreenY() {
         return screenY;
     }
-    
-    
 
 }
