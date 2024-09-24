@@ -32,22 +32,27 @@ public class GamePanel extends JPanel implements Runnable {
     private final int screenWidth = tileSize * maxScreenCol; //768 pixels
     private final int screenHeight = tileSize * maxScreenRow; //576 pixels
     
-    //World settings 
+    //Configuracion del mundo
     private final int maxWorldCol = 50;
     private final int maxWorldRow = 50;
-    private final int worldWidth = tileSize*maxWorldCol;
-    private final int worldHeight = tileSize*maxScreenRow;
+    //Variables que no se usaron
+//    private final int worldWidth = tileSize*maxWorldCol;
+//    private final int worldHeight = tileSize*maxScreenRow;
 
     //FPS
     private int fps = 60;
 
     private TileManager tileM = new TileManager(this);
-    private Thread gameThread;
     private KeyHandler keyH = new KeyHandler();
+    private Sound music = new Sound();
+    private Sound se = new Sound();
     private CollisionChecker cChecker = new CollisionChecker(this);
     private AssetSetter aSetter = new AssetSetter(this);
-    private Player player = new Player(this, keyH);
+    private UI ui = new UI(this);
+    private Thread gameThread;
     
+    //Entidad y objetos
+    private Player player = new Player(this, keyH);   
     //este array basicamente indica la cantidad de objetos distintos que pueden haber en el mundo
     private SuperObject obj[] = new SuperObject[10];
 
@@ -68,6 +73,9 @@ public class GamePanel extends JPanel implements Runnable {
     
     public void setUpGame(){
         aSetter.setObject();
+        
+        //reproduce BlueBoyAdveture.wav
+        playMusic(0);
     }
 
     public void startGameThread() {
@@ -137,10 +145,37 @@ public class GamePanel extends JPanel implements Runnable {
         
         //jugador
         player.draw(g2);
+        
+        //UI
+        ui.draw(g2);
 
         g2.dispose();
     }
+    
+    public void playMusic(int i){
+        music.setFile(i);
+        music.play();
+        music.loop();
+    }
+    
+    public void stopMusic(){
+        music.stop();;
+    }
+    
+    public void playSE(int i){
+        se.setFile(i);
+        se.play();
+    }
 
+            
+    
+            
+            
+            
+            
+            
+            
+    //GETTERS Y SETTERS        
     public int getOriginalTileSize() {
         return originalTileSize;
     }
@@ -177,13 +212,13 @@ public class GamePanel extends JPanel implements Runnable {
         return maxWorldRow;
     }
 
-    public int getWorldWidth() {
-        return worldWidth;
-    }
-
-    public int getWorldHeight() {
-        return worldHeight;
-    }
+//    public int getWorldWidth() {
+//        return worldWidth;
+//    }
+//
+//    public int getWorldHeight() {
+//        return worldHeight;
+//    }
 
     public Player getPlayer() {
         return player;
@@ -216,6 +251,39 @@ public class GamePanel extends JPanel implements Runnable {
     public void setObj(SuperObject[] obj) {
         this.obj = obj;
     }
+
+    public Sound getSound() {
+        return music;
+    }
+
+    public void setSound(Sound sound) {
+        this.music = sound;
+    }
+
+    public Sound getSe() {
+        return se;
+    }
+
+    public void setSe(Sound se) {
+        this.se = se;
+    }
+
+    public UI getUi() {
+        return ui;
+    }
+
+    public void setUi(UI ui) {
+        this.ui = ui;
+    }
+
+    public Thread getGameThread() {
+        return gameThread;
+    }
+
+    public void setGameThread(Thread gameThread) {
+        this.gameThread = gameThread;
+    }
+    
     
     
     

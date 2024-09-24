@@ -143,15 +143,31 @@ public class Player extends Entity {
 
             switch (objectName) {
                 case "key":
+                    gp.playSE(1);
                     hasKey++;
                     gp.getObj()[i] = null;
-                    System.out.println("Keys: " + hasKey);
+                    gp.getUi().showMessage("Has obtenido una llave");
                     break;
                 case "door":
                     if (hasKey > 0) {
+                        gp.playSE(3);
                         gp.getObj()[i] = null;
                         hasKey--;
+                        gp.getUi().showMessage("Has abierto una puerta");
+                    }else{
+                        gp.getUi().showMessage("Necesitas una llave!");
                     }
+                    break;
+                case "boots":
+                    gp.playSE(2);
+                    speed += 2;
+                    gp.getObj()[i] = null;
+                    gp.getUi().showMessage("Eres veloz!!!");
+                    break;
+                case "chest":
+                    gp.getUi().setGameFinished(true);
+                    gp.stopMusic();
+                    gp.playSE(4);
                     break;
             }
 

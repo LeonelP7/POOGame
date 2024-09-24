@@ -4,6 +4,7 @@
  */
 package main;
 
+import object.OBJ_Boots;
 import object.OBJ_Chest;
 import object.OBJ_Door;
 import object.OBJ_Key;
@@ -50,6 +51,10 @@ public class AssetSetter {
         gp.getObj()[6] = new OBJ_Chest();
         gp.getObj()[6].setWorldX(10*gp.getTileSize());
         gp.getObj()[6].setWorldY(7*gp.getTileSize());
+        
+        gp.getObj()[7] = new OBJ_Boots();
+        gp.getObj()[7].setWorldX(37*gp.getTileSize());
+        gp.getObj()[7].setWorldY(42*gp.getTileSize());
     }
     
 }
