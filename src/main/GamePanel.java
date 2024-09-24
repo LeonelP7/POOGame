@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import object.SuperObject;
 import tile.TileManager;
 
 /**
@@ -44,7 +45,11 @@ public class GamePanel extends JPanel implements Runnable {
     private Thread gameThread;
     private KeyHandler keyH = new KeyHandler();
     private CollisionChecker cChecker = new CollisionChecker(this);
+    private AssetSetter aSetter = new AssetSetter(this);
     private Player player = new Player(this, keyH);
+    
+    //este array basicamente indica la cantidad de objetos distintos que pueden haber en el mundo
+    private SuperObject obj[] = new SuperObject[10];
 
 
     public GamePanel() {
@@ -59,6 +64,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         //con esto hacemos que el GamePanel se enfoque en recibir las entradas de teclado
         this.setFocusable(true);
+    }
+    
+    public void setUpGame(){
+        aSetter.setObject();
     }
 
     public void startGameThread() {
@@ -96,11 +105,11 @@ public class GamePanel extends JPanel implements Runnable {
             }
             
             //este if y sus variables son para ver los fps
-            if(timer >= 1000000000){
-                System.out.println("FPS: "+drawCount);
-                timer = 0;
-                drawCount = 0;
-            }
+//            if(timer >= 1000000000){
+//                System.out.println("FPS: "+drawCount);
+//                timer = 0;
+//                drawCount = 0;
+//            }
 
         }
     }
@@ -116,8 +125,17 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
+        //Tiles
         tileM.draw(g2);
         
+        //objetos
+        for (int i = 0; i < obj.length; i++) {
+            if(obj[i] != null){
+                obj[i].draw(g2, this);
+            }
+        }
+        
+        //jugador
         player.draw(g2);
 
         g2.dispose();
@@ -189,6 +207,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setTileM(TileManager tileM) {
         this.tileM = tileM;
+    }
+
+    public SuperObject[] getObj() {
+        return obj;
+    }
+
+    public void setObj(SuperObject[] obj) {
+        this.obj = obj;
     }
     
     

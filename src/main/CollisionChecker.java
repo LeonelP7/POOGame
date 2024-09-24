@@ -5,6 +5,7 @@
 package main;
 
 import entity.Entity;
+import java.awt.Rectangle;
 
 /**
  *
@@ -65,9 +66,87 @@ public class CollisionChecker {
                     entity.setCollisionOn(true);
                 }
                 break;
+        }
+    }
 
+    public int checkObject(Entity entity, boolean player) {
+
+        int index = 999;
+
+        for (int i = 0; i < gp.getObj().length; i++) {
+
+            if (gp.getObj()[i] != null) {
+
+                //obtenemos la posicion del area solida de la entidad
+                //System.out.println("entity solidArea x: " + entity.getSolidArea().x);
+                entity.getSolidArea().x += entity.getWorldX();
+                //System.out.println("entity solidArea x: " + entity.getSolidArea().x);
+                entity.getSolidArea().y += entity.getWorldY();
+                //System.out.println("entity solidArea y: " + entity.getSolidArea().y);
+
+                //obtenemos la posicion del area solida del objeto
+//                System.out.println(gp.getObj()[i].getName());
+//                System.out.println("object solidArea x: " + gp.getObj()[i].getSolidArea().x);
+                gp.getObj()[i].getSolidArea().x += gp.getObj()[i].getWorldX();
+//                System.out.println("object solidArea x: " + gp.getObj()[i].getSolidArea().x);
+                gp.getObj()[i].getSolidArea().y += gp.getObj()[i].getWorldY();
+                switch (entity.getDirection()) {
+                    case "up":
+//                        System.out.println("entity solid area y: " + entity.getSolidArea().y);
+                        entity.getSolidArea().y -= entity.getSpeed();
+//                        System.out.println(gp.getObj()[i].getSolidArea().toString());
+                        if (entity.getSolidArea().intersects(gp.getObj()[i].getSolidArea())) {
+                            if (gp.getObj()[i].isCollision()) {
+                                entity.setCollisionOn(true);
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                        break;
+                    case "down":
+                        entity.getSolidArea().y += entity.getSpeed();
+                        if (entity.getSolidArea().intersects(gp.getObj()[i].getSolidArea())) {
+                            if (gp.getObj()[i].isCollision()) {
+                                entity.setCollisionOn(true);
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                        break;
+                    case "left":
+                        entity.getSolidArea().x -= entity.getSpeed();
+                        if (entity.getSolidArea().intersects(gp.getObj()[i].getSolidArea())) {
+                            if (gp.getObj()[i].isCollision()) {
+                                entity.setCollisionOn(true);
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                        break;
+                    case "right":
+                        entity.getSolidArea().x += entity.getSpeed();
+                        if (entity.getSolidArea().intersects(gp.getObj()[i].getSolidArea())) {
+                            if (gp.getObj()[i].isCollision()) {
+                                entity.setCollisionOn(true);
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                        break;
+                }
+                entity.getSolidArea().x = entity.getSolidAreaDefaultX();
+                entity.getSolidArea().y = entity.getSolidAreaDefaultY();
+
+                gp.getObj()[i].getSolidArea().x = gp.getObj()[i].getSolidAreaDefaultX();
+                gp.getObj()[i].getSolidArea().y = gp.getObj()[i].getSolidAreaDefaultY();
+            }
         }
 
+        return index;
     }
 
 }

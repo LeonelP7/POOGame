@@ -28,6 +28,9 @@ public class Player extends Entity {
     private final int screenX;
     private final int screenY;
 
+    //la cantidad de llaves que tiene el jugador
+    private int hasKey;
+
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
@@ -38,8 +41,10 @@ public class Player extends Entity {
         solidArea = new Rectangle();
         solidArea.x = 8;
         solidArea.y = 16;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
         solidArea.width = 32;
-        solidArea.width = 32;
+        solidArea.height = 32;
 
         setDefaultValues();
         getPlayerImage();
@@ -80,18 +85,22 @@ public class Player extends Entity {
 
             } else if (keyH.isDownPressed()) {
                 direction = "down";
-                
+
             } else if (keyH.isLeftPressed()) {
                 direction = "left";
-                
+
             } else if (keyH.isRightPressed()) {
                 direction = "right";
-               
+
             }
 
             //revisar la colision del tile
             collisionOn = false;
             gp.getcChecker().checkTile(this);
+
+            //revisar la colision de objetos
+            int objectIndex = gp.getcChecker().checkObject(this, true);
+            pickUpObject(objectIndex);
 
             //si collisionOn es false, el jugador puede moverse
             if (!collisionOn) {
@@ -107,7 +116,7 @@ public class Player extends Entity {
                         worldX -= speed;
                         break;
                     case "right":
-                         worldX += speed;
+                        worldX += speed;
                         break;
                 }
             }
@@ -124,6 +133,30 @@ public class Player extends Entity {
 
             }
         }
+    }
+
+    public void pickUpObject(int i) {
+
+        if (i != 999) {
+
+            String objectName = gp.getObj()[i].getName();
+
+            switch (objectName) {
+                case "key":
+                    hasKey++;
+                    gp.getObj()[i] = null;
+                    System.out.println("Keys: " + hasKey);
+                    break;
+                case "door":
+                    if (hasKey > 0) {
+                        gp.getObj()[i] = null;
+                        hasKey--;
+                    }
+                    break;
+            }
+
+        }
+
     }
 
     public void draw(Graphics2D g2) {
@@ -176,6 +209,14 @@ public class Player extends Entity {
 
     public int getScreenY() {
         return screenY;
+    }
+
+    public int getHasKey() {
+        return hasKey;
+    }
+
+    public void setHasKey(int hasKey) {
+        this.hasKey = hasKey;
     }
 
 }
