@@ -6,6 +6,7 @@ package object;
 
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import main.GamePanel;
 
 /**
  *
@@ -13,11 +14,13 @@ import javax.imageio.ImageIO;
  */
 public class OBJ_Door extends SuperObject{
     
-    public OBJ_Door() {
+    public OBJ_Door(GamePanel gp) {
+        this.gp = gp;
         name = "door";
         
         try {
             image = ImageIO.read(getClass().getResourceAsStream("/objects/door.png"));
+            image = uTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -29,7 +29,7 @@ public class UI {
         this.gp = gp;
         arial_30 = new Font("Arial", Font.PLAIN, 30);
         arial_70B = new Font("Arial", Font.BOLD, 70);
-        OBJ_Key objKey = new OBJ_Key();
+        OBJ_Key objKey = new OBJ_Key(gp);
         keyImage = objKey.getImage();
     }
 

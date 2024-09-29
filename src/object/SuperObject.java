@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import main.GamePanel;
+import main.UtilityTool;
 
 /**
  *
@@ -23,7 +24,10 @@ public class SuperObject {
     protected Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     protected int solidAreaDefaultX = 0;
     protected int solidAreaDefaultY = 0;
-
+    protected UtilityTool uTool = new UtilityTool();
+    protected GamePanel gp = null;
+    
+    
     public SuperObject() {
         collision = false;
     }
@@ -38,8 +42,11 @@ public class SuperObject {
                 && worldY + gp.getTileSize() > gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY()
                 && worldY - gp.getTileSize() < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY()) {
 
-            g2.drawImage(image, screenX, screenY,
-                    gp.getTileSize(), gp.getTileSize(), null);
+            g2.drawImage(image, screenX, screenY, null);
+            
+            //CAMBIADO PARA MEJORAR EL RENDIMIENTO A LA HORA DE DIBUJAR LOS OBJETOS EN PANTALLA
+//            g2.drawImage(image, screenX, screenY,
+//                    gp.getTileSize(), gp.getTileSize(), null);
         }
     }
 
@@ -98,5 +105,15 @@ public class SuperObject {
     public int getSolidAreaDefaultY() {
         return solidAreaDefaultY;
     }
+
+    public GamePanel getGp() {
+        return gp;
+    }
+
+    public void setGp(GamePanel gp) {
+        this.gp = gp;
+    }
+    
+    
 
 }

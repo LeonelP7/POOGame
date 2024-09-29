@@ -31,7 +31,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final int maxScreenRow = 12;
     private final int screenWidth = tileSize * maxScreenCol; //768 pixels
     private final int screenHeight = tileSize * maxScreenRow; //576 pixels
-    
+
     //Configuracion del mundo
     private final int maxWorldCol = 50;
     private final int maxWorldRow = 50;
@@ -50,12 +50,11 @@ public class GamePanel extends JPanel implements Runnable {
     private AssetSetter aSetter = new AssetSetter(this);
     private UI ui = new UI(this);
     private Thread gameThread;
-    
+
     //Entidad y objetos
-    private Player player = new Player(this, keyH);   
+    private Player player = new Player(this, keyH);
     //este array basicamente indica la cantidad de objetos distintos que pueden haber en el mundo
     private SuperObject obj[] = new SuperObject[10];
-
 
     public GamePanel() {
 
@@ -70,10 +69,10 @@ public class GamePanel extends JPanel implements Runnable {
         //con esto hacemos que el GamePanel se enfoque en recibir las entradas de teclado
         this.setFocusable(true);
     }
-    
-    public void setUpGame(){
+
+    public void setUpGame() {
         aSetter.setObject();
-        
+
         //reproduce BlueBoyAdveture.wav
         playMusic(0);
     }
@@ -107,23 +106,22 @@ public class GamePanel extends JPanel implements Runnable {
 
                 //2 Dibujar: dibujar la pantalla con la informacion actualizada
                 repaint();
-                
+
                 delta--;
                 drawCount++;
             }
-            
+
             //este if y sus variables son para ver los fps
 //            if(timer >= 1000000000){
 //                System.out.println("FPS: "+drawCount);
 //                timer = 0;
 //                drawCount = 0;
 //            }
-
         }
     }
 
     public void update() {
-        
+
         player.update();
     }
 
@@ -133,48 +131,55 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
+        //DEBUG
+        long drawStart = 0;
+        if (keyH.isCheckDrawTime()) {
+            drawStart = System.nanoTime();
+        }
+
         //Tiles
         tileM.draw(g2);
-        
+
         //objetos
         for (int i = 0; i < obj.length; i++) {
-            if(obj[i] != null){
+            if (obj[i] != null) {
                 obj[i].draw(g2, this);
             }
         }
-        
+
         //jugador
         player.draw(g2);
-        
+
         //UI
         ui.draw(g2);
 
+        //DEBUG
+        if (keyH.isCheckDrawTime()) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            g2.setColor(Color.white);
+            g2.drawString("Draw time: " + passed, 10, 400);
+            System.out.println("Draw time: " + passed);
+        }
+
         g2.dispose();
     }
-    
-    public void playMusic(int i){
+
+    public void playMusic(int i) {
         music.setFile(i);
         music.play();
         music.loop();
     }
-    
-    public void stopMusic(){
+
+    public void stopMusic() {
         music.stop();;
     }
-    
-    public void playSE(int i){
+
+    public void playSE(int i) {
         se.setFile(i);
         se.play();
     }
 
-            
-    
-            
-            
-            
-            
-            
-            
     //GETTERS Y SETTERS        
     public int getOriginalTileSize() {
         return originalTileSize;
@@ -219,7 +224,6 @@ public class GamePanel extends JPanel implements Runnable {
 //    public int getWorldHeight() {
 //        return worldHeight;
 //    }
-
     public Player getPlayer() {
         return player;
     }
@@ -283,10 +287,5 @@ public class GamePanel extends JPanel implements Runnable {
     public void setGameThread(Thread gameThread) {
         this.gameThread = gameThread;
     }
-    
-    
-    
-    
-    
 
 }
