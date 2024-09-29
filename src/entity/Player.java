@@ -27,6 +27,9 @@ public class Player extends Entity {
 
     //la cantidad de llaves que tiene el jugador
     private int hasKey;
+    
+    //contador para actualizar el sprite si se queda quieto el personaje
+    private int standCounter;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -128,6 +131,13 @@ public class Player extends Entity {
                 }
                 spriteCounter = 0;
 
+            }
+        }else{
+            standCounter++;
+            
+            if(standCounter == 20){
+                spriteNum = 1;
+                standCounter = 0;
             }
         }
     }
