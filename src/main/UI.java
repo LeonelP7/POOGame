@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 import object.OBJ_Key;
 
 public class UI {
@@ -20,6 +21,9 @@ public class UI {
     private String message = "";
     private int messageCounter;
     private boolean gameFinished = false;
+    
+    private double playTime;
+    private DecimalFormat dFormat = new DecimalFormat("#0.00");
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -45,16 +49,23 @@ public class UI {
 
             String text;
 
-            text = "You have found a treasure!";
+            text = "Haz encontrado el tesoro!";
             //aqui obtenemos la la longitud del texto que se va a mostrar
             textLegth = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
             x = (gp.getScreenWidth() / 2) - textLegth/2;
             y = (gp.getScreenHeight() / 2) - (gp.getTileSize() * 3);
             g2.drawString(text, x, y);
+            
+            text = "Tu tiempo fue: " + dFormat.format(playTime);
+            //aqui obtenemos la la longitud del texto que se va a mostrar
+            textLegth = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+            x = (gp.getScreenWidth() / 2) - textLegth/2;
+            y = (gp.getScreenHeight() / 2) + (gp.getTileSize() * 4);
+            g2.drawString(text, x, y);
 
             g2.setFont(arial_70B);
             g2.setColor(Color.YELLOW);
-            text = "Congratulations!";
+            text = "Felicidades!";
             textLegth = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
             x = (gp.getScreenWidth() / 2) - textLegth/2;
             y = (gp.getScreenHeight() / 2) + (gp.getTileSize() * 2);
@@ -69,6 +80,10 @@ public class UI {
             g2.drawImage(getKeyImage(), getGp().getTileSize() / 2, getGp().getTileSize() / 2, getGp().getTileSize(), getGp().getTileSize(), null);
             g2.drawString("x " + getGp().getPlayer().getHasKey(), 76, 60);
 
+            //tiempo de juego
+            playTime += (double)1/60;
+            g2.drawString("Tiempo: "+dFormat.format(playTime), gp.getTileSize()*11, 60);
+            
             //mensaje
             if (messageOn) {                               
                 textLegth = (int) g2.getFontMetrics().getStringBounds(message, g2).getWidth();
@@ -120,5 +135,15 @@ public class UI {
     public void setGameFinished(boolean gameFinished) {
         this.gameFinished = gameFinished;
     }
+
+    public double getPlayTime() {
+        return playTime;
+    }
+
+    public void setPlayTime(double playTime) {
+        this.playTime = playTime;
+    }
+    
+    
 
 }

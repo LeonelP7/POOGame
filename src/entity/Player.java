@@ -15,10 +15,7 @@ import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
 
-/**
- *
- * @author ASUS TUF
- */
+
 public class Player extends Entity {
 
     private GamePanel gp;

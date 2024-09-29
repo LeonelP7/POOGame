@@ -16,6 +16,7 @@ import javax.sound.sampled.Clip;
 public class Sound {
     
     private Clip clip;
+    //vector con los sonidos del juego
     private URL soundURL[] = new URL[30];
 
     public Sound() {
