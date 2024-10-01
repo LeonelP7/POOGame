@@ -63,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
     private int gameState;
     private final int playState = 1;
     private final int pauseState = 2;
+    private final int dialogueState = 3;
 
     public GamePanel() {
 
@@ -346,6 +347,12 @@ public class GamePanel extends JPanel implements Runnable {
     public void setNpc(Entity[] npc) {
         this.npc = npc;
     }
+
+    public int getDialogueState() {
+        return dialogueState;
+    }
+    
+    
     
     
 

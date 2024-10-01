@@ -39,6 +39,10 @@ public class Entity {
     
     //contador para cambiar la accion
     protected int actionLockCounter;
+    
+    //vector de dialogos
+    protected String dialogues[] = new String[20];
+    protected int dialogueIndex = 0;
 
     public Entity(GamePanel gp) {
 
@@ -51,6 +55,31 @@ public class Entity {
     }
     
     public void setAction(){}
+    
+    public void speak(){
+        if (dialogues[dialogueIndex] == null) {
+            dialogueIndex = 4;
+        }
+
+        gp.getUi().setCurrentDialogue(dialogues[dialogueIndex]);
+        dialogueIndex++;
+
+        switch (gp.getPlayer().getDirection()) {
+            case "up":
+                direction = "down";
+                break;
+            case "down":
+                direction = "up";
+                break;
+            case "left":
+                direction = "right";
+                break;
+            case "right":
+                direction = "left";
+                break;
+        }
+    }
+    
     public void update(){
         
         setAction();
@@ -229,6 +258,22 @@ public class Entity {
 
     public void setGp(GamePanel gp) {
         this.gp = gp;
+    }
+
+    public String[] getDialogues() {
+        return dialogues;
+    }
+
+    public void setDialogues(String[] dialogues) {
+        this.dialogues = dialogues;
+    }
+
+    public int getDialogueIndex() {
+        return dialogueIndex;
+    }
+
+    public void setDialogueIndex(int dialogueIndex) {
+        this.dialogueIndex = dialogueIndex;
     }
     
     

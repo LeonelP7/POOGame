@@ -20,6 +20,7 @@ public class NPC_OldMan extends Entity {
         speed = 1;
 
         getImage();
+        setDialogues();
     }
 
     public void getImage() {
@@ -32,6 +33,22 @@ public class NPC_OldMan extends Entity {
         left2 = setUp("/npc/oldman_left_2");
         right1 = setUp("/npc/oldman_right_1");
         right2 = setUp("/npc/oldman_right_2");
+    }
+
+    public void setDialogues() {
+
+        dialogues[0] = "Holas, patatudo.";
+        dialogues[1] = "Entonces... sigues aqui.";
+        dialogues[2] = "Asumo que has venido en \nbusqueda de tesoros patatudo.";
+        dialogues[3] = "Yo una vez tuve un sueño similar... \nhasta que me dio una flecha en la rodilla.";
+        dialogues[4] = "Buena suerte entonces cabeza de chorlito!";
+
+    }
+
+    @Override
+    public void speak() {
+
+        super.speak();
     }
 
     @Override
@@ -54,7 +71,7 @@ public class NPC_OldMan extends Entity {
             if (i > 75 && i <= 100) {
                 direction = "right";
             }
-            
+
             actionLockCounter = 0;
         }
 

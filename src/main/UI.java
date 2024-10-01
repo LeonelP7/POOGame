@@ -4,6 +4,7 @@
  */
 package main;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -17,11 +18,11 @@ public class UI {
     private Graphics2D g2;
     private Font arial_30;
     private Font arial_70B;
-//    private BufferedImage keyImage;
     private boolean messageOn = false;
     private String message = "";
     private int messageCounter;
     private boolean gameFinished = false;
+    private String currentDialogue = "";
 
     private double playTime;
     private DecimalFormat dFormat = new DecimalFormat("#0.00");
@@ -30,8 +31,6 @@ public class UI {
         this.gp = gp;
         arial_30 = new Font("Arial", Font.PLAIN, 30);
         arial_70B = new Font("Arial", Font.BOLD, 70);
-//        OBJ_Key objKey = new OBJ_Key(gp);
-//        keyImage = objKey.getImage();
     }
 
     public void showMessage(String text) {
@@ -41,40 +40,80 @@ public class UI {
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
-        
+
         g2.setFont(arial_30);
         g2.setColor(Color.white);
-        
-        if(gp.getGameState() == gp.getPlayState()){
+
+        // estado: jugando
+        if (gp.getGameState() == gp.getPlayState()) {
             //hacer las cosas del gamestate despues
         }
-        if(gp.getGameState() == gp.getPauseState()){
+
+        // estado: pausa
+        if (gp.getGameState() == gp.getPauseState()) {
             drawPauseScreen();
         }
-        
+
+        // estado: dialogo
+        if (gp.getGameState() == gp.getDialogueState()) {
+            drawDialogueScreen();
+        }
+
     }
-    
-    public void drawPauseScreen(){
-        
+
+    public void drawPauseScreen() {
+
         String text = "PAUSA";
-        
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,80F));
-        
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
+
         int x = getXForCenteredText(text);
 
-        int y = gp.getScreenHeight()/2;
-        
-        g2.drawString(text,x,y);
+        int y = gp.getScreenHeight() / 2;
+
+        g2.drawString(text, x, y);
     }
 
-    public int getXForCenteredText(String text){
+    public void drawDialogueScreen() {
+
+        //Parametros para la ventana
+        int x = gp.getTileSize() * 2;
+        int y = gp.getTileSize() / 2;
+        int width = gp.getScreenWidth() - (gp.getTileSize() * 4);
+        int height = gp.getTileSize() * 4;
+
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 26F));
+        x += gp.getTileSize();
+        y += gp.getTileSize();
         
-        int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-        int x = gp.getScreenWidth()/2 - length/2;
+        for (String line : currentDialogue.split("\n")) {
+            g2.drawString(line, x, y);
+            y += 40;
+        }
+    }
+
+    public void drawSubWindow(int x, int y, int width, int height) {
+
+        Color c = new Color(0, 0, 0, 200);
+        g2.setColor(c);
+        g2.fillRoundRect(x, y, width, height, 35, 35);
+
+        c = new Color(255, 255, 255);
+        g2.setColor(c);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x + 5, y + 5, width - 10, height - 10, 25, 25);
+
+    }
+
+    public int getXForCenteredText(String text) {
+
+        int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        int x = gp.getScreenWidth() / 2 - length / 2;
         return x;
     }
-    
-    
+
     //GETTERS Y SETTERS
     public GamePanel getGp() {
         return gp;
@@ -106,6 +145,14 @@ public class UI {
 
     public void setPlayTime(double playTime) {
         this.playTime = playTime;
+    }
+
+    public String getCurrentDialogue() {
+        return currentDialogue;
+    }
+
+    public void setCurrentDialogue(String currentDialogue) {
+        this.currentDialogue = currentDialogue;
     }
 
 }

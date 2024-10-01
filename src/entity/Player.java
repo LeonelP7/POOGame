@@ -17,7 +17,7 @@ import main.KeyHandler;
 import main.UtilityTool;
 
 public class Player extends Entity {
-    
+
     private KeyHandler keyH;
 
     //variables para la posicion del jugador en la pantalla
@@ -90,7 +90,7 @@ public class Player extends Entity {
             //revisa la colision de objetos
             int objectIndex = gp.getcChecker().checkObject(this, true);
             pickUpObject(objectIndex);
-            
+
             //revisa la colicion con npcs
             int npcIndex = gp.getcChecker().checkEntity(this, gp.getNpc());
             interactNPC(npcIndex);
@@ -141,11 +141,15 @@ public class Player extends Entity {
         }
 
     }
-    
-    public void interactNPC(int i){
+
+    public void interactNPC(int i) {
         if (i != 999) {
-            System.out.println("Estas golpeando un npc!");
+            if (gp.getKeyH().isEnterPressed()) {
+                gp.setGameState(gp.getDialogueState());
+                gp.getNpc()[i].speak();
+            }
         }
+        gp.getKeyH().setEnterPressed(false);
     }
 
     @Override
