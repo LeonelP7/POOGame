@@ -32,6 +32,36 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
 
         int code = e.getKeyCode();
+        
+        //Estado: titulo
+        if(gp.getGameState() == gp.getTitleState()){
+            if (code == KeyEvent.VK_W) {
+                
+                gp.getUi().setCommandNumber(gp.getUi().getCommandNumber()-1);
+                if(gp.getUi().getCommandNumber() < 0){
+                    gp.getUi().setCommandNumber(2);
+                }
+            }
+            if (code == KeyEvent.VK_S) {
+                gp.getUi().setCommandNumber(gp.getUi().getCommandNumber()+1);
+                if(gp.getUi().getCommandNumber() > 2){
+                    gp.getUi().setCommandNumber(0);
+                }
+            }
+            if (code == KeyEvent.VK_ENTER) {
+                if(gp.getUi().getCommandNumber() == 0){
+                    gp.setGameState(gp.getPlayState());
+                    gp.playMusic(0);
+                }
+                if(gp.getUi().getCommandNumber() == 1){
+                    //añadir luego
+                }
+                if(gp.getUi().getCommandNumber() == 2){
+                    System.exit(0);
+                }
+            }
+        }
+        
         //Estado: jugando
         if (gp.getGameState() == gp.getPlayState()) {
 
