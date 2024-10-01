@@ -17,7 +17,7 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("POOGame");
+        window.setTitle("EARTH ON DECLINEsdsdaw");
         
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
