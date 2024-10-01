@@ -4,6 +4,7 @@
  */
 package main;
 
+import entity.Entity;
 import entity.Player;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -53,8 +54,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     //Entidad y objetos
     private Player player = new Player(this, keyH);
-    //este array basicamente indica la cantidad de objetos distintos que pueden haber en el mundo
+    //este vector contiene los objetos distintos que pueden haber en el mundo
     private SuperObject obj[] = new SuperObject[10];
+    //este vector contiene los npcs distintos que pueden haber en el mundo
+    private Entity npc[] = new Entity[10];
     
     //GAME STATE(estado del juego)
     private int gameState;
@@ -76,8 +79,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setUpGame() {
+        
+        //coloca los objetos y npcs en el mundo
         aSetter.setObject();
-
+        aSetter.setNPC();
+        
         //reproduce BlueBoyAdveture.wav
         playMusic(0);
         gameState = playState;
@@ -96,14 +102,15 @@ public class GamePanel extends JPanel implements Runnable {
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-        long timer = 0;
+        //long timer = 0;
         int drawCount = 0;
 
+        //game loop
         while (gameThread != null) {
 
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
-            timer += (currentTime - lastTime);
+            //timer += (currentTime - lastTime);
             lastTime = currentTime;
 
             if (delta >= 1) {
@@ -129,7 +136,16 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         
         if (gameState == playState) {
+            
+            //jugador
             player.update();
+            
+            //npc
+            for (int i = 0; i < npc.length; i++) {
+                if(npc[i] != null){
+                    npc[i].update();
+                }
+            }
         }
         if (gameState == pauseState) {
             //nada por ahora
@@ -149,20 +165,27 @@ public class GamePanel extends JPanel implements Runnable {
             drawStart = System.nanoTime();
         }
 
-        //Tiles
+        //dibuja los Tiles en pantalla
         tileM.draw(g2);
 
-        //objetos
+        //dibuja los objetos en pantalla
         for (int i = 0; i < obj.length; i++) {
             if (obj[i] != null) {
-                obj[i].draw(g2, this);
+                obj[i].draw(g2);
+            }
+        }
+        
+        //dibuja los npcs en pantalla
+        for (int i = 0; i < npc.length; i++) {
+            if (npc[i] != null) {
+                npc[i].draw(g2);
             }
         }
 
-        //jugador
+        //dibuja al jugador en pantalla
         player.draw(g2);
 
-        //UI
+        //dibuja la UI
         ui.draw(g2);
 
         //DEBUG
@@ -314,6 +337,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     public int getPauseState() {
         return pauseState;
+    }
+
+    public Entity[] getNpc() {
+        return npc;
+    }
+
+    public void setNpc(Entity[] npc) {
+        this.npc = npc;
     }
     
     

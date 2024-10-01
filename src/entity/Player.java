@@ -17,21 +17,18 @@ import main.KeyHandler;
 import main.UtilityTool;
 
 public class Player extends Entity {
-
-    private GamePanel gp;
+    
     private KeyHandler keyH;
 
     //variables para la posicion del jugador en la pantalla
     private final int screenX;
     private final int screenY;
 
-    //la cantidad de llaves que tiene el jugador
-//    private int hasKey;
     //contador para actualizar el sprite si se queda quieto el personaje
     private int standCounter;
 
     public Player(GamePanel gp, KeyHandler keyH) {
-        this.gp = gp;
+        super(gp);
         this.keyH = keyH;
 
         screenX = gp.getScreenWidth() / 2 - (gp.getTileSize() / 2);
@@ -58,28 +55,14 @@ public class Player extends Entity {
 
     public void getPlayerImage() {
 
-        up1 = setUp("boy_up_1");
-        up2 = setUp("boy_up_2");
-        down1 = setUp("boy_down_1");
-        down2 = setUp("boy_down_2");
-        left1 = setUp("boy_left_1");
-        left2 = setUp("boy_left_2");
-        right1 = setUp("boy_right_1");
-        right2 = setUp("boy_right_2");
-    }
-
-    private BufferedImage setUp(String imageName) {
-
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-
-        try {
-            image = ImageIO.read(getClass().getResourceAsStream("/player/" + imageName + ".png"));
-            image = uTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
-
-        } catch (IOException e) {
-        }
-        return image;
+        up1 = setUp("/player/boy_up_1");
+        up2 = setUp("/player/boy_up_2");
+        down1 = setUp("/player/boy_down_1");
+        down2 = setUp("/player/boy_down_2");
+        left1 = setUp("/player/boy_left_1");
+        left2 = setUp("/player/boy_left_2");
+        right1 = setUp("/player/boy_right_1");
+        right2 = setUp("/player/boy_right_2");
     }
 
     public void update() {
@@ -100,13 +83,17 @@ public class Player extends Entity {
 
             }
 
-            //revisar la colision del tile
+            //revisa la colision del tile
             collisionOn = false;
             gp.getcChecker().checkTile(this);
 
-            //revisar la colision de objetos
+            //revisa la colision de objetos
             int objectIndex = gp.getcChecker().checkObject(this, true);
             pickUpObject(objectIndex);
+            
+            //revisa la colicion con npcs
+            int npcIndex = gp.getcChecker().checkEntity(this, gp.getNpc());
+            interactNPC(npcIndex);
 
             //si collisionOn es false, el jugador puede moverse
             if (!collisionOn) {
@@ -127,7 +114,7 @@ public class Player extends Entity {
                 }
             }
 
-            //esto hace que el sprite cambie cada 10 frames
+            //esto hace que el sprite cambie cada 12 frames
             spriteCounter++;
             if (spriteCounter > 12) {
                 if (spriteNum == 1) {
@@ -154,7 +141,14 @@ public class Player extends Entity {
         }
 
     }
+    
+    public void interactNPC(int i){
+        if (i != 999) {
+            System.out.println("Estas golpeando un npc!");
+        }
+    }
 
+    @Override
     public void draw(Graphics2D g2) {
 //        g2.setColor(Color.white);
 //        g2.fillRect(x, y, gp.getTileSize(), gp.getTileSize());

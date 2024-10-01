@@ -15,7 +15,7 @@ import main.GamePanel;
 public class OBJ_Boots extends SuperObject{
     
     public OBJ_Boots(GamePanel gp) {
-        this.gp = gp;
+        super(gp);
         name = "boots";
         
         try {

@@ -25,14 +25,17 @@ public class SuperObject {
     protected int solidAreaDefaultX = 0;
     protected int solidAreaDefaultY = 0;
     protected UtilityTool uTool = new UtilityTool();
-    protected GamePanel gp = null;
-    
+    protected GamePanel gp;
+
+    public SuperObject(GamePanel gp) {
+        this.gp = gp;
+        collision = false;
+    } 
     
     public SuperObject() {
-        collision = false;
     }
 
-    public void draw(Graphics2D g2, GamePanel gp) {
+    public void draw(Graphics2D g2) {
 
         int screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
         int screenY = worldY - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
