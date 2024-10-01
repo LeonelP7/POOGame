@@ -16,7 +16,6 @@ import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
 
-
 public class Player extends Entity {
 
     private GamePanel gp;
@@ -27,8 +26,7 @@ public class Player extends Entity {
     private final int screenY;
 
     //la cantidad de llaves que tiene el jugador
-    private int hasKey;
-    
+//    private int hasKey;
     //contador para actualizar el sprite si se queda quieto el personaje
     private int standCounter;
 
@@ -69,16 +67,16 @@ public class Player extends Entity {
         right1 = setUp("boy_right_1");
         right2 = setUp("boy_right_2");
     }
-    
-    private BufferedImage setUp(String imageName){
-        
+
+    private BufferedImage setUp(String imageName) {
+
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
-        
+
         try {
             image = ImageIO.read(getClass().getResourceAsStream("/player/" + imageName + ".png"));
             image = uTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
-            
+
         } catch (IOException e) {
         }
         return image;
@@ -140,10 +138,10 @@ public class Player extends Entity {
                 spriteCounter = 0;
 
             }
-        }else{
+        } else {
             standCounter++;
-            
-            if(standCounter == 20){
+
+            if (standCounter == 20) {
                 spriteNum = 1;
                 standCounter = 0;
             }
@@ -151,40 +149,7 @@ public class Player extends Entity {
     }
 
     public void pickUpObject(int i) {
-
         if (i != 999) {
-
-            String objectName = gp.getObj()[i].getName();
-
-            switch (objectName) {
-                case "key":
-                    gp.playSE(1);
-                    hasKey++;
-                    gp.getObj()[i] = null;
-                    gp.getUi().showMessage("Has obtenido una llave");
-                    break;
-                case "door":
-                    if (hasKey > 0) {
-                        gp.playSE(3);
-                        gp.getObj()[i] = null;
-                        hasKey--;
-                        gp.getUi().showMessage("Has abierto una puerta");
-                    }else{
-                        gp.getUi().showMessage("Necesitas una llave!");
-                    }
-                    break;
-                case "boots":
-                    gp.playSE(2);
-                    speed += 2;
-                    gp.getObj()[i] = null;
-                    gp.getUi().showMessage("Eres veloz!!!");
-                    break;
-                case "chest":
-                    gp.getUi().setGameFinished(true);
-                    gp.stopMusic();
-                    gp.playSE(4);
-                    break;
-            }
 
         }
 
@@ -240,14 +205,6 @@ public class Player extends Entity {
 
     public int getScreenY() {
         return screenY;
-    }
-
-    public int getHasKey() {
-        return hasKey;
-    }
-
-    public void setHasKey(int hasKey) {
-        this.hasKey = hasKey;
     }
 
 }

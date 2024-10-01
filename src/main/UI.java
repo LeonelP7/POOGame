@@ -14,14 +14,15 @@ import object.OBJ_Key;
 public class UI {
 
     private GamePanel gp;
+    private Graphics2D g2;
     private Font arial_30;
     private Font arial_70B;
-    private BufferedImage keyImage;
+//    private BufferedImage keyImage;
     private boolean messageOn = false;
     private String message = "";
     private int messageCounter;
     private boolean gameFinished = false;
-    
+
     private double playTime;
     private DecimalFormat dFormat = new DecimalFormat("#0.00");
 
@@ -29,8 +30,8 @@ public class UI {
         this.gp = gp;
         arial_30 = new Font("Arial", Font.PLAIN, 30);
         arial_70B = new Font("Arial", Font.BOLD, 70);
-        OBJ_Key objKey = new OBJ_Key(gp);
-        keyImage = objKey.getImage();
+//        OBJ_Key objKey = new OBJ_Key(gp);
+//        keyImage = objKey.getImage();
     }
 
     public void showMessage(String text) {
@@ -39,71 +40,42 @@ public class UI {
     }
 
     public void draw(Graphics2D g2) {
-
-        int x;
-        int y;
-        int textLegth;
-        if (gameFinished) {
-            g2.setFont(arial_30);
-            g2.setColor(Color.white);
-
-            String text;
-
-            text = "Haz encontrado el tesoro!";
-            //aqui obtenemos la la longitud del texto que se va a mostrar
-            textLegth = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-            x = (gp.getScreenWidth() / 2) - textLegth/2;
-            y = (gp.getScreenHeight() / 2) - (gp.getTileSize() * 3);
-            g2.drawString(text, x, y);
-            
-            text = "Tu tiempo fue: " + dFormat.format(playTime);
-            //aqui obtenemos la la longitud del texto que se va a mostrar
-            textLegth = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-            x = (gp.getScreenWidth() / 2) - textLegth/2;
-            y = (gp.getScreenHeight() / 2) + (gp.getTileSize() * 4);
-            g2.drawString(text, x, y);
-
-            g2.setFont(arial_70B);
-            g2.setColor(Color.YELLOW);
-            text = "Felicidades!";
-            textLegth = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-            x = (gp.getScreenWidth() / 2) - textLegth/2;
-            y = (gp.getScreenHeight() / 2) + (gp.getTileSize() * 2);
-            g2.drawString(text, x, y);
-            
-            //detiene el juego
-            gp.setGameThread(null);
-
-        } else {
-            g2.setFont(getArial_30());
-            g2.setColor(Color.white);
-            g2.drawImage(getKeyImage(), getGp().getTileSize() / 2, getGp().getTileSize() / 2, getGp().getTileSize(), getGp().getTileSize(), null);
-            g2.drawString("x " + getGp().getPlayer().getHasKey(), 76, 60);
-
-            //tiempo de juego
-            playTime += (double)1/60;
-            g2.drawString("Tiempo: "+dFormat.format(playTime), gp.getTileSize()*11, 60);
-            
-            //mensaje
-            if (messageOn) {                               
-                textLegth = (int) g2.getFontMetrics().getStringBounds(message, g2).getWidth();
-                x = gp.getScreenWidth() / 2 - textLegth/2;
-                y =  (gp.getScreenHeight() / 2) - (gp.getTileSize());
-
-                g2.setFont(g2.getFont().deriveFont(30));
-                g2.drawString(message, x, y);
-
-                //con esto hacemos que los mensajes se muestren durante cierto tiempo
-                messageCounter++;
-                if (messageCounter > 100) {
-                    messageCounter = 0;
-                    messageOn = false;
-                }
-            }
+        this.g2 = g2;
+        
+        g2.setFont(arial_30);
+        g2.setColor(Color.white);
+        
+        if(gp.getGameState() == gp.getPlayState()){
+            //hacer las cosas del gamestate despues
         }
+        if(gp.getGameState() == gp.getPauseState()){
+            drawPauseScreen();
+        }
+        
+    }
+    
+    public void drawPauseScreen(){
+        
+        String text = "PAUSA";
+        
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,80F));
+        
+        int x = getXForCenteredText(text);
 
+        int y = gp.getScreenHeight()/2;
+        
+        g2.drawString(text,x,y);
     }
 
+    public int getXForCenteredText(String text){
+        
+        int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        int x = gp.getScreenWidth()/2 - length/2;
+        return x;
+    }
+    
+    
+    //GETTERS Y SETTERS
     public GamePanel getGp() {
         return gp;
     }
@@ -118,14 +90,6 @@ public class UI {
 
     public void setArial_30(Font arial_30) {
         this.arial_30 = arial_30;
-    }
-
-    public BufferedImage getKeyImage() {
-        return keyImage;
-    }
-
-    public void setKeyImage(BufferedImage keyImage) {
-        this.keyImage = keyImage;
     }
 
     public boolean isGameFinished() {
@@ -143,7 +107,5 @@ public class UI {
     public void setPlayTime(double playTime) {
         this.playTime = playTime;
     }
-    
-    
 
 }

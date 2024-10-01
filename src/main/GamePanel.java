@@ -43,7 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
     private int fps = 60;
 
     private TileManager tileM = new TileManager(this);
-    private KeyHandler keyH = new KeyHandler();
+    private KeyHandler keyH = new KeyHandler(this);
     private Sound music = new Sound();
     private Sound se = new Sound();
     private CollisionChecker cChecker = new CollisionChecker(this);
@@ -55,6 +55,11 @@ public class GamePanel extends JPanel implements Runnable {
     private Player player = new Player(this, keyH);
     //este array basicamente indica la cantidad de objetos distintos que pueden haber en el mundo
     private SuperObject obj[] = new SuperObject[10];
+    
+    //GAME STATE(estado del juego)
+    private int gameState;
+    private final int playState = 1;
+    private final int pauseState = 2;
 
     public GamePanel() {
 
@@ -75,6 +80,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         //reproduce BlueBoyAdveture.wav
         playMusic(0);
+        gameState = playState;
     }
 
     public void startGameThread() {
@@ -121,8 +127,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-
-        player.update();
+        
+        if (gameState == playState) {
+            player.update();
+        }
+        if (gameState == pauseState) {
+            //nada por ahora
+        }
+        
     }
 
     public void paintComponent(Graphics g) {
@@ -287,5 +299,23 @@ public class GamePanel extends JPanel implements Runnable {
     public void setGameThread(Thread gameThread) {
         this.gameThread = gameThread;
     }
+
+    public int getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(int gameState) {
+        this.gameState = gameState;
+    }
+
+    public int getPlayState() {
+        return playState;
+    }
+
+    public int getPauseState() {
+        return pauseState;
+    }
+    
+    
 
 }
