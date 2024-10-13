@@ -40,6 +40,10 @@ public class Entity {
     //contador para cambiar la accion
     protected int actionLockCounter;
     
+    //Estado del personaje
+    protected int maxLife;
+    protected int life;
+    
     //vector de dialogos
     protected String dialogues[] = new String[20];
     protected int dialogueIndex = 0;
@@ -275,6 +279,24 @@ public class Entity {
     public void setDialogueIndex(int dialogueIndex) {
         this.dialogueIndex = dialogueIndex;
     }
+
+    public int getMaxLife() {
+        return maxLife;
+    }
+
+    public void setMaxLife(int maxLife) {
+        this.maxLife = maxLife;
+    }
+
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+    
+    
 
     public BufferedImage getUp1() {
         return up1;

@@ -16,7 +16,7 @@ import main.UtilityTool;
  */
 public class SuperObject {
 
-    protected BufferedImage image;
+    protected BufferedImage image, image2, image3;
     protected String name;
     protected boolean collision;
     protected int worldX;
@@ -61,6 +61,22 @@ public class SuperObject {
         this.image = image;
     }
 
+    public BufferedImage getImage2() {
+        return image2;
+    }
+
+    public void setImage2(BufferedImage image2) {
+        this.image2 = image2;
+    }
+
+    public BufferedImage getImage3() {
+        return image3;
+    }
+
+    public void setImage3(BufferedImage image3) {
+        this.image3 = image3;
+    }
+    
     public String getName() {
         return name;
     }

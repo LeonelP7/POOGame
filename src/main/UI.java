@@ -15,13 +15,16 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import object.OBJ_Heart;
 import object.OBJ_Key;
+import object.SuperObject;
 
 public class UI {
 
     private GamePanel gp;
     private Graphics2D g2;
     private Font maruMonica;
+    private BufferedImage heart_full, heart_half, heart_blank;
     private boolean messageOn = false;
     private String message = "";
     private int messageCounter;
@@ -43,6 +46,14 @@ public class UI {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        
+        //Crea objeto para el HUD
+        SuperObject heart = new OBJ_Heart(gp);
+        heart_full = heart.getImage();
+        heart_half = heart.getImage2();
+        heart_blank = heart.getImage3();
+        
+        
     }
 
     public void showMessage(String text) {
@@ -63,19 +74,52 @@ public class UI {
 
         // estado: jugando
         if (gp.getGameState() == gp.getPlayState()) {
-            //hacer las cosas del gamestate despues
+            drawPlayerLife();
         }
 
         // estado: pausa
         if (gp.getGameState() == gp.getPauseState()) {
+            drawPlayerLife();
             drawPauseScreen();
         }
 
         // estado: dialogo
         if (gp.getGameState() == gp.getDialogueState()) {
+            drawPlayerLife();
             drawDialogueScreen();
         }
 
+    }
+    
+    public void drawPlayerLife(){
+        
+        int x = gp.getTileSize()/2;
+        int y = gp.getTileSize()/2;
+        int i = 0;
+        
+        //dibuja la vida maxima en corazones en blanco
+        while(i < gp.getPlayer().getMaxLife()/2){
+            g2.drawImage(heart_blank, x, y, null);
+            i++;
+            x += gp.getTileSize();
+        }
+        
+        //resetea valores
+        x = gp.getTileSize()/2;
+        y = gp.getTileSize()/2;
+        i = 0;
+        
+        //dibuja la vida actual
+        while(i<gp.getPlayer().getLife()){
+            g2.drawImage(heart_half, x, y, null);
+            i++;
+            
+            if(i<gp.getPlayer().getLife()){
+                g2.drawImage(heart_full, x, y, null);
+                i++;
+                x += gp.getTileSize();
+            }
+        }
     }
     
     public void drawTitleScreen(){
@@ -187,6 +231,9 @@ public class UI {
         return x;
     }
 
+    
+    
+    
     //GETTERS Y SETTERS
     public GamePanel getGp() {
         return gp;
