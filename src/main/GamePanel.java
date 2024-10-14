@@ -43,12 +43,14 @@ public class GamePanel extends JPanel implements Runnable {
     //FPS
     private int fps = 60;
 
+    //Sistema
     private TileManager tileM = new TileManager(this);
     private KeyHandler keyH = new KeyHandler(this);
     private Sound music = new Sound();
     private Sound se = new Sound();
     private CollisionChecker cChecker = new CollisionChecker(this);
     private AssetSetter aSetter = new AssetSetter(this);
+    private EventHandler eHandler = new EventHandler(this);
     private UI ui = new UI(this);
     private Thread gameThread;
 
@@ -365,4 +367,13 @@ public class GamePanel extends JPanel implements Runnable {
         return titleState;
     }
 
+    public EventHandler geteHandler() {
+        return eHandler;
+    }
+
+    public void seteHandler(EventHandler eHandler) {
+        this.eHandler = eHandler;
+    }
+
+    
 }

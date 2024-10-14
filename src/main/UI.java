@@ -269,7 +269,7 @@ public class UI {
 
     public String getCurrentDialogue() {
         return currentDialogue;
-    }
+     }
 
     public void setCurrentDialogue(String currentDialogue) {
         this.currentDialogue = currentDialogue;

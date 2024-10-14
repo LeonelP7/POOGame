@@ -95,10 +95,14 @@ public class Player extends Entity {
             int objectIndex = gp.getcChecker().checkObject(this, true);
             pickUpObject(objectIndex);
 
-            //revisa la colicion con npcs
+            //revisa la colision con npcs
             int npcIndex = gp.getcChecker().checkEntity(this, gp.getNpc());
             interactNPC(npcIndex);
-
+            
+            //revisa los eventos
+            gp.geteHandler().checkEvent();
+            gp.getKeyH().setEnterPressed(false);
+            
             //si collisionOn es false, el jugador puede moverse
             if (!collisionOn) {
 
@@ -153,7 +157,7 @@ public class Player extends Entity {
                 gp.getNpc()[i].speak();
             }
         }
-        gp.getKeyH().setEnterPressed(false);
+        
     }
 
     @Override
