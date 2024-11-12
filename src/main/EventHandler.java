@@ -13,18 +13,34 @@ import java.awt.Rectangle;
 public class EventHandler {
 
     private GamePanel gp;
-    private Rectangle eventRect;
-    private int eventRectDefaultX, eventRectDefaultY;
+    private EventRect eventRect[][];
+
+    //variables para condicionar a un evento a no ocurrir repetidamente
+    private int previousEventX, previousEventY;
+    private boolean canTouchEvent = true;
 
     public EventHandler(GamePanel gp) {
         this.gp = gp;
-        eventRect = new Rectangle();
-        eventRect.x = 23;
-        eventRect.y = 23;
-        eventRect.width = 2;
-        eventRect.height = 2;
-        eventRectDefaultX = eventRect.x;
-        eventRectDefaultY = eventRect.y;
+        this.eventRect = new EventRect[gp.getMaxWorldCol()][gp.getMaxWorldRow()];
+
+        int col = 0;
+        int row = 0;
+        while (col < gp.getMaxWorldCol() && row < gp.getMaxWorldRow()) {
+            eventRect[col][row] = new EventRect();
+            eventRect[col][row].x = 23;
+            eventRect[col][row].y = 23;
+            eventRect[col][row].width = 2;
+            eventRect[col][row].height = 2;
+            eventRect[col][row].setEventRectDefaultX(eventRect[col][row].x);
+            eventRect[col][row].setEventRectDefaultY(eventRect[col][row].y);
+
+            col++;
+            if (col == gp.getMaxWorldCol()) {
+                col = 0;
+                row++;
+            }
+        }
+
     }
 
     /*
@@ -34,52 +50,79 @@ public class EventHandler {
      */
     public void checkEvent() {
 
-        if (hit(16, 27, "right") == true) {
-            damagePit(gp.getDialogueState());
+        //revisar que el jugador este a mas de 1 tile de distancia del ultimo evento
+        int xDistance = Math.abs(gp.getPlayer().getWorldX() - previousEventX);
+        int yDistance = Math.abs(gp.getPlayer().getWorldY() - previousEventY);
+        int distance = Math.max(xDistance, yDistance);
+        if (distance > 1) {
+            canTouchEvent = true;
         }
-        if (hit(12, 23, "up")) {
-            healingPool(gp.getDialogueState());
+
+        if (canTouchEvent) {
+            if (hit(27, 16, "right") == true) {
+                damagePit(27, 16, gp.getDialogueState());
+            }
+            if (hit(23, 12, "up")) {
+                healingPool(23, 12, gp.getDialogueState());
+            }
         }
+
     }
 
-    public boolean hit(int eventRow, int eventColumn, String reqDirection) {
+    /**
+     * Metodo para activar un evento
+     *
+     * @param col columna del mundo en la que se encuentra el evento
+     * @param row fila del mundo en la que se encuentra el evento
+     * @param reqDirection direccion en la que tiene que ir el jugador para
+     * activar el evento
+     * @return
+     */
+    public boolean hit(int col, int row, String reqDirection) {
 
         boolean hit = false;
 
         gp.getPlayer().getSolidArea().x += gp.getPlayer().getWorldX();
         gp.getPlayer().getSolidArea().y += gp.getPlayer().getWorldY();
-        eventRect.x += eventColumn * gp.getTileSize();
-        eventRect.y += eventRow * gp.getTileSize();
+        eventRect[col][row].x += col * gp.getTileSize();
+        eventRect[col][row].y += row * gp.getTileSize();
 
-        if (eventRect.intersects(gp.getPlayer().getSolidArea())) {
+        if (eventRect[col][row].intersects(gp.getPlayer().getSolidArea()) && !eventRect[col][row].isEventDone()) {
             if (gp.getPlayer().getDirection().equalsIgnoreCase(reqDirection)
                     || reqDirection.equalsIgnoreCase("any")) {
                 hit = true;
+
+                previousEventX = gp.getPlayer().getWorldX();
+                previousEventY = gp.getPlayer().getWorldY();
             }
         }
 
         gp.getPlayer().getSolidArea().x = gp.getPlayer().getSolidAreaDefaultX();
         gp.getPlayer().getSolidArea().y = gp.getPlayer().getSolidAreaDefaultY();
-        eventRect.x = eventRectDefaultX;
-        eventRect.y = eventRectDefaultY;
+        eventRect[col][row].x = eventRect[col][row].getEventRectDefaultX();
+        eventRect[col][row].y = eventRect[col][row].getEventRectDefaultY();
 
         return hit;
     }
 
-    public void damagePit(int gameState) {
+    public void damagePit(int col, int row, int gameState) {
         gp.setGameState(gameState);
         gp.getUi().setCurrentDialogue("Te haz doblado el tobillo! :(");
         gp.getPlayer().setLife(gp.getPlayer().getLife() - 1);
+        canTouchEvent = false;
+
+        //Evento hecho si no se quiere que se repita el evento
+        //eventRect[col][row].setEventDone(true);
     }
 
-    public void healingPool(int gameState) {
+    public void healingPool(int col, int row, int gameState) {
 
         if (gp.getKeyH().isEnterPressed()) {
             gp.setGameState(gameState);
             gp.getUi().setCurrentDialogue("Haz recuperado salud! :)");
             gp.getPlayer().setLife(gp.getPlayer().getMaxLife());
         }
-        
+
     }
 
     //GETTERS Y SETTERS
