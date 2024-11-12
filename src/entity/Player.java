@@ -4,6 +4,7 @@
  */
 package entity;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -34,8 +35,8 @@ public class Player extends Entity {
         screenX = gp.getScreenWidth() / 2 - (gp.getTileSize() / 2);
         screenY = gp.getScreenHeight() / 2 - (gp.getTileSize() / 2);
         
-//        solidArea.x = 0;
-//        solidArea.y = 16;
+        solidArea.x = 8;
+        solidArea.y = 16;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         solidArea.width = 32;
@@ -98,6 +99,10 @@ public class Player extends Entity {
             int npcIndex = gp.getcChecker().checkEntity(this, gp.getNpc());
             interactNPC(npcIndex);
             
+            //revisa la colision con monstruos
+            int monsterIndex = gp.getcChecker().checkEntity(this, gp.getMonster());
+            contactMonster(monsterIndex);
+            
             //revisa los eventos
             gp.geteHandler().checkEvent();
             gp.getKeyH().setEnterPressed(false);
@@ -140,6 +145,15 @@ public class Player extends Entity {
                 standCounter = 0;
             }
         }
+        
+        //frames de invulnerabilidad para el jugador
+        if(invincible){
+            invincibleCounter++;
+            if (invincibleCounter>=60) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
 
     public void pickUpObject(int i) {
@@ -147,6 +161,16 @@ public class Player extends Entity {
 
         }
 
+    }
+    
+    public void contactMonster(int i){
+        if (i != 999){
+            if (!invincible) {
+                life--;
+                invincible = true;
+            }
+            
+        }
     }
 
     public void interactNPC(int i) {
@@ -200,8 +224,15 @@ public class Player extends Entity {
                 }
                 break;
         }
+        
+        if (invincible) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
 
         g2.drawImage(image, screenX, screenY, null);
+        
+        //restablecer alpha (opacidad)
+         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 
     public int getScreenX() {

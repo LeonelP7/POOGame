@@ -59,6 +59,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Player player = new Player(this, keyH);
     private Entity obj[] = new Entity[10];//este vector contiene los objetos distintos que pueden haber en el mundo
     private Entity npc[] = new Entity[10];//este vector contiene los npcs distintos que pueden haber en el mundo
+    private Entity monster[] = new Entity[20]; 
     private ArrayList<Entity> entityList = new ArrayList<>();
 
     //GAME STATE(estado del juego)
@@ -87,6 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
         //coloca los objetos y npcs en el mundo
         aSetter.setObject();
         aSetter.setNPC();
+        aSetter.setMoster();
 
         //reproduce BlueBoyAdveture.wav
         //playMusic(0);
@@ -150,6 +152,13 @@ public class GamePanel extends JPanel implements Runnable {
                     npc[i].update();
                 }
             }
+            
+            //monster
+            for (int i = 0; i < monster.length; i++) {
+                if(monster[i] != null){
+                    monster[i].update();
+                }
+            }
         }
         if (gameState == pauseState) {
             //nada por ahora
@@ -191,6 +200,12 @@ public class GamePanel extends JPanel implements Runnable {
             for (int i = 0; i < obj.length; i++) {
                 if (obj[i]!=null) {
                     entityList.add(obj[i]);
+                }
+            }
+            
+            for (int i = 0; i < monster.length; i++) {
+                if (monster[i]!=null) {
+                    entityList.add(monster[i]);
                 }
             }
             
@@ -380,6 +395,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setObj(Entity[] obj) {
         this.obj = obj;
+    }
+
+    public Entity[] getMonster() {
+        return monster;
+    }
+
+    public void setMonster(Entity[] monster) {
+        this.monster = monster;
     }
 
     

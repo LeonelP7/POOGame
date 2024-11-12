@@ -43,6 +43,9 @@ public class Entity {
     //Estado del personaje
     protected int maxLife;
     protected int life;
+    
+    protected boolean invincible;
+    protected int invincibleCounter = 0;
 
     //vector de dialogos
     protected String dialogues[] = new String[20];
@@ -52,6 +55,9 @@ public class Entity {
     protected BufferedImage image, image2, image3;
     protected String name;
     protected boolean collision;
+    
+    //tipo de entidad
+    protected int type; //0 = jugador, 1 = npc, 2 = monstruo
 
     public Entity(GamePanel gp) {
 
@@ -65,6 +71,7 @@ public class Entity {
         collisionOn = false;
         collision = false;
         actionLockCounter = 0;
+        invincible = false;
     }
 
     public void setAction() {
@@ -101,8 +108,17 @@ public class Entity {
         collisionOn = false;
         gp.getcChecker().checkTile(this);
         gp.getcChecker().checkObject(this, false);
-        gp.getcChecker().checkPlayer(this);
+        gp.getcChecker().checkEntity(this, gp.getNpc());
+        gp.getcChecker().checkEntity(this, gp.getMonster());
+        boolean contactPlayer = gp.getcChecker().checkPlayer(this);
 
+        if (this.type == 2 && contactPlayer) {
+            if (!gp.getPlayer().isInvincible()) {
+                gp.getPlayer().setLife(gp.getPlayer().getLife()-1);
+                gp.getPlayer().setInvincible(true);
+            }
+        }
+        
         //si collisionOn es false, el npc puede moverse
         if (!collisionOn) {
 
@@ -375,6 +391,30 @@ public class Entity {
 
     public void setCollision(boolean collision) {
         this.collision = collision;
+    }
+
+    public boolean isInvincible() {
+        return invincible;
+    }
+
+    public void setInvincible(boolean invincible) {
+        this.invincible = invincible;
+    }
+
+    public int getInvincibleCounter() {
+        return invincibleCounter;
+    }
+
+    public void setInvincibleCounter(int invincibleCounter) {
+        this.invincibleCounter = invincibleCounter;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
     
     

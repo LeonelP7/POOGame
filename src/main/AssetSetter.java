@@ -5,6 +5,7 @@
 package main;
 
 import entity.NPC_OldMan;
+import monster.MON_GreenSlime;
 import object.OBJ_Boots;
 import object.OBJ_Chest;
 import object.OBJ_Door;
@@ -24,9 +25,7 @@ public class AssetSetter {
     }
 
     public void setObject() {
-        gp.getObj()[0] = new OBJ_Door(gp);
-        gp.getObj()[0].setWorldX(gp.getTileSize()*21);
-        gp.getObj()[0].setWorldY(gp.getTileSize()*22);
+        
     }
     
     public void setNPC(){
@@ -36,4 +35,13 @@ public class AssetSetter {
         gp.getNpc()[0].setWorldY(gp.getTileSize()*21);
     }
 
+    public void setMoster(){
+        gp.getMonster()[0] = new MON_GreenSlime(gp);
+        gp.getMonster()[0].setWorldX(23*gp.getTileSize());
+        gp.getMonster()[0].setWorldY(36*gp.getTileSize());
+        
+        gp.getMonster()[1] = new MON_GreenSlime(gp);
+        gp.getMonster()[1].setWorldX(23*gp.getTileSize());
+        gp.getMonster()[1].setWorldY(37*gp.getTileSize());
+    }
 }
