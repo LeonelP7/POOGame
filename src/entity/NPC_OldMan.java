@@ -18,12 +18,15 @@ public class NPC_OldMan extends Entity {
         super(gp);
         direction = "down";
         speed = 1;
+        solidArea.width=32;
+        solidArea.height = 32;
+        
 
-        getImage();
+        getNpcImage();
         setDialogues();
     }
 
-    public void getImage() {
+    public void getNpcImage() {
 
         up1 = setUp("/npc/oldman_up_1");
         up2 = setUp("/npc/oldman_up_2");

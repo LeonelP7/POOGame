@@ -36,31 +36,41 @@ public class Entity {
     protected int solidAreaDefaultX;
     protected int solidAreaDefaultY;
     protected boolean collisionOn;
-    
+
     //contador para cambiar la accion
     protected int actionLockCounter;
-    
+
     //Estado del personaje
     protected int maxLife;
     protected int life;
-    
+
     //vector de dialogos
     protected String dialogues[] = new String[20];
     protected int dialogueIndex = 0;
+
+    //Atributos de objetos
+    protected BufferedImage image, image2, image3;
+    protected String name;
+    protected boolean collision;
 
     public Entity(GamePanel gp) {
 
         this.gp = gp;
 
+        //direccion por defecto
+        direction = "down";
+        
         spriteCounter = 0;
         spriteNum = 1;
         collisionOn = false;
+        collision = false;
         actionLockCounter = 0;
     }
-    
-    public void setAction(){}
-    
-    public void speak(){
+
+    public void setAction() {
+    }
+
+    public void speak() {
         if (dialogues[dialogueIndex] == null) {
             dialogueIndex = 4;
         }
@@ -83,54 +93,53 @@ public class Entity {
                 break;
         }
     }
-    
-    public void update(){
-        
+
+    public void update() {
+
         setAction();
-        
+
         collisionOn = false;
         gp.getcChecker().checkTile(this);
         gp.getcChecker().checkObject(this, false);
         gp.getcChecker().checkPlayer(this);
-        
+
         //si collisionOn es false, el npc puede moverse
-            if (!collisionOn) {
+        if (!collisionOn) {
 
-                switch (direction) {
-                    case "up":
-                        worldY -= speed;
-                        break;
-                    case "down":
-                        worldY += speed;
-                        break;
-                    case "left":
-                        worldX -= speed;
-                        break;
-                    case "right":
-                        worldX += speed;
-                        break;
-                }
+            switch (direction) {
+                case "up":
+                    worldY -= speed;
+                    break;
+                case "down":
+                    worldY += speed;
+                    break;
+                case "left":
+                    worldX -= speed;
+                    break;
+                case "right":
+                    worldX += speed;
+                    break;
             }
+        }
 
-            //esto hace que el sprite cambie cada 12 frames
-            spriteCounter++;
-            if (spriteCounter > 12) {
-                if (spriteNum == 1) {
-                    spriteNum = 2;
-                } else if (spriteNum == 2) {
-                    spriteNum = 1;
-                }
-                spriteCounter = 0;
-
+        //esto hace que el sprite cambie cada 12 frames
+        spriteCounter++;
+        if (spriteCounter > 12) {
+            if (spriteNum == 1) {
+                spriteNum = 2;
+            } else if (spriteNum == 2) {
+                spriteNum = 1;
             }
-        
-    
+            spriteCounter = 0;
+
+        }
+
     }
-    
-    public void draw(Graphics2D g2){
-        
+
+    public void draw(Graphics2D g2) {
+
         BufferedImage image = null;
-        
+
         int screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
         int screenY = worldY - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
 
@@ -138,41 +147,41 @@ public class Entity {
                 && worldX - gp.getTileSize() < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX()
                 && worldY + gp.getTileSize() > gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY()
                 && worldY - gp.getTileSize() < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY()) {
-            
+
             switch (direction) {
-            case "up":
-                if (spriteNum == 1) {
-                    image = up1;
-                }
-                if (spriteNum == 2) {
-                    image = up2;
-                }
-                break;
-            case "down":
-                if (spriteNum == 1) {
-                    image = down1;
-                }
-                if (spriteNum == 2) {
-                    image = down2;
-                }
-                break;
-            case "left":
-                if (spriteNum == 1) {
-                    image = left1;
-                }
-                if (spriteNum == 2) {
-                    image = left2;
-                }
-                break;
-            case "right":
-                if (spriteNum == 1) {
-                    image = right1;
-                }
-                if (spriteNum == 2) {
-                    image = right2;
-                }
-                break;
-        }
+                case "up":
+                    if (spriteNum == 1) {
+                        image = up1;
+                    }
+                    if (spriteNum == 2) {
+                        image = up2;
+                    }
+                    break;
+                case "down":
+                    if (spriteNum == 1) {
+                        image = down1;
+                    }
+                    if (spriteNum == 2) {
+                        image = down2;
+                    }
+                    break;
+                case "left":
+                    if (spriteNum == 1) {
+                        image = left1;
+                    }
+                    if (spriteNum == 2) {
+                        image = left2;
+                    }
+                    break;
+                case "right":
+                    if (spriteNum == 1) {
+                        image = right1;
+                    }
+                    if (spriteNum == 2) {
+                        image = right2;
+                    }
+                    break;
+            }
 
             g2.drawImage(image, screenX, screenY, null);
         }
@@ -295,8 +304,6 @@ public class Entity {
     public void setLife(int life) {
         this.life = life;
     }
-    
-    
 
     public BufferedImage getUp1() {
         return up1;
@@ -328,6 +335,46 @@ public class Entity {
 
     public BufferedImage getRight2() {
         return right2;
+    }
+
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
+    public BufferedImage getImage2() {
+        return image2;
+    }
+
+    public void setImage2(BufferedImage image2) {
+        this.image2 = image2;
+    }
+
+    public BufferedImage getImage3() {
+        return image3;
+    }
+
+    public void setImage3(BufferedImage image3) {
+        this.image3 = image3;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isCollision() {
+        return collision;
+    }
+
+    public void setCollision(boolean collision) {
+        this.collision = collision;
     }
     
     

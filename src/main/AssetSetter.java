@@ -24,7 +24,9 @@ public class AssetSetter {
     }
 
     public void setObject() {
-
+        gp.getObj()[0] = new OBJ_Door(gp);
+        gp.getObj()[0].setWorldX(gp.getTileSize()*21);
+        gp.getObj()[0].setWorldY(gp.getTileSize()*22);
     }
     
     public void setNPC(){

@@ -10,8 +10,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JPanel;
-import object.SuperObject;
 import tile.TileManager;
 
 /**
@@ -56,10 +57,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     //Entidad y objetos
     private Player player = new Player(this, keyH);
-    //este vector contiene los objetos distintos que pueden haber en el mundo
-    private SuperObject obj[] = new SuperObject[10];
-    //este vector contiene los npcs distintos que pueden haber en el mundo
-    private Entity npc[] = new Entity[10];
+    private Entity obj[] = new Entity[10];//este vector contiene los objetos distintos que pueden haber en el mundo
+    private Entity npc[] = new Entity[10];//este vector contiene los npcs distintos que pueden haber en el mundo
+    private ArrayList<Entity> entityList = new ArrayList<>();
 
     //GAME STATE(estado del juego)
     private int gameState;
@@ -178,23 +178,30 @@ public class GamePanel extends JPanel implements Runnable {
 
             //dibuja los Tiles en pantalla
             tileM.draw(g2);
-
-            //dibuja los objetos en pantalla
-            for (int i = 0; i < obj.length; i++) {
-                if (obj[i] != null) {
-                    obj[i].draw(g2);
-                }
-            }
-
-            //dibuja los npcs en pantalla
+            
+            //agregando las entidades a la lista
+            entityList.add(player);
+            
             for (int i = 0; i < npc.length; i++) {
-                if (npc[i] != null) {
-                    npc[i].draw(g2);
+                if(npc[i]!=null){
+                    entityList.add(npc[i]);
                 }
             }
-
-            //dibuja al jugador en pantalla
-            player.draw(g2);
+            
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i]!=null) {
+                    entityList.add(obj[i]);
+                }
+            }
+            
+            //organizar la lista de entidades
+            Collections.sort(entityList, new ComparatorByWorldY());
+            
+            //dibuja las entidades
+            for (int i = 0; i < entityList.size(); i++) {
+                entityList.get(i).draw(g2);
+            }
+            entityList.clear();
 
             //dibuja la UI
             ui.draw(g2);
@@ -295,14 +302,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.tileM = tileM;
     }
 
-    public SuperObject[] getObj() {
-        return obj;
-    }
-
-    public void setObj(SuperObject[] obj) {
-        this.obj = obj;
-    }
-
     public Sound getSound() {
         return music;
     }
@@ -375,5 +374,14 @@ public class GamePanel extends JPanel implements Runnable {
         this.eHandler = eHandler;
     }
 
+    public Entity[] getObj() {
+        return obj;
+    }
+
+    public void setObj(Entity[] obj) {
+        this.obj = obj;
+    }
+
+    
     
 }

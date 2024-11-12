@@ -4,6 +4,7 @@
  */
 package object;
 
+import entity.Entity;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,18 +16,13 @@ import main.GamePanel;
  *
  * @author ASUS TUF
  */
-public class OBJ_Key extends SuperObject{
+public class OBJ_Key extends Entity{
     
     public OBJ_Key(GamePanel gp) {
         super(gp);
         name = "key";
+        down1 = setUp("/objects/key");
         
-        try {
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/key.png"));
-            image = uTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
     
     

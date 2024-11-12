@@ -4,26 +4,19 @@
  */
 package object;
 
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import entity.Entity;
 import main.GamePanel;
 
 /**
  *
  * @author ASUS TUF
  */
-public class OBJ_Boots extends SuperObject{
+public class OBJ_Boots extends Entity{
     
     public OBJ_Boots(GamePanel gp) {
         super(gp);
         name = "boots";
-        
-        try {
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/boots.png"));
-            image = uTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        down1 = setUp("/objects/boots");
     }
     
 }

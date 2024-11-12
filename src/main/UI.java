@@ -4,6 +4,7 @@
  */
 package main;
 
+import entity.Entity;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -13,11 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import object.OBJ_Heart;
-import object.OBJ_Key;
-import object.SuperObject;
 
 public class UI {
 
@@ -48,7 +45,7 @@ public class UI {
         }
         
         //Crea objeto para el HUD
-        SuperObject heart = new OBJ_Heart(gp);
+        Entity heart = new OBJ_Heart(gp);
         heart_full = heart.getImage();
         heart_half = heart.getImage2();
         heart_blank = heart.getImage3();
