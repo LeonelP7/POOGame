@@ -32,74 +32,102 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
 
         int code = e.getKeyCode();
-        
-        //Estado: titulo
-        if(gp.getGameState() == gp.getTitleState()){
-            if (code == KeyEvent.VK_W) {
-                
-                gp.getUi().setCommandNumber(gp.getUi().getCommandNumber()-1);
-                if(gp.getUi().getCommandNumber() < 0){
-                    gp.getUi().setCommandNumber(2);
-                }
-            }
-            if (code == KeyEvent.VK_S) {
-                gp.getUi().setCommandNumber(gp.getUi().getCommandNumber()+1);
-                if(gp.getUi().getCommandNumber() > 2){
-                    gp.getUi().setCommandNumber(0);
-                }
-            }
-            if (code == KeyEvent.VK_ENTER) {
-                if(gp.getUi().getCommandNumber() == 0){
-                    gp.setGameState(gp.getPlayState());
-                    gp.playMusic(0);
-                }
-                if(gp.getUi().getCommandNumber() == 1){
-                    //añadir luego
-                }
-                if(gp.getUi().getCommandNumber() == 2){
-                    System.exit(0);
-                }
-            }
-        }
-        
-        //Estado: jugando
-        else if (gp.getGameState() == gp.getPlayState()) {
 
-            if (code == KeyEvent.VK_W) {
-                upPressed = true;
-            }
-            if (code == KeyEvent.VK_S) {
-                downPressed = true;
-            }
-            if (code == KeyEvent.VK_A) {
-                leftPressed = true;
-            }
-            if (code == KeyEvent.VK_D) {
-                rightPressed = true;
-            }
-            if (code == KeyEvent.VK_ENTER) {
-                enterPressed = true;
-            }
-            if (code == KeyEvent.VK_T) {
-                if (!checkDrawTime) {
-                    checkDrawTime = true;
-                } else if (checkDrawTime) {
-                    checkDrawTime = false;
-                }
-            }
-            if (code == KeyEvent.VK_P) {
-                gp.setGameState(gp.getPauseState());
-            }
+        //Estado: titulo
+        if (gp.getGameState() == gp.getTitleState()) {
+            titleState(code);
+        } //Estado: jugando
+        else if (gp.getGameState() == gp.getPlayState()) {
+            playState(code);
         } //Estado: pausa
         else if (gp.getGameState() == gp.getPauseState()) {
-            if (code == KeyEvent.VK_P) {
-                gp.setGameState(gp.getPlayState());
-            }
+            pauseState(code);
         } //Estado: dialogo
-        else if(gp.getGameState() == gp.getDialogueState()){
-            if(code == KeyEvent.VK_ENTER){
-                gp.setGameState(gp.getPlayState());
+        else if (gp.getGameState() == gp.getDialogueState()) {
+            dialogueState(code);
+
+        }//Estado: estado del jugador
+        else if (gp.getGameState() == gp.getCharacterState()) {
+            characterState(code);
+
+        }
+    }
+
+    public void titleState(int code) {
+        if (code == KeyEvent.VK_W) {
+
+            gp.getUi().setCommandNumber(gp.getUi().getCommandNumber() - 1);
+            if (gp.getUi().getCommandNumber() < 0) {
+                gp.getUi().setCommandNumber(2);
             }
+        }
+        if (code == KeyEvent.VK_S) {
+            gp.getUi().setCommandNumber(gp.getUi().getCommandNumber() + 1);
+            if (gp.getUi().getCommandNumber() > 2) {
+                gp.getUi().setCommandNumber(0);
+            }
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            if (gp.getUi().getCommandNumber() == 0) {
+                gp.setGameState(gp.getPlayState());
+                gp.playMusic(0);
+            }
+            if (gp.getUi().getCommandNumber() == 1) {
+                //añadir luego
+            }
+            if (gp.getUi().getCommandNumber() == 2) {
+                System.exit(0);
+            }
+        }
+    }
+
+    public void playState(int code) {
+        if (code == KeyEvent.VK_W) {
+            upPressed = true;
+        }
+        if (code == KeyEvent.VK_S) {
+            downPressed = true;
+        }
+        if (code == KeyEvent.VK_A) {
+            leftPressed = true;
+        }
+        if (code == KeyEvent.VK_D) {
+            rightPressed = true;
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressed = true;
+        }
+        if (code == KeyEvent.VK_P) {
+            gp.setGameState(gp.getPauseState());
+        }
+        if (code == KeyEvent.VK_C) {
+            gp.setGameState(gp.getCharacterState());
+        }
+        //debug
+//            if (code == KeyEvent.VK_T) {
+//                if (!checkDrawTime) {
+//                    checkDrawTime = true;
+//                } else if (checkDrawTime) {
+//                    checkDrawTime = false;
+//                }
+//            }
+    }
+
+    public void pauseState(int code) {
+        if (code == KeyEvent.VK_P) {
+            gp.setGameState(gp.getPlayState());
+        }
+    }
+
+    public void dialogueState(int code) {
+        if (code == KeyEvent.VK_ENTER) {
+            gp.setGameState(gp.getPlayState());
+        }
+    }
+
+    public void characterState(int code) {
+        if (code == KeyEvent.VK_C) {
+            gp.setGameState(gp.getPlayState());
         }
     }
 
@@ -178,5 +206,4 @@ public class KeyHandler implements KeyListener {
         this.enterPressed = enterPressed;
     }
 
-    
 }

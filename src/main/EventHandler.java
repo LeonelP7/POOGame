@@ -107,6 +107,7 @@ public class EventHandler {
 
     public void damagePit(int col, int row, int gameState) {
         gp.setGameState(gameState);
+        gp.playSE(6);
         gp.getUi().setCurrentDialogue("Te haz doblado el tobillo! :(");
         gp.getPlayer().setLife(gp.getPlayer().getLife() - 1);
         canTouchEvent = false;
@@ -119,6 +120,7 @@ public class EventHandler {
 
         if (gp.getKeyH().isEnterPressed()) {
             gp.setGameState(gameState);
+            gp.getPlayer().setAttackCancel(true);
             gp.getUi().setCurrentDialogue("Haz recuperado salud! :)");
             gp.getPlayer().setLife(gp.getPlayer().getMaxLife());
         }

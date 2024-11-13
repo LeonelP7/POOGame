@@ -24,12 +24,13 @@ public abstract class Entity {
 
     protected int worldX;
     protected int worldY;
-    protected int speed;
+    
 
     //imagenes de la entidad
     protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     protected BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,
             attackLeft1, attackLeft2, attackRight1, attackRight2;
+    protected BufferedImage image, image2, image3;
     protected String direction;
 
     //contador para cambiar la accion
@@ -40,6 +41,7 @@ public abstract class Entity {
     protected int hpBarCounter;
 
     //area solida para las colisiones
+        protected boolean collision;
     protected Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     protected int solidAreaDefaultX;
     protected int solidAreaDefaultY;
@@ -47,8 +49,6 @@ public abstract class Entity {
     protected Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 
     //Estado de la entidad
-    protected int maxLife;
-    protected int life;
     protected boolean invincible;
     protected int invincibleCounter = 0;
     protected boolean attacking = false;
@@ -61,13 +61,26 @@ public abstract class Entity {
     protected String dialogues[] = new String[20];
     protected int dialogueIndex = 0;
 
-    //Atributos de objetos
-    protected BufferedImage image, image2, image3;
+    //Atributos de la entidad
     protected String name;
-    protected boolean collision;
-
-    //tipo de entidad
+    protected int maxLife;
+    protected int life;
     protected int type; //0 = jugador, 1 = npc, 2 = monstruo
+    protected int speed;
+    protected int level;
+    protected int strength;
+    protected int dexterity;
+    protected int attack;
+    protected int defense;
+    protected int exp;
+    protected int nextLevelExp;
+    protected int coin;
+    protected Entity currentWeapon;
+    protected Entity currentShield;
+    
+    //atributos de objeto
+    protected int attackValue;
+    protected int defenseValue;
 
     public Entity(GamePanel gp) {
 
@@ -624,5 +637,119 @@ public abstract class Entity {
     public void setDying(boolean dying) {
         this.dying = dying;
     }
+
+    public int getHpBarCounter() {
+        return hpBarCounter;
+    }
+
+    public void setHpBarCounter(int hpBarCounter) {
+        this.hpBarCounter = hpBarCounter;
+    }
+
+    public boolean isHpBarOn() {
+        return hpBarOn;
+    }
+
+    public void setHpBarOn(boolean hpBarOn) {
+        this.hpBarOn = hpBarOn;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public void setExp(int exp) {
+        this.exp = exp;
+    }
+
+    public int getNextLevelExp() {
+        return nextLevelExp;
+    }
+
+    public void setNextLevelExp(int nextLevelExp) {
+        this.nextLevelExp = nextLevelExp;
+    }
+
+    public int getCoin() {
+        return coin;
+    }
+
+    public void setCoin(int coin) {
+        this.coin = coin;
+    }
+
+    public Entity getCurrentWeapon() {
+        return currentWeapon;
+    }
+
+    public void setCurrentWeapon(Entity currentWeapon) {
+        this.currentWeapon = currentWeapon;
+    }
+
+    public Entity getCurrentShield() {
+        return currentShield;
+    }
+
+    public void setCurrentShield(Entity currentShield) {
+        this.currentShield = currentShield;
+    }
+
+    public int getAttackValue() {
+        return attackValue;
+    }
+
+    public void setAttackValue(int attackValue) {
+        this.attackValue = attackValue;
+    }
+
+    public int getDefenseValue() {
+        return defenseValue;
+    }
+
+    public void setDefenseValue(int defenseValue) {
+        this.defenseValue = defenseValue;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public int getDexterity() {
+        return dexterity;
+    }
+
+    public void setDexterity(int dexterity) {
+        this.dexterity = dexterity;
+    }
+    
+    
 
 }

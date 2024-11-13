@@ -16,6 +16,8 @@ import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
+import object.OBJ_Shield_Wood;
+import object.OBJ_Sword_Normal;
 
 public class Player extends Entity {
 
@@ -27,6 +29,8 @@ public class Player extends Entity {
 
     //contador para actualizar el sprite si se queda quieto el personaje
     private int standCounter;
+    
+    private boolean attackCancel;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -44,6 +48,8 @@ public class Player extends Entity {
 
         attackArea.width = 36;
         attackArea.height = 36;
+        
+        attackCancel = false;
 
         setDefaultValues();
         getPlayerImage();
@@ -57,8 +63,26 @@ public class Player extends Entity {
         direction = "down";
 
         //estado del jugador
+        level = 1;
+        strength = 1; //entre mas fuerza tenga mas daño hace
+        dexterity = 1; //entre mas destreza tenga menos daño recibe
+        exp = 0;
+        nextLevelExp = 5;
+        coin = 0;
+        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentShield = new OBJ_Shield_Wood(gp);
+        attack = getTotalAttack();
+        defense = getTotalDefense();
         maxLife = 6;
         life = maxLife;
+    }
+    
+    public int getTotalAttack(){
+        return attack = strength*currentWeapon.getAttackValue();
+    }
+    
+    public int getTotalDefense(){
+        return defense = dexterity*currentShield.getDefenseValue();
     }
 
     public void getPlayerImage() {
@@ -144,7 +168,13 @@ public class Player extends Entity {
                         break;
                 }
             }
+            
+            if (keyH.isEnterPressed() && !attackCancel) {
+                attacking = true;
+                spriteCounter = 0;
+            }
 
+            attackCancel = false;
             gp.getKeyH().setEnterPressed(false);
 
             //esto hace que el sprite cambie cada 12 frames
@@ -264,12 +294,11 @@ public class Player extends Entity {
 
         if (gp.getKeyH().isEnterPressed()) {
             if (i != 999) {
+                attackCancel = true;
                 gp.setGameState(gp.getDialogueState());
                 gp.getNpc()[i].speak();
 
-            } else {
-                attacking = true;
-            }
+            } 
         }
 
     }
@@ -389,4 +418,13 @@ public class Player extends Entity {
         return screenY;
     }
 
+    public boolean isAttackCancel() {
+        return attackCancel;
+    }
+
+    public void setAttackCancel(boolean attackCancel) {
+        this.attackCancel = attackCancel;
+    }
+
+    
 }
