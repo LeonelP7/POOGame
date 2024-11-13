@@ -14,6 +14,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import javax.crypto.AEADBadTagException;
 import object.OBJ_Heart;
 
 public class UI {
@@ -22,9 +24,9 @@ public class UI {
     private Graphics2D g2;
     private Font maruMonica;
     private BufferedImage heart_full, heart_half, heart_blank;
-    private boolean messageOn = false;
-    private String message = "";
-    private int messageCounter;
+    private boolean messageOn =false;
+    private ArrayList<String> message = new ArrayList<>();
+    private ArrayList<Integer> messageCounter = new ArrayList<>();
     private boolean gameFinished = false;
     private String currentDialogue = "";
     private int commandNumber = 0;
@@ -52,9 +54,10 @@ public class UI {
 
     }
 
-    public void showMessage(String text) {
-        message = text;
-        messageOn = true;
+    public void addMessage(String text) {
+
+        message.add(text);
+        messageCounter.add(0);
     }
 
     public void draw(Graphics2D g2) {
@@ -71,6 +74,7 @@ public class UI {
         // estado: jugando
         if (gp.getGameState() == gp.getPlayState()) {
             drawPlayerLife();
+            drawMessage();
         }
 
         // estado: pausa
@@ -121,6 +125,33 @@ public class UI {
                 x += gp.getTileSize();
             }
         }
+    }
+    
+    public void drawMessage(){
+        int messageX = gp.getTileSize();
+        int messageY = gp.getTileSize();
+        
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
+        
+        for (int i = 0; i < message.size(); i++) {
+            if (message.get(i) != null) {
+                g2.setColor(Color.black);
+                 g2.drawString(message.get(i), messageX+2, messageY+2);
+                 g2.setColor(Color.white);
+                 g2.drawString(message.get(i), messageX, messageY);
+                 
+                 int counter = messageCounter.get(i) +1; //messageCounter++
+                 messageCounter.set(i, counter);
+                 messageY += 50;
+                 
+                 if(messageCounter.get(i) > 180){
+                     message.remove(i);
+                     messageCounter.remove(i);
+                 }
+                 
+            }
+        }
+        
     }
 
     public void drawTitleScreen() {

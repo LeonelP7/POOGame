@@ -268,7 +268,12 @@ public class Player extends Entity {
         if (i != 999) {
             if (!invincible) {
                 gp.playSE(6);
-                life--;
+                int damage = gp.getMonster()[i].getAttack()-defense;
+                if(damage < 0){
+                    damage = 0;
+                }
+                
+                life -= damage;
                 invincible = true;
             }
 
@@ -279,14 +284,38 @@ public class Player extends Entity {
         if (i != 999) {
             if (!gp.getMonster()[i].isInvincible()) {
                 gp.playSE(5);
-                gp.getMonster()[i].setLife(gp.getMonster()[i].getLife()-1);
+                
+                int damage = attack -gp.getMonster()[i].getDefense();
+                if(damage < 0){
+                    damage = 0;
+                }
+                gp.getMonster()[i].setLife(gp.getMonster()[i].getLife()-damage);
                 gp.getMonster()[i].setInvincible(true);
                 gp.getMonster()[i].damageReaction();
                 
                 if (gp.getMonster()[i].getLife() <= 0) {
                     gp.getMonster()[i].setDying(true);
+                    exp+=gp.getMonster()[i].getExp();
+                    checkLevelUp();
                 }
             }
+        }
+    }
+    
+    public void checkLevelUp(){
+        if (exp >= nextLevelExp) {
+            level++;
+            nextLevelExp = nextLevelExp*2;
+            maxLife+=2;
+            strength++;
+            dexterity++;
+            attack = getAttack();
+            defense =  getDefense();
+            
+            gp.playSE(7);
+            gp.setGameState(gp.getDialogueState());
+            gp.getUi().setCurrentDialogue("Has subido a nivel " +  level + "\n"
+                    +"Te sientes mas fuerte!");
         }
     }
 

@@ -415,6 +415,14 @@ public class GamePanel extends JPanel implements Runnable {
         return characterState;
     }
 
+    public AssetSetter getaSetter() {
+        return aSetter;
+    }
+
+    public void setaSetter(AssetSetter aSetter) {
+        this.aSetter = aSetter;
+    }
+
     
     
 }

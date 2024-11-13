@@ -149,6 +149,14 @@ public abstract class Entity {
 
             if (!gp.getPlayer().isInvincible()) {
                 gp.playSE(6);
+                
+                int damage = attack - gp.getPlayer().getDefense();
+                if(damage < 0){
+                    damage = 0;
+                }
+                
+                gp.getPlayer().setLife(gp.getPlayer().getLife()-damage);
+                
                 gp.getPlayer().setLife(gp.getPlayer().getLife() - 1);
                 gp.getPlayer().setInvincible(true);
             }

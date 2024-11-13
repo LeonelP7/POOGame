@@ -123,6 +123,7 @@ public class EventHandler {
             gp.getPlayer().setAttackCancel(true);
             gp.getUi().setCurrentDialogue("Haz recuperado salud! :)");
             gp.getPlayer().setLife(gp.getPlayer().getMaxLife());
+            gp.getaSetter().setMoster();
         }
 
     }
