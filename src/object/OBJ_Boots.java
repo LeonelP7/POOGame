@@ -16,7 +16,7 @@ public class OBJ_Boots extends Entity{
     public OBJ_Boots(GamePanel gp) {
         super(gp);
         name = "boots";
-        down1 = setUp("/objects/boots");
+        down1 = setUp("/objects/boots",gp.getTileSize(),gp.getTileSize());
     }
     
 }

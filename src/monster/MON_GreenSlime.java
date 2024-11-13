@@ -33,14 +33,14 @@ public class MON_GreenSlime extends Entity{
     }
     
     public void getMonImage(){
-        up1 = setUp("/monster/greenslime_down_1");
-        up2 = setUp("/monster/greenslime_down_2");
-        down1 = setUp("/monster/greenslime_down_1");
-        down2 = setUp("/monster/greenslime_down_2");
-        left1 = setUp("/monster/greenslime_down_1");
-        left2 = setUp("/monster/greenslime_down_2");
-        right1 = setUp("/monster/greenslime_down_1");
-        right2 = setUp("/monster/greenslime_down_2");
+        up1 = setUp("/monster/greenslime_down_1",gp.getTileSize(),gp.getTileSize());
+        up2 = setUp("/monster/greenslime_down_2",gp.getTileSize(),gp.getTileSize());
+        down1 = setUp("/monster/greenslime_down_1",gp.getTileSize(),gp.getTileSize());
+        down2 = setUp("/monster/greenslime_down_2",gp.getTileSize(),gp.getTileSize());
+        left1 = setUp("/monster/greenslime_down_1",gp.getTileSize(),gp.getTileSize());
+        left2 = setUp("/monster/greenslime_down_2",gp.getTileSize(),gp.getTileSize());
+        right1 = setUp("/monster/greenslime_down_1",gp.getTileSize(),gp.getTileSize());
+        right2 = setUp("/monster/greenslime_down_2",gp.getTileSize(),gp.getTileSize());
     }
 
     @Override
@@ -65,6 +65,12 @@ public class MON_GreenSlime extends Entity{
 
             actionLockCounter = 0;
         }
+    }
+
+    @Override
+    public void damageReaction() {
+        actionLockCounter = 0;
+        direction = gp.getPlayer().getDirection();
     }
     
     

@@ -63,7 +63,7 @@ public class KeyHandler implements KeyListener {
         }
         
         //Estado: jugando
-        if (gp.getGameState() == gp.getPlayState()) {
+        else if (gp.getGameState() == gp.getPlayState()) {
 
             if (code == KeyEvent.VK_W) {
                 upPressed = true;

@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -16,7 +18,7 @@ import main.UtilityTool;
  *
  * @author ASUS TUF
  */
-public class Entity {
+public abstract class Entity {
 
     protected GamePanel gp;
 
@@ -26,26 +28,34 @@ public class Entity {
 
     //imagenes de la entidad
     protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    protected BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,
+            attackLeft1, attackLeft2, attackRight1, attackRight2;
     protected String direction;
 
+    //contador para cambiar la accion
+    protected int actionLockCounter;
     protected int spriteCounter;
     protected int spriteNum;
+    protected int dyingCounter;
+    protected int hpBarCounter;
 
     //area solida para las colisiones
     protected Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     protected int solidAreaDefaultX;
     protected int solidAreaDefaultY;
     protected boolean collisionOn;
+    protected Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 
-    //contador para cambiar la accion
-    protected int actionLockCounter;
-
-    //Estado del personaje
+    //Estado de la entidad
     protected int maxLife;
     protected int life;
-    
     protected boolean invincible;
     protected int invincibleCounter = 0;
+    protected boolean attacking = false;
+    protected boolean alive;
+    protected boolean dying;
+    protected boolean hpBarOn;
+    
 
     //vector de dialogos
     protected String dialogues[] = new String[20];
@@ -55,7 +65,7 @@ public class Entity {
     protected BufferedImage image, image2, image3;
     protected String name;
     protected boolean collision;
-    
+
     //tipo de entidad
     protected int type; //0 = jugador, 1 = npc, 2 = monstruo
 
@@ -65,16 +75,26 @@ public class Entity {
 
         //direccion por defecto
         direction = "down";
-        
+
         spriteCounter = 0;
         spriteNum = 1;
         collisionOn = false;
         collision = false;
         actionLockCounter = 0;
         invincible = false;
+        alive = true;
+        dying = false;
+        dyingCounter = 0;
+        hpBarOn = false;
+        hpBarCounter = 0;
+
     }
 
     public void setAction() {
+    }
+    
+    public void damageReaction(){
+        
     }
 
     public void speak() {
@@ -113,12 +133,14 @@ public class Entity {
         boolean contactPlayer = gp.getcChecker().checkPlayer(this);
 
         if (this.type == 2 && contactPlayer) {
+
             if (!gp.getPlayer().isInvincible()) {
-                gp.getPlayer().setLife(gp.getPlayer().getLife()-1);
+                gp.playSE(6);
+                gp.getPlayer().setLife(gp.getPlayer().getLife() - 1);
                 gp.getPlayer().setInvincible(true);
             }
         }
-        
+
         //si collisionOn es false, el npc puede moverse
         if (!collisionOn) {
 
@@ -150,6 +172,13 @@ public class Entity {
 
         }
 
+        if (invincible) {
+            invincibleCounter++;
+            if (invincibleCounter >= 40) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
 
     public void draw(Graphics2D g2) {
@@ -199,18 +228,93 @@ public class Entity {
                     break;
             }
 
+            //barra de vida para los monstruos
+            if (type == 2 && hpBarOn) {
+                double oneScale = (double)gp.getTileSize()/maxLife;
+                double hpBarValue = oneScale*life;
+                
+                g2.setColor(new Color(35,35,35));
+                g2.fillRect(screenX-1, screenY-16, gp.getTileSize()+2, 12);
+                
+                g2.setColor(new Color(255, 0, 30));
+                g2.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
+                
+                hpBarCounter++;
+                if (hpBarCounter > 300 ) {
+                    hpBarCounter = 0;
+                    hpBarOn = false;
+                    
+                }
+            }
+
+            if (invincible) {
+                hpBarOn = true;
+                hpBarCounter = 0;
+                changeAlpha(g2, 0.4f);
+            }
+
+            if (dying) {
+                dyingAnimation(g2);
+            }
+
             g2.drawImage(image, screenX, screenY, null);
+
+            changeAlpha(g2, 1f);
         }
     }
 
-    public BufferedImage setUp(String imagePath) {
+    public void dyingAnimation(Graphics2D g2) {
+        dyingCounter++;
+
+        int i = 5;
+        if (dyingCounter <= i) {
+            changeAlpha(g2, 0);
+        }
+
+        if (dyingCounter > i && dyingCounter <= i * 2) {
+            changeAlpha(g2, 1);
+        }
+
+        if (dyingCounter > i * 2 && dyingCounter <= i * 3) {
+            changeAlpha(g2, 0);
+        }
+        if (dyingCounter > i * 3 && dyingCounter <= i * 4) {
+            changeAlpha(g2, 1);
+        }
+
+        if (dyingCounter > i * 4 && dyingCounter <= i * 5) {
+            changeAlpha(g2, 0);
+        }
+        if (dyingCounter > i * 5 && dyingCounter <= i * 6) {
+            changeAlpha(g2, 1);
+        }
+        if (dyingCounter > i * 6 && dyingCounter <= i * 7) {
+            changeAlpha(g2, 0);
+        }
+
+        if (dyingCounter > i * 7 && dyingCounter <= i * 8) {
+            changeAlpha(g2, 1);
+        }
+
+        if (dyingCounter > i * 8) {
+            dying = false;
+            alive = false;
+        }
+
+    }
+
+    public void changeAlpha(Graphics2D g2, float alphaValue) {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
+    }
+
+    public BufferedImage setUp(String imagePath, int width, int height) {
 
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
 
         try {
             image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-            image = uTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
+            image = uTool.scaleImage(image, width, height);
 
         } catch (IOException e) {
         }
@@ -416,7 +520,109 @@ public class Entity {
     public void setType(int type) {
         this.type = type;
     }
-    
-    
+
+    public BufferedImage getAttackUp1() {
+        return attackUp1;
+    }
+
+    public void setAttackUp1(BufferedImage attackUp1) {
+        this.attackUp1 = attackUp1;
+    }
+
+    public BufferedImage getAttackUp2() {
+        return attackUp2;
+    }
+
+    public void setAttackUp2(BufferedImage attackUp2) {
+        this.attackUp2 = attackUp2;
+    }
+
+    public BufferedImage getAttackDown1() {
+        return attackDown1;
+    }
+
+    public void setAttackDown1(BufferedImage attackDown1) {
+        this.attackDown1 = attackDown1;
+    }
+
+    public BufferedImage getAttackDown2() {
+        return attackDown2;
+    }
+
+    public void setAttackDown2(BufferedImage attackDown2) {
+        this.attackDown2 = attackDown2;
+    }
+
+    public BufferedImage getAttackLeft1() {
+        return attackLeft1;
+    }
+
+    public void setAttackLeft1(BufferedImage attackLeft1) {
+        this.attackLeft1 = attackLeft1;
+    }
+
+    public BufferedImage getAttackLeft2() {
+        return attackLeft2;
+    }
+
+    public void setAttackLeft2(BufferedImage attackLeft2) {
+        this.attackLeft2 = attackLeft2;
+    }
+
+    public BufferedImage getAttackRight1() {
+        return attackRight1;
+    }
+
+    public void setAttackRight1(BufferedImage attackRight1) {
+        this.attackRight1 = attackRight1;
+    }
+
+    public BufferedImage getAttackRight2() {
+        return attackRight2;
+    }
+
+    public void setAttackRight2(BufferedImage attackRight2) {
+        this.attackRight2 = attackRight2;
+    }
+
+    public int getDyingCounter() {
+        return dyingCounter;
+    }
+
+    public void setDyingCounter(int dyingCounter) {
+        this.dyingCounter = dyingCounter;
+    }
+
+    public Rectangle getAttackArea() {
+        return attackArea;
+    }
+
+    public void setAttackArea(Rectangle attackArea) {
+        this.attackArea = attackArea;
+    }
+
+    public boolean isAttacking() {
+        return attacking;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public boolean isDying() {
+        return dying;
+    }
+
+    public void setDying(boolean dying) {
+        this.dying = dying;
+    }
 
 }
