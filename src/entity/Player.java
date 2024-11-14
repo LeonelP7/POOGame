@@ -10,12 +10,14 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
+import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
 
@@ -29,8 +31,9 @@ public class Player extends Entity {
 
     //contador para actualizar el sprite si se queda quieto el personaje
     private int standCounter;
-    
     private boolean attackCancel;
+    private ArrayList<Entity> inventory = new ArrayList<>();
+    private final int maxInventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -54,6 +57,7 @@ public class Player extends Entity {
         setDefaultValues();
         getPlayerImage();
         getPlayerAttackImage();
+        setItems();
     }
 
     public void setDefaultValues() {
@@ -75,6 +79,13 @@ public class Player extends Entity {
         defense = getTotalDefense();
         maxLife = 6;
         life = maxLife;
+    }
+    
+    public void setItems(){
+        inventory.add(currentWeapon);
+        inventory.add(currentShield);
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
     }
     
     public int getTotalAttack(){
@@ -453,6 +464,18 @@ public class Player extends Entity {
 
     public void setAttackCancel(boolean attackCancel) {
         this.attackCancel = attackCancel;
+    }
+
+    public ArrayList<Entity> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(ArrayList<Entity> inventory) {
+        this.inventory = inventory;
+    }
+
+    public int getMaxInventorySize() {
+        return maxInventorySize;
     }
 
     

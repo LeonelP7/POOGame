@@ -15,9 +15,10 @@ public class OBJ_Shield_Wood extends Entity{
     
     public OBJ_Shield_Wood(GamePanel gp) {
         super(gp);
-        name = "Wood Shield";
+        name = "Escudo de Carton";
         down1 = setUp("/objects/shield_wood", gp.getTileSize(), gp.getTileSize());
         defenseValue = 1;
+        description = "[" + name + "]\n Un carton Duro :/.";
     }
     
 }

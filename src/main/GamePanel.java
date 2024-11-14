@@ -8,6 +8,7 @@ import entity.Entity;
 import entity.Player;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -180,7 +181,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         //DEBUG
         long drawStart = 0;
-        if (keyH.isCheckDrawTime()) {
+        if (keyH.isShowDebugText()) {
             drawStart = System.nanoTime();
         }
 
@@ -229,11 +230,22 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         //DEBUG
-        if (keyH.isCheckDrawTime()) {
+        if (keyH.isShowDebugText()) {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
+            
+            g2.setFont(new Font("Arial",Font.PLAIN, 20));
             g2.setColor(Color.white);
-            g2.drawString("Draw time: " + passed, 10, 400);
+            int x = 10;
+            int y = 400;
+            int lineHeight = 20;
+            
+            g2.drawString("WorldX "+ player.getWorldX(), x, y); y += lineHeight;
+            g2.drawString("WorldY "+ player.getWorldY(), x, y);y += lineHeight;
+            g2.drawString("Col "+ (player.getWorldX()+player.getSolidArea().x)/tileSize, x, y);y += lineHeight;
+            g2.drawString("Row "+ (player.getWorldY()+player.getSolidArea().y)/tileSize, x, y);y += lineHeight;
+            
+            g2.drawString("Draw time: " + passed, x, y);
             System.out.println("Draw time: " + passed);
         }
 

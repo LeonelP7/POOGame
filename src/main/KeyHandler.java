@@ -18,7 +18,7 @@ public class KeyHandler implements KeyListener {
     private boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
 
     //DEBUG
-    private boolean checkDrawTime = false;
+    private boolean showDebugText = false;
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
@@ -104,13 +104,18 @@ public class KeyHandler implements KeyListener {
             gp.setGameState(gp.getCharacterState());
         }
         //debug
-//            if (code == KeyEvent.VK_T) {
-//                if (!checkDrawTime) {
-//                    checkDrawTime = true;
-//                } else if (checkDrawTime) {
-//                    checkDrawTime = false;
-//                }
-//            }
+        if (code == KeyEvent.VK_T) {
+            if (!showDebugText) {
+                showDebugText = true;
+            } else if (showDebugText) {
+                showDebugText = false;
+            }
+        }
+
+        //recarga el mapa
+        if (code == KeyEvent.VK_R) {
+            gp.getTileM().loadMap("/maps/worldV2.txt");
+        }
     }
 
     public void pauseState(int code) {
@@ -129,6 +134,33 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_C) {
             gp.setGameState(gp.getPlayState());
         }
+        if (code == KeyEvent.VK_W) {
+            if (gp.getUi().getSlotRow() != 0) {
+                gp.getUi().setSlotRow(gp.getUi().getSlotRow() - 1);
+                gp.playSE(8);
+            }
+        }
+        if (code == KeyEvent.VK_A) {
+            if (gp.getUi().getSlotCol() != 0) {
+                gp.getUi().setSlotCol(gp.getUi().getSlotCol() - 1);
+                gp.playSE(8);
+            }
+        }
+        if (code == KeyEvent.VK_S) {
+            if (gp.getUi().getSlotRow() != 3) {
+                gp.getUi().setSlotRow(gp.getUi().getSlotRow() + 1);
+                gp.playSE(8);
+            }
+
+        }
+        if (code == KeyEvent.VK_D) {
+            if (gp.getUi().getSlotCol() != 4) {
+                gp.getUi().setSlotCol(gp.getUi().getSlotCol() + 1);
+                gp.playSE(8);
+            }
+
+        }
+
     }
 
     @Override
@@ -182,12 +214,12 @@ public class KeyHandler implements KeyListener {
         this.rightPressed = rightPressed;
     }
 
-    public boolean isCheckDrawTime() {
-        return checkDrawTime;
+    public boolean isShowDebugText() {
+        return showDebugText;
     }
 
-    public void setCheckDrawTime(boolean checkDrawTime) {
-        this.checkDrawTime = checkDrawTime;
+    public void setShowDebugText(boolean checkDrawTime) {
+        this.showDebugText = checkDrawTime;
     }
 
     public GamePanel getGp() {

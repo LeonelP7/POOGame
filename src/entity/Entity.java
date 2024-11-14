@@ -81,6 +81,7 @@ public abstract class Entity {
     //atributos de objeto
     protected int attackValue;
     protected int defenseValue;
+    protected String description;
 
     public Entity(GamePanel gp) {
 
@@ -100,6 +101,7 @@ public abstract class Entity {
         dyingCounter = 0;
         hpBarOn = false;
         hpBarCounter = 0;
+        description = "";
 
     }
 
@@ -756,6 +758,14 @@ public abstract class Entity {
 
     public void setDexterity(int dexterity) {
         this.dexterity = dexterity;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
     
     

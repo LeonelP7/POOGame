@@ -20,9 +20,9 @@ public class OBJ_Key extends Entity{
     
     public OBJ_Key(GamePanel gp) {
         super(gp);
-        name = "key";
+        name = "Llave";
         down1 = setUp("/objects/key",gp.getTileSize(),gp.getTileSize());
-        
+        description = "[" + name + "]\n Pa´ abrir las \npuertas de tu corazon.";
     }
     
     

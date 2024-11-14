@@ -24,12 +24,15 @@ public class UI {
     private Graphics2D g2;
     private Font maruMonica;
     private BufferedImage heart_full, heart_half, heart_blank;
-    private boolean messageOn =false;
+    private boolean messageOn = false;
     private ArrayList<String> message = new ArrayList<>();
     private ArrayList<Integer> messageCounter = new ArrayList<>();
     private boolean gameFinished = false;
     private String currentDialogue = "";
     private int commandNumber = 0;
+
+    private int slotCol = 0;
+    private int slotRow = 0;
 
     private double playTime;
     private DecimalFormat dFormat = new DecimalFormat("#0.00");
@@ -92,6 +95,7 @@ public class UI {
         // estado: estado del jugador
         if (gp.getGameState() == gp.getCharacterState()) {
             drawCharacterScreen();
+            drawInventory();
         }
 
     }
@@ -126,32 +130,32 @@ public class UI {
             }
         }
     }
-    
-    public void drawMessage(){
+
+    public void drawMessage() {
         int messageX = gp.getTileSize();
         int messageY = gp.getTileSize();
-        
+
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
-        
+
         for (int i = 0; i < message.size(); i++) {
             if (message.get(i) != null) {
                 g2.setColor(Color.black);
-                 g2.drawString(message.get(i), messageX+2, messageY+2);
-                 g2.setColor(Color.white);
-                 g2.drawString(message.get(i), messageX, messageY);
-                 
-                 int counter = messageCounter.get(i) +1; //messageCounter++
-                 messageCounter.set(i, counter);
-                 messageY += 50;
-                 
-                 if(messageCounter.get(i) > 180){
-                     message.remove(i);
-                     messageCounter.remove(i);
-                 }
-                 
+                g2.drawString(message.get(i), messageX + 2, messageY + 2);
+                g2.setColor(Color.white);
+                g2.drawString(message.get(i), messageX, messageY);
+
+                int counter = messageCounter.get(i) + 1; //messageCounter++
+                messageCounter.set(i, counter);
+                messageY += 50;
+
+                if (messageCounter.get(i) > 180) {
+                    message.remove(i);
+                    messageCounter.remove(i);
+                }
+
             }
         }
-        
+
     }
 
     public void drawTitleScreen() {
@@ -261,27 +265,27 @@ public class UI {
         final int lineHeight = 35;
 
         //nombres
-        g2.drawString("Level", textX, textY);
+        g2.drawString("Nivel", textX, textY);
         textY += lineHeight;
-        g2.drawString("Life", textX, textY);
+        g2.drawString("Vida", textX, textY);
         textY += lineHeight;
-        g2.drawString("Strength", textX, textY);
+        g2.drawString("Fuerza", textX, textY);
         textY += lineHeight;
-        g2.drawString("Dexterity", textX, textY);
+        g2.drawString("Deztreza", textX, textY);
         textY += lineHeight;
-        g2.drawString("Attack", textX, textY);
+        g2.drawString("Ataque", textX, textY);
         textY += lineHeight;
-        g2.drawString("Defense", textX, textY);
+        g2.drawString("Defensa", textX, textY);
         textY += lineHeight;
         g2.drawString("Exp", textX, textY);
         textY += lineHeight;
-        g2.drawString("Next Level", textX, textY);
+        g2.drawString("Sig Nivel", textX, textY);
         textY += lineHeight;
-        g2.drawString("Coin", textX, textY);
+        g2.drawString("Pesos", textX, textY);
         textY += lineHeight + 20;
-        g2.drawString("Weapon", textX, textY);
+        g2.drawString("Arma", textX, textY);
         textY += lineHeight + 15;
-        g2.drawString("Shield", textX, textY);
+        g2.drawString("Escudo", textX, textY);
         textY += lineHeight;
 
         //valores
@@ -289,57 +293,125 @@ public class UI {
         //restableciendo frameY
         textY = frameY + gp.getTileSize();
         String value = "";
-        
+
         value = String.valueOf(gp.getPlayer().getLevel());
         textX = getXForAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
-        
-        value = String.valueOf(gp.getPlayer().getLife()+"/"+gp.getPlayer().getMaxLife());
+
+        value = String.valueOf(gp.getPlayer().getLife() + "/" + gp.getPlayer().getMaxLife());
         textX = getXForAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
-        
+
         value = String.valueOf(gp.getPlayer().getStrength());
         textX = getXForAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
-        
+
         value = String.valueOf(gp.getPlayer().getDexterity());
         textX = getXForAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
-        
+
         value = String.valueOf(gp.getPlayer().getAttack());
         textX = getXForAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
-        
+
         value = String.valueOf(gp.getPlayer().getDefense());
         textX = getXForAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
-        
+
         value = String.valueOf(gp.getPlayer().getExp());
         textX = getXForAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
-        
+
         value = String.valueOf(gp.getPlayer().getNextLevelExp());
         textX = getXForAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
-        
+
         value = String.valueOf(gp.getPlayer().getCoin());
         textX = getXForAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
-        
+
         g2.drawImage(gp.getPlayer().getCurrentWeapon().getDown1(),
-                tailX-gp.getTileSize(), textY-14,null);
+                tailX - gp.getTileSize(), textY - 14, null);
         textY += gp.getTileSize();
         g2.drawImage(gp.getPlayer().getCurrentShield().getDown1(),
-                tailX-gp.getTileSize(), textY-14,null);
+                tailX - gp.getTileSize(), textY - 14, null);
+    }
+
+    public void drawInventory() {
+        //cuadro
+        int frameX = gp.getTileSize() * 9;
+        int frameY = gp.getTileSize();
+        int frameWidth = gp.getTileSize() * 6;
+        int frameHeight = gp.getTileSize() * 5;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        //espacios
+        final int slotXstart = frameX + 20;
+        final int slotYstart = frameY + 20;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+        int slotSize = gp.getTileSize() + 3;
+
+        //dibujar items del jugador
+        for (int i = 0; i < gp.getPlayer().getInventory().size(); i++) {
+            g2.drawImage(gp.getPlayer().getInventory().get(i).getDown1(),
+                    slotX, slotY, null);
+            slotX += slotSize;
+
+            if (i == 4 || i == 9 || i == 14) {
+                slotX = slotXstart;
+                slotY += slotSize;
+            }
+
+        }
+
+        //cursor
+        int cursorX = slotXstart + (slotSize * slotCol);
+        int cursorY = slotYstart + (slotSize * slotRow);
+        int cursorWidth = gp.getTileSize();
+        int cursorHeight = gp.getTileSize();
+
+        //dibujar cursor
+        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+
+        //cuadro de descripcion
+        int dFrameX = frameX;
+        int dFrameY = frameY + frameHeight;
+        int dFrameWidth = frameWidth;
+        int dFrameHeight = gp.getTileSize() * 3;
+
+        //dibuja el texto de la descripcion
+        int textX = dFrameX + 20;
+        int textY = dFrameY + gp.getTileSize();
+        g2.setFont(g2.getFont().deriveFont(28F));
+
+        int itemIndex = getItemIndexOnSlot();
+        if (itemIndex < gp.getPlayer().getInventory().size()) {
+
+            drawSubWindow(dFrameX, dFrameY, dFrameWidth, dFrameHeight);
+            for (String line : gp.getPlayer().getInventory()
+                    .get(itemIndex).getDescription().split("\n")) {
+                g2.drawString(line, textX, textY);
+                textY += 32;
+            }
+
+        }
+    }
+
+    public int getItemIndexOnSlot() {
+        int itemIndex = slotCol + (slotRow * 5);
+        return itemIndex;
     }
 
     public void drawSubWindow(int x, int y, int width, int height) {
@@ -415,6 +487,22 @@ public class UI {
 
     public void setCommandNumber(int commandNumber) {
         this.commandNumber = commandNumber;
+    }
+
+    public int getSlotCol() {
+        return slotCol;
+    }
+
+    public void setSlotCol(int slotCol) {
+        this.slotCol = slotCol;
+    }
+
+    public int getSlotRow() {
+        return slotRow;
+    }
+
+    public void setSlotRow(int slotRow) {
+        this.slotRow = slotRow;
     }
 
 }

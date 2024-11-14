@@ -15,9 +15,10 @@ public class OBJ_Sword_Normal extends Entity{
     
     public OBJ_Sword_Normal(GamePanel gp) {
         super(gp);
-        name = "Normal Sword";
+        name = "Machete Normal";
         down1 = setUp("/objects/sword_normal", gp.getTileSize(), gp.getTileSize());
         attackValue = 1;
+        description = "[" + name + "]\n El machete de \nalgun abuelo...";
     }
     
 }
