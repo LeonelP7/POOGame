@@ -65,7 +65,6 @@ public abstract class Entity {
     protected String name;
     protected int maxLife;
     protected int life;
-    protected int type; //0 = jugador, 1 = npc, 2 = monstruo
     protected int speed;
     protected int level;
     protected int strength;
@@ -82,6 +81,18 @@ public abstract class Entity {
     protected int attackValue;
     protected int defenseValue;
     protected String description;
+    
+    //tipo de entidad
+    protected int type;
+    protected final int type_player = 0;
+    protected final int type_npc = 1;
+    protected final int type_monster = 2;
+    protected final int type_sword = 3;
+    protected final int type_axe = 4;
+    protected final int type_shield = 5;
+    protected final int type_consumable = 6;
+    
+    
 
     public Entity(GamePanel gp) {
 
@@ -109,6 +120,10 @@ public abstract class Entity {
     }
     
     public void damageReaction(){
+        
+    }
+    
+    public void use(Entity entity){
         
     }
 
@@ -147,7 +162,7 @@ public abstract class Entity {
         gp.getcChecker().checkEntity(this, gp.getMonster());
         boolean contactPlayer = gp.getcChecker().checkPlayer(this);
 
-        if (this.type == 2 && contactPlayer) {
+        if (this.type == type_monster && contactPlayer) {
 
             if (!gp.getPlayer().isInvincible()) {
                 gp.playSE(6);

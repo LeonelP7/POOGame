@@ -133,7 +133,7 @@ public class UI {
 
     public void drawMessage() {
         int messageX = gp.getTileSize();
-        int messageY = gp.getTileSize();
+        int messageY = gp.getTileSize()*3;
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
 
@@ -363,6 +363,15 @@ public class UI {
 
         //dibujar items del jugador
         for (int i = 0; i < gp.getPlayer().getInventory().size(); i++) {
+            
+            //cursor para equipar
+            if(gp.getPlayer().getInventory().get(i) == gp.getPlayer().getCurrentWeapon() ||
+                    gp.getPlayer().getInventory().get(i) == gp.getPlayer().getCurrentShield()){
+                g2.setColor(new Color(240,190,90));
+                g2.fillRoundRect(slotX, slotY, gp.getTileSize(), gp.getTileSize()
+                        , 10, 10);
+            }
+            
             g2.drawImage(gp.getPlayer().getInventory().get(i).getDown1(),
                     slotX, slotY, null);
             slotX += slotSize;

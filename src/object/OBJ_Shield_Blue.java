@@ -11,15 +11,16 @@ import main.GamePanel;
  *
  * @author ASUS TUF
  */
-public class OBJ_Shield_Wood extends Entity{
+public class OBJ_Shield_Blue extends Entity{
     
-    public OBJ_Shield_Wood(GamePanel gp) {
+    public OBJ_Shield_Blue(GamePanel gp) {
         super(gp);
         type = type_shield;
-        name = "Escudo de Carton";
-        down1 = setUp("/objects/shield_wood", gp.getTileSize(), gp.getTileSize());
-        defenseValue = 1;
-        description = "[" + name + "]\n Un carton Duro :/.";
+        name = "Escudo Azul";
+        down1 = setUp("/objects/shield_blue", gp.getTileSize(), gp.getTileSize());
+        defenseValue = 2;
+        description = "["+name+"]"+"\nYas...";
     }
+    
     
 }
