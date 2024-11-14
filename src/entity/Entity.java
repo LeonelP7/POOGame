@@ -41,7 +41,7 @@ public abstract class Entity {
     protected int hpBarCounter;
 
     //area solida para las colisiones
-        protected boolean collision;
+    protected boolean collision;
     protected Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     protected int solidAreaDefaultX;
     protected int solidAreaDefaultY;
@@ -56,7 +56,6 @@ public abstract class Entity {
     protected boolean dying;
     protected boolean hpBarOn;
     
-
     //vector de dialogos
     protected String dialogues[] = new String[20];
     protected int dialogueIndex = 0;
@@ -81,6 +80,7 @@ public abstract class Entity {
     protected int attackValue;
     protected int defenseValue;
     protected String description;
+    protected int value;
     
     //tipo de entidad
     protected int type;
@@ -91,6 +91,7 @@ public abstract class Entity {
     protected final int type_axe = 4;
     protected final int type_shield = 5;
     protected final int type_consumable = 6;
+    protected final int type_pickUpOnly = 7;
     
     
 
@@ -116,6 +117,32 @@ public abstract class Entity {
 
     }
 
+    public Entity(GamePanel gp, int col, int row) {
+        
+        this.gp = gp;
+        this.worldX = col*gp.getTileSize();
+        this.worldY = row*gp.getTileSize();
+
+        //direccion por defecto
+        direction = "down";
+
+        spriteCounter = 0;
+        spriteNum = 1;
+        collisionOn = false;
+        collision = false;
+        actionLockCounter = 0;
+        invincible = false;
+        alive = true;
+        dying = false;
+        dyingCounter = 0;
+        hpBarOn = false;
+        hpBarCounter = 0;
+        description = "";
+        
+    }
+    
+    
+
     public void setAction() {
     }
     
@@ -125,6 +152,57 @@ public abstract class Entity {
     
     public void use(Entity entity){
         
+    }
+    
+    public void checkDrop(){
+        
+    }
+    
+    public void dropItem(Entity droppedItem){
+        
+        for (int i = 0; i < gp.getObj().length; i++) {
+            if(gp.getObj()[i] == null){
+                gp.getObj()[i] = droppedItem;
+                gp.getObj()[i].setWorldX(worldX);
+                gp.getObj()[i].setWorldY(worldY);
+                break;
+            }
+        }
+    }
+    
+    public Color getParticleColor(){
+        Color color = null;
+        return color;
+    }
+    
+    public int getParticleSize(){
+        int size = 0;
+        return size;
+    }
+    
+    public int getParticleSpeed(){
+        int particleSpeed = 0;
+        return particleSpeed;
+    }
+    
+    public int getParticleMaxLife(){
+        int maxLife = 0;
+        return maxLife;
+    }
+    
+    public void generateParticle(Entity generator, Entity target){
+        
+        Color color = generator.getParticleColor();
+        int size = generator.getParticleSize();
+        int speed = generator.getParticleSpeed();
+        int maxLife = generator.getParticleMaxLife();
+        
+        Particle p1 = new Particle(gp, target, color, size, speed, maxLife, -2, -1);
+        Particle p2 = new Particle(gp, target, color, size, speed, maxLife, 2, -1);
+        Particle p3 = new Particle(gp, target, color, size, speed, maxLife, -2, 1);
+        gp.getParticleList().add(p1);
+        gp.getParticleList().add(p2);
+        gp.getParticleList().add(p3);
     }
 
     public void speak() {
@@ -160,6 +238,7 @@ public abstract class Entity {
         gp.getcChecker().checkObject(this, false);
         gp.getcChecker().checkEntity(this, gp.getNpc());
         gp.getcChecker().checkEntity(this, gp.getMonster());
+        gp.getcChecker().checkEntity(this, gp.getiTile());
         boolean contactPlayer = gp.getcChecker().checkPlayer(this);
 
         if (this.type == type_monster && contactPlayer) {
@@ -335,7 +414,7 @@ public abstract class Entity {
         }
 
         if (dyingCounter > i * 8) {
-            dying = false;
+            
             alive = false;
         }
 

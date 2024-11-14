@@ -7,6 +7,8 @@ package monster;
 import entity.Entity;
 import java.util.Random;
 import main.GamePanel;
+import object.OBJ_CoinBronze;
+import object.OBJ_Heart;
 
 /**
  *
@@ -74,6 +76,24 @@ public class MON_GreenSlime extends Entity{
     public void damageReaction() {
         actionLockCounter = 0;
         direction = gp.getPlayer().getDirection();
+    }
+
+    @Override
+    public void checkDrop() {
+        
+        //A la hora de morir
+        int i = new Random().nextInt(100)+1;
+        
+        //Establecer lo que el suelta el monstruo
+        if(i < 25){
+            dropItem(new OBJ_CoinBronze(gp));
+        }
+        if(i >= 25 && i < 50){
+            //aqui deberia de soltar pegamento
+        }
+        if(i >= 50 && i < 75){
+            dropItem(new OBJ_Heart(gp));
+        }
     }
     
     

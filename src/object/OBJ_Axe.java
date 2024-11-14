@@ -13,8 +13,8 @@ import main.GamePanel;
  */
 public class OBJ_Axe extends Entity{
     
-    public OBJ_Axe(GamePanel gp) {
-        super(gp);
+    public OBJ_Axe(GamePanel gp, int col, int row) {
+        super(gp,col,row);
         type = type_axe;
         name = "Hacha de leñador";
         down1 = setUp("/objects/axe", gp.getTileSize(), gp.getTileSize());

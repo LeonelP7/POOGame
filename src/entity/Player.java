@@ -18,8 +18,8 @@ import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
 import object.OBJ_Key;
-import object.OBJ_Shield_Wood;
-import object.OBJ_Sword_Normal;
+import object.OBJ_ShieldWood;
+import object.OBJ_SwordNormal;
 
 public class Player extends Entity {
 
@@ -73,8 +73,8 @@ public class Player extends Entity {
         exp = 0;
         nextLevelExp = 5;
         coin = 0;
-        currentWeapon = new OBJ_Sword_Normal(gp);
-        currentShield = new OBJ_Shield_Wood(gp);
+        currentWeapon = new OBJ_SwordNormal(gp);
+        currentShield = new OBJ_ShieldWood(gp);
         attack = getTotalAttack();
         defense = getTotalDefense();
         maxLife = 6;
@@ -121,7 +121,7 @@ public class Player extends Entity {
             attackRight1 = setUp("/player/boy_attack_right_2", gp.getTileSize() * 2, gp.getTileSize());
             attackRight2 = setUp("/player/boy_attack_right_2", gp.getTileSize() * 2, gp.getTileSize());
         }
-        
+
         if (currentWeapon.type == type_axe) {
             attackUp1 = setUp("/player/boy_axe_up_1", gp.getTileSize(), gp.getTileSize() * 2);
             attackUp2 = setUp("/player/boy_axe_up_2", gp.getTileSize(), gp.getTileSize() * 2);
@@ -172,6 +172,9 @@ public class Player extends Entity {
             //revisa la colision con monstruos
             int monsterIndex = gp.getcChecker().checkEntity(this, gp.getMonster());
             contactMonster(monsterIndex);
+            
+            //revisa la colision con tiles interactivos
+            int iTileIndex = gp.getcChecker().checkEntity(this, gp.getiTile());
 
             //revisa los eventos
             gp.geteHandler().checkEvent();
@@ -231,6 +234,10 @@ public class Player extends Entity {
                 invincibleCounter = 0;
             }
         }
+
+        if (life > maxLife) {
+            life = maxLife;
+        }
     }
 
     public void attacking() {
@@ -262,12 +269,18 @@ public class Player extends Entity {
                     break;
             }
 
+            // el area de ataque se vuelve parte del area solida del jugador
             solidArea.width = attackArea.width;
             solidArea.height = attackArea.height;
 
+            // revisa la colision con monstruos con las actualizadas worldX, worldY y solidArea
             int monsterIndex = gp.getcChecker().checkEntity(this, gp.getMonster());
             damageMonster(monsterIndex);
+            
+            int iTileIndex = gp.getcChecker().checkEntity(this, gp.getiTile());
+            damageInteractiveTile(iTileIndex);
 
+            // despues de revisar la colision, restaura a los datos originales
             worldX = currentWorldX;
             worldY = currentWorldY;
             solidArea.width = solidAreaWidth;
@@ -284,24 +297,33 @@ public class Player extends Entity {
 
     public void pickUpObject(int i) {
         if (i != 999) {
-            String text;
-            if (inventory.size() != maxInventorySize) {
-                inventory.add(gp.getObj()[i]);
-                gp.playSE(1);
-                text = "Recogiste " + gp.getObj()[i].getName() + "!";
-                gp.getObj()[i] = null;
-            } else {
-                text = "Ya no puedes llevar mas!";
-            }
 
-            gp.getUi().addMessage(text);
+            //Items que solo se pueden recoger
+            if (gp.getObj()[i].getType() == type_pickUpOnly) {
+
+                gp.getObj()[i].use(this);
+                gp.getObj()[i] = null;
+            }//Items que van al inventario
+            else {
+                String text = "";
+                if (inventory.size() != maxInventorySize) {
+                    inventory.add(gp.getObj()[i]);
+                    gp.playSE(1);
+                    text = "Recogiste " + gp.getObj()[i].getName() + "!";
+                    gp.getObj()[i] = null;
+                } else {
+                    text = "Ya no puedes llevar mas!";
+                }
+
+                gp.getUi().addMessage(text);
+            }
         }
 
     }
 
     public void contactMonster(int i) {
         if (i != 999) {
-            if (!invincible) {
+            if (!invincible && !gp.getMonster()[i].isDying()) {
                 gp.playSE(6);
                 int damage = gp.getMonster()[i].getAttack() - defense;
                 if (damage < 0) {
@@ -334,6 +356,16 @@ public class Player extends Entity {
                     checkLevelUp();
                 }
             }
+        }
+    }
+    
+    public void damageInteractiveTile(int i){
+        if(i != 999 && gp.getiTile()[i].isDestructible() &&
+                gp.getiTile()[i].isCorrectItem(this)){
+            gp.getiTile()[i].playSE();
+            generateParticle(gp.getiTile()[i], gp.getiTile()[i]);
+            gp.getiTile()[i] = gp.getiTile()[i].getDestroyedFrom();
+            
         }
     }
 

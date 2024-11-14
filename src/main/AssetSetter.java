@@ -10,9 +10,11 @@ import object.OBJ_Axe;
 import object.OBJ_Boots;
 import object.OBJ_Chest;
 import object.OBJ_Door;
+import object.OBJ_Heart;
 import object.OBJ_Key;
-import object.OBJ_Potion_Red;
-import object.OBJ_Shield_Blue;
+import object.OBJ_PotionRed;
+import object.OBJ_ShieldBlue;
+import tiles_interactive.IT_DryTree;
 
 /**
  *
@@ -29,29 +31,19 @@ public class AssetSetter {
 
     public void setObject() {
         int i = 0;
-        gp.getObj()[i] = new OBJ_Key(gp);
-        gp.getObj()[i].setWorldX(gp.getTileSize()*25);
-        gp.getObj()[i].setWorldY(gp.getTileSize()*23);
+        gp.getObj()[i] = new OBJ_Key(gp,25,23);
         i++;
-        gp.getObj()[i] = new OBJ_Key(gp);
-        gp.getObj()[i].setWorldX(gp.getTileSize()*21);
-        gp.getObj()[i].setWorldY(gp.getTileSize()*19);
+        gp.getObj()[i] = new OBJ_Key(gp,21,19);
         i++;
-        gp.getObj()[i] = new OBJ_Key(gp);
-        gp.getObj()[i].setWorldX(gp.getTileSize()*26);
-        gp.getObj()[i].setWorldY(gp.getTileSize()*21);
+        gp.getObj()[i] = new OBJ_Key(gp,26,21);
         i++;
-        gp.getObj()[i] = new OBJ_Axe(gp);
-        gp.getObj()[i].setWorldX(gp.getTileSize()*33);
-        gp.getObj()[i].setWorldY(gp.getTileSize()*21);
+        gp.getObj()[i] = new OBJ_Axe(gp,33,21);
         i++;
-        gp.getObj()[i] = new OBJ_Shield_Blue(gp);
-        gp.getObj()[i].setWorldX(gp.getTileSize()*35);
-        gp.getObj()[i].setWorldY(gp.getTileSize()*21);
+        gp.getObj()[i] = new OBJ_ShieldBlue(gp,35,21);
         i++;
-        gp.getObj()[i] = new OBJ_Potion_Red(gp);
-        gp.getObj()[i].setWorldX(gp.getTileSize()*22);
-        gp.getObj()[i].setWorldY(gp.getTileSize()*27);
+        gp.getObj()[i] = new OBJ_PotionRed(gp,22,27);
+        i++;
+        gp.getObj()[i] = new OBJ_Heart(gp,22,29);
         i++;
     }
     
@@ -70,5 +62,25 @@ public class AssetSetter {
         gp.getMonster()[1] = new MON_GreenSlime(gp);
         gp.getMonster()[1].setWorldX(23*gp.getTileSize());
         gp.getMonster()[1].setWorldY(37*gp.getTileSize());
+    }
+    
+    public void setInteractiveTile(){
+        int i = 0;
+        gp.getiTile()[i] = new IT_DryTree(gp, 27,12);
+        i++;
+        gp.getiTile()[i] = new IT_DryTree(gp,28,12);
+        i++;
+        gp.getiTile()[i] = new IT_DryTree(gp,29,12);
+        i++;
+        gp.getiTile()[i] = new IT_DryTree(gp,30,12);
+        i++;
+        gp.getiTile()[i] = new IT_DryTree(gp,31,12);
+        i++;
+        gp.getiTile()[i] = new IT_DryTree(gp,32,12);
+        i++;
+        gp.getiTile()[i] = new IT_DryTree(gp,33,12);
+        i++;
+        
+        
     }
 }

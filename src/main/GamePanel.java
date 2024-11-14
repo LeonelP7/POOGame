@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JPanel;
 import tile.TileManager;
+import tiles_interactive.InteractiveTile;
 
 /**
  *
@@ -58,10 +59,12 @@ public class GamePanel extends JPanel implements Runnable {
 
     //Entidad y objetos
     private Player player = new Player(this, keyH);
-    private Entity obj[] = new Entity[10];//este vector contiene los objetos distintos que pueden haber en el mundo
+    private Entity obj[] = new Entity[20];//este vector contiene los objetos distintos que pueden haber en el mundo
     private Entity npc[] = new Entity[10];//este vector contiene los npcs distintos que pueden haber en el mundo
-    private Entity monster[] = new Entity[20]; 
+    private Entity monster[] = new Entity[20];
+    private InteractiveTile iTile[] = new  InteractiveTile[50];
     private ArrayList<Entity> entityList = new ArrayList<>();
+    private ArrayList<Entity> particleList = new ArrayList<>();
 
     //GAME STATE(estado del juego)
     private int gameState;
@@ -91,6 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMoster();
+        aSetter.setInteractiveTile();
 
         //reproduce BlueBoyAdveture.wav
         //playMusic(0);
@@ -162,8 +166,29 @@ public class GamePanel extends JPanel implements Runnable {
                         monster[i].update();
                     }  
                     if (!monster[i].isAlive()) {
+                        monster[i].checkDrop();
                         monster[i]=null;
                     } 
+                }
+            }
+            
+            //particulas
+            for (int i = 0; i < particleList.size(); i++) {
+                if(particleList.get(i) != null){
+                    if(particleList.get(i).isAlive()){
+                        particleList.get(i).update();
+                    }
+                    
+                    if(!particleList.get(i).isAlive()){
+                        particleList.remove(i);
+                    }
+                }
+            }
+            
+            //tiles interactivos
+            for (int i = 0; i < iTile.length; i++) {
+                if(iTile[i] != null){
+                    iTile[i].update();
                 }
             }
         }
@@ -173,6 +198,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
+    @Override
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
@@ -195,6 +221,12 @@ public class GamePanel extends JPanel implements Runnable {
             //dibuja los Tiles en pantalla
             tileM.draw(g2);
             
+            for (int i = 0; i < iTile.length; i++) {
+                if(iTile[i] != null){
+                    iTile[i].draw(g2);
+                }
+            }
+            
             //agregando las entidades a la lista
             entityList.add(player);
             
@@ -213,6 +245,12 @@ public class GamePanel extends JPanel implements Runnable {
             for (int i = 0; i < monster.length; i++) {
                 if (monster[i]!=null) {
                     entityList.add(monster[i]);
+                }
+            }
+            
+            for (int i = 0; i < particleList.size(); i++) {
+                if (particleList.get(i) != null) {
+                    entityList.add(particleList.get(i));
                 }
             }
             
@@ -433,6 +471,30 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setaSetter(AssetSetter aSetter) {
         this.aSetter = aSetter;
+    }
+
+    public ArrayList<Entity> getEntityList() {
+        return entityList;
+    }
+
+    public void setEntityList(ArrayList<Entity> entityList) {
+        this.entityList = entityList;
+    }
+
+    public InteractiveTile[] getiTile() {
+        return iTile;
+    }
+
+    public void setiTile(InteractiveTile[] iTile) {
+        this.iTile = iTile;
+    }
+
+    public ArrayList<Entity> getParticleList() {
+        return particleList;
+    }
+
+    public void setParticleList(ArrayList<Entity> particleList) {
+        this.particleList = particleList;
     }
 
     

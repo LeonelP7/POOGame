@@ -20,7 +20,8 @@ public class Sound {
     private URL soundURL[] = new URL[30];
 
     public Sound() {
-        soundURL[0] = getClass().getResource("/sound/pixsouls.wav");
+        //soundURL[0] = getClass().getResource("/sound/pixsouls.wav");
+        soundURL[0] = getClass().getResource("/sound/deutschland.wav");
         soundURL[1] = getClass().getResource("/sound/coin.wav");
         soundURL[2] = getClass().getResource("/sound/powerup.wav");
         soundURL[3] = getClass().getResource("/sound/unlock.wav");
@@ -29,6 +30,7 @@ public class Sound {
         soundURL[6] = getClass().getResource("/sound/receivedamage.wav");
         soundURL[7] = getClass().getResource("/sound/levelup.wav");
         soundURL[8] = getClass().getResource("/sound/cursor.wav");
+        soundURL[9] = getClass().getResource("/sound/cuttree.wav");
     }
     
     public void setFile(int i){

@@ -18,6 +18,12 @@ import main.GamePanel;
  */
 public class OBJ_Key extends Entity{
     
+    public OBJ_Key(GamePanel gp, int col, int row) {
+        super(gp, col, row);
+        name = "Llave";
+        down1 = setUp("/objects/key",gp.getTileSize(),gp.getTileSize());
+        description = "[" + name + "]\n Pa´ abrir las \npuertas de tu corazon.";
+    }
     public OBJ_Key(GamePanel gp) {
         super(gp);
         name = "Llave";
