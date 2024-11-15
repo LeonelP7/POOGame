@@ -50,6 +50,10 @@ public class KeyHandler implements KeyListener {
         else if (gp.getGameState() == gp.getCharacterState()) {
             characterState(code);
 
+        }//Estado: opciones
+        else if (gp.getGameState() == gp.getOptionState()) {
+            optionsState(code);
+
         }
     }
 
@@ -103,6 +107,9 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_C) {
             gp.setGameState(gp.getCharacterState());
         }
+        if (code == KeyEvent.VK_ESCAPE) {
+            gp.setGameState(gp.getOptionState());
+        }
         //debug
         if (code == KeyEvent.VK_T) {
             if (!showDebugText) {
@@ -127,6 +134,70 @@ public class KeyHandler implements KeyListener {
     public void dialogueState(int code) {
         if (code == KeyEvent.VK_ENTER) {
             gp.setGameState(gp.getPlayState());
+        }
+    }
+
+    public void optionsState(int code) {
+        if (code == KeyEvent.VK_ESCAPE) {
+            gp.setGameState(gp.getPlayState());
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressed = true;
+        }
+
+        int maxCommandNumber = 0;
+        switch (gp.getUi().getSubState()) {
+            case 0:
+                maxCommandNumber = 5;
+                break;
+            case 3:
+                maxCommandNumber = 1;
+                break;
+
+        }
+
+        if (code == KeyEvent.VK_W) {
+            gp.getUi().setCommandNumber(gp.getUi().getCommandNumber() - 1);
+            gp.playSE(8);
+            if (gp.getUi().getCommandNumber() < 0) {
+                gp.getUi().setCommandNumber(maxCommandNumber);
+            }
+        }
+        if (code == KeyEvent.VK_S) {
+            gp.getUi().setCommandNumber(gp.getUi().getCommandNumber() + 1);
+            gp.playSE(8);
+            if (gp.getUi().getCommandNumber() > maxCommandNumber) {
+                gp.getUi().setCommandNumber(0);
+            }
+        }
+
+        if (code == KeyEvent.VK_A) {
+            if (gp.getUi().getSubState() == 0) {
+                if (gp.getUi().getCommandNumber() == 1 && gp.getMusic().getVolumeScale() > 0) {
+                    gp.getMusic().setVolumeScale(gp.getMusic().getVolumeScale() - 1);
+                    gp.getMusic().checkVolume();
+                    gp.playSE(8);
+                }
+
+                if (gp.getUi().getCommandNumber() == 2 && gp.getSe().getVolumeScale() > 0) {
+                    gp.getSe().setVolumeScale(gp.getSe().getVolumeScale() - 1);
+                    gp.playSE(8);
+                }
+            }
+        }
+
+        if (code == KeyEvent.VK_D) {
+            if (gp.getUi().getSubState() == 0) {
+                if (gp.getUi().getCommandNumber() == 1 && gp.getMusic().getVolumeScale() < 5) {
+                    gp.getMusic().setVolumeScale(gp.getMusic().getVolumeScale() + 1);
+                    gp.getMusic().checkVolume();
+                    gp.playSE(8);
+                }
+                if (gp.getUi().getCommandNumber() == 2 && gp.getSe().getVolumeScale() < 5) {
+                    gp.getSe().setVolumeScale(gp.getSe().getVolumeScale() + 1);
+                    gp.playSE(8);
+                }
+            }
         }
     }
 

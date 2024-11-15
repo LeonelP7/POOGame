@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
-import main.UtilityTool;
+import util.UtilityTool;
 import object.OBJ_Key;
 import object.OBJ_ShieldWood;
 import object.OBJ_SwordNormal;

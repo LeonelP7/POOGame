@@ -4,6 +4,7 @@
  */
 package main;
 
+import util.ComparatorByWorldY;
 import entity.Entity;
 import entity.Player;
 import java.awt.Color;
@@ -42,8 +43,6 @@ public class GamePanel extends JPanel implements Runnable {
     //para pantalla completa
     private int screenWidth2 = screenWidth;
     private int screenHeight2 = screenHeight;
-    private BufferedImage tempScreen;
-    private Graphics2D g2;
 
     //Configuracion del mundo
     private final int maxWorldCol = 50;
@@ -65,6 +64,7 @@ public class GamePanel extends JPanel implements Runnable {
     private EventHandler eHandler = new EventHandler(this);
     private UI ui = new UI(this);
     private Thread gameThread;
+    private Config config = new Config(this);
 
     //Entidad y objetos
     private Player player = new Player(this, keyH);
@@ -82,6 +82,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final int pauseState = 2;
     private final int dialogueState = 3;
     private final int characterState = 4;
+    private final int optionState = 5;
 
     public GamePanel() {
 
@@ -108,18 +109,6 @@ public class GamePanel extends JPanel implements Runnable {
         //reproduce BlueBoyAdveture.wav
         //playMusic(0);
         gameState = titleState;
-        
-        //crea una BufferedImage en blanco, tan grande como nuestra pantalla(la ventana de juego para este caso)
-        /*
-        para la pantalla completa dividimos el proceso de dibujar en pantalla en
-        1. dibujamos todo en la tempScreen
-        2. dibujamos la tempScreen en el JPanel
-        Lo hacemos asi para en lugar de tener que redimencionar todos los elementos en pantalla
-        solo tener que redimensionar la tempScreen, este metodo es un poco mas pesado que solo
-        dibujar directamente sobre el JPanel
-        */
-        tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
-        g2 = (Graphics2D)tempScreen.getGraphics(); //todo lo que el g2 dibuje sera guardado en la bufferedImage
         
         //setFullScreen();
     }
@@ -166,8 +155,8 @@ public class GamePanel extends JPanel implements Runnable {
                 update();
 
                 //2 Dibujar: dibujar en la bufferedImage(tempScreen) con la informacion actualizada
-                drawToTempScreen();
-                drawToScreen(); // dibuja la bufferedImage(tempScreen) en la pantalla
+                repaint();
+                //drawToScreen(); // dibuja la bufferedImage(tempScreen) en la pantalla
 
                 delta--;
                 drawCount++;
@@ -232,17 +221,23 @@ public class GamePanel extends JPanel implements Runnable {
         if (gameState == pauseState) {
             //nada por ahora
         }
+        
+        if(gameState == titleState){
+            //nada por ahora
+            
+        }
 
     }
     
-    public void drawToScreen(){
-        Graphics g = getGraphics();
-        g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
-        g.dispose();
-    }
-    
-    public void drawToTempScreen(){
-        //DEBUG
+    @Override
+    public void paintComponent(Graphics g) {
+
+        super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D) g;
+        
+        
+         //DEBUG
         long drawStart = 0;
         if (keyH.isShowDebugText()) {
             drawStart = System.nanoTime();
@@ -323,6 +318,11 @@ public class GamePanel extends JPanel implements Runnable {
             g2.drawString("Draw time: " + passed, x, y);
             System.out.println("Draw time: " + passed);
         }
+        
+        
+        
+        
+        g2.dispose();
     }
 
     public void playMusic(int i) {
@@ -532,6 +532,27 @@ public class GamePanel extends JPanel implements Runnable {
         this.particleList = particleList;
     }
 
+    public int getOptionState() {
+        return optionState;
+    }
+
+    public Sound getMusic() {
+        return music;
+    }
+
+    public void setMusic(Sound music) {
+        this.music = music;
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
+    }
+
+    
     
     
 }

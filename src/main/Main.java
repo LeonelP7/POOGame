@@ -25,6 +25,10 @@ public class Main {
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
         
+        //cargando las configuraciones
+        gamePanel.getConfig().loadConfig();
+        
+        
         //ajusta el tamaño de la ventana a las dimensiones de sus componentes(gamePanel)
         window.pack();
         
