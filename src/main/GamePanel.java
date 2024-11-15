@@ -11,6 +11,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JPanel;
@@ -31,10 +34,16 @@ public class GamePanel extends JPanel implements Runnable {
     private final int tileSize = originalTileSize * scale; //48x48 tile
 
     //tamaño de la pantalla
-    private final int maxScreenCol = 16;
+    private final int maxScreenCol = 20;
     private final int maxScreenRow = 12;
-    private final int screenWidth = tileSize * maxScreenCol; //768 pixels
+    private final int screenWidth = tileSize * maxScreenCol; //960 pixels
     private final int screenHeight = tileSize * maxScreenRow; //576 pixels
+    
+    //para pantalla completa
+    private int screenWidth2 = screenWidth;
+    private int screenHeight2 = screenHeight;
+    private BufferedImage tempScreen;
+    private Graphics2D g2;
 
     //Configuracion del mundo
     private final int maxWorldCol = 50;
@@ -99,6 +108,33 @@ public class GamePanel extends JPanel implements Runnable {
         //reproduce BlueBoyAdveture.wav
         //playMusic(0);
         gameState = titleState;
+        
+        //crea una BufferedImage en blanco, tan grande como nuestra pantalla(la ventana de juego para este caso)
+        /*
+        para la pantalla completa dividimos el proceso de dibujar en pantalla en
+        1. dibujamos todo en la tempScreen
+        2. dibujamos la tempScreen en el JPanel
+        Lo hacemos asi para en lugar de tener que redimencionar todos los elementos en pantalla
+        solo tener que redimensionar la tempScreen, este metodo es un poco mas pesado que solo
+        dibujar directamente sobre el JPanel
+        */
+        tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+        g2 = (Graphics2D)tempScreen.getGraphics(); //todo lo que el g2 dibuje sera guardado en la bufferedImage
+        
+        //setFullScreen();
+    }
+    
+    public void setFullScreen(){
+        
+        //obtener informacion del monitor local
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice(); 
+        gd.setFullScreenWindow(Main.window);
+        
+        //obtener el ancho y el alto de la pantalla completa, para redimencionaar la bufferedImage(tempScreen)
+        screenWidth2 = Main.window.getWidth();
+        screenHeight2 = Main.window.getHeight();
+        
     }
 
     public void startGameThread() {
@@ -126,11 +162,12 @@ public class GamePanel extends JPanel implements Runnable {
             lastTime = currentTime;
 
             if (delta >= 1) {
-                //1 Actualizar; actualizar informacion como la posicion del personaje
+                //1 Actualizar: actualizar informacion como la posicion del personaje
                 update();
 
-                //2 Dibujar: dibujar la pantalla con la informacion actualizada
-                repaint();
+                //2 Dibujar: dibujar en la bufferedImage(tempScreen) con la informacion actualizada
+                drawToTempScreen();
+                drawToScreen(); // dibuja la bufferedImage(tempScreen) en la pantalla
 
                 delta--;
                 drawCount++;
@@ -197,14 +234,14 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
     }
-
-    @Override
-    public void paintComponent(Graphics g) {
-
-        super.paintComponent(g);
-
-        Graphics2D g2 = (Graphics2D) g;
-
+    
+    public void drawToScreen(){
+        Graphics g = getGraphics();
+        g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
+        g.dispose();
+    }
+    
+    public void drawToTempScreen(){
         //DEBUG
         long drawStart = 0;
         if (keyH.isShowDebugText()) {
@@ -286,8 +323,6 @@ public class GamePanel extends JPanel implements Runnable {
             g2.drawString("Draw time: " + passed, x, y);
             System.out.println("Draw time: " + passed);
         }
-
-        g2.dispose();
     }
 
     public void playMusic(int i) {

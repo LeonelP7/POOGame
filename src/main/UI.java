@@ -250,7 +250,7 @@ public class UI {
     public void drawCharacterScreen() {
 
         //creando un cuadro
-        final int frameX = gp.getTileSize();
+        final int frameX = gp.getTileSize()*2;
         final int frameY = gp.getTileSize();
         final int frameWidth = gp.getTileSize() * 5;
         final int frameHeight = gp.getTileSize() * 10;
@@ -348,7 +348,7 @@ public class UI {
 
     public void drawInventory() {
         //cuadro
-        int frameX = gp.getTileSize() * 9;
+        int frameX = gp.getTileSize() * 12;
         int frameY = gp.getTileSize();
         int frameWidth = gp.getTileSize() * 6;
         int frameHeight = gp.getTileSize() * 5;
