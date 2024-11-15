@@ -160,11 +160,11 @@ public abstract class Entity {
     
     public void dropItem(Entity droppedItem){
         
-        for (int i = 0; i < gp.getObj().length; i++) {
-            if(gp.getObj()[i] == null){
-                gp.getObj()[i] = droppedItem;
-                gp.getObj()[i].setWorldX(worldX);
-                gp.getObj()[i].setWorldY(worldY);
+        for (int i = 0; i < gp.getObj()[1].length; i++) {
+            if(gp.getObj()[gp.getCurrentMap()][i] == null){
+                gp.getObj()[gp.getCurrentMap()][i] = droppedItem;
+                gp.getObj()[gp.getCurrentMap()][i].setWorldX(worldX);
+                gp.getObj()[gp.getCurrentMap()][i].setWorldY(worldY);
                 break;
             }
         }

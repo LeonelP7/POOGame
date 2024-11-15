@@ -24,15 +24,16 @@ public class TileManager {
     //array que contiene los distintos tipos de tiles
     private Tile[] tile;
 
-    private int mapTileNum[][];
+    private int mapTileNum[][][];
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[50];
-        mapTileNum = new int[gp.getMaxWorldCol()][gp.getMaxWorldRow()];
+        mapTileNum = new int[gp.getMaxMap()][gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 
         getTileImage();
-        loadMap("/maps/worldV2.txt");
+        loadMap("/maps/worldV3.txt",0);
+        loadMap("/maps/interior01.txt",1);
     }
 
     public void getTileImage() {
@@ -82,6 +83,9 @@ public class TileManager {
         setUp(39, "earth", false);
         setUp(40, "wall", false);
         setUp(41, "tree", true);
+        setUp(42, "hut", false);
+        setUp(43, "floor01", false);
+        setUp(44, "table01", true);
     }
 
     private void setUp(int index, String imageName, boolean collision) {
@@ -99,7 +103,7 @@ public class TileManager {
 
     }
 
-    public void loadMap(String filePath) {
+    public void loadMap(String filePath, int map) {
 
         try {
             /*
@@ -122,7 +126,7 @@ public class TileManager {
                     String numbers[] = line.split(" ");
 
                     int num = Integer.parseInt(numbers[col]);
-                    mapTileNum[col][row] = num;
+                    mapTileNum[map][col][row] = num;
 
                     col++;
                 }
@@ -145,7 +149,7 @@ public class TileManager {
 
         while (worldCol < gp.getMaxWorldCol() && worldRow < gp.getMaxWorldRow()) {
 
-            int tileNumber = mapTileNum[worldCol][worldRow];
+            int tileNumber = mapTileNum[gp.getCurrentMap()][worldCol][worldRow];
 
             int worldX = worldCol * gp.getTileSize();
             int worldY = worldRow * gp.getTileSize();
@@ -188,11 +192,11 @@ public class TileManager {
         this.tile = tile;
     }
 
-    public int[][] getMapTileNum() {
+    public int[][][] getMapTileNum() {
         return mapTileNum;
     }
 
-    public void setMapTileNum(int[][] mapTileNum) {
+    public void setMapTileNum(int[][][] mapTileNum) {
         this.mapTileNum = mapTileNum;
     }
 

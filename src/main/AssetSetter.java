@@ -30,55 +30,66 @@ public class AssetSetter {
     }
 
     public void setObject() {
+        
+        int mapNum = 0;
+        
         int i = 0;
-        gp.getObj()[i] = new OBJ_Key(gp,25,23);
+        gp.getObj()[mapNum][i] = new OBJ_Key(gp,25,23);
         i++;
-        gp.getObj()[i] = new OBJ_Key(gp,21,19);
+        gp.getObj()[mapNum][i] = new OBJ_Key(gp,21,19);
         i++;
-        gp.getObj()[i] = new OBJ_Key(gp,26,21);
+        gp.getObj()[mapNum][i] = new OBJ_Key(gp,26,21);
         i++;
-        gp.getObj()[i] = new OBJ_Axe(gp,33,21);
+        gp.getObj()[mapNum][i] = new OBJ_Axe(gp,33,21);
         i++;
-        gp.getObj()[i] = new OBJ_ShieldBlue(gp,35,21);
+        gp.getObj()[mapNum][i] = new OBJ_ShieldBlue(gp,35,21);
         i++;
-        gp.getObj()[i] = new OBJ_PotionRed(gp,22,27);
+        gp.getObj()[mapNum][i] = new OBJ_PotionRed(gp,22,27);
         i++;
-        gp.getObj()[i] = new OBJ_Heart(gp,22,29);
+        gp.getObj()[mapNum][i] = new OBJ_Heart(gp,22,29);
         i++;
     }
     
     public void setNPC(){
         
-        gp.getNpc()[0] = new NPC_OldMan(gp);
-        gp.getNpc()[0].setWorldX(gp.getTileSize()*21);
-        gp.getNpc()[0].setWorldY(gp.getTileSize()*21);
+        int mapNum = 0;
+        
+        gp.getNpc()[mapNum][0] = new NPC_OldMan(gp);
+        gp.getNpc()[mapNum][0].setWorldX(gp.getTileSize()*21);
+        gp.getNpc()[mapNum][0].setWorldY(gp.getTileSize()*21);
     }
 
     public void setMoster(){
-        gp.getMonster()[0] = new MON_GreenSlime(gp);
-        gp.getMonster()[0].setWorldX(23*gp.getTileSize());
-        gp.getMonster()[0].setWorldY(36*gp.getTileSize());
         
-        gp.getMonster()[1] = new MON_GreenSlime(gp);
-        gp.getMonster()[1].setWorldX(23*gp.getTileSize());
-        gp.getMonster()[1].setWorldY(37*gp.getTileSize());
+        int mapNum = 0;
+        
+        gp.getMonster()[mapNum][0] = new MON_GreenSlime(gp);
+        gp.getMonster()[mapNum][0].setWorldX(23*gp.getTileSize());
+        gp.getMonster()[mapNum][0].setWorldY(36*gp.getTileSize());
+        
+        gp.getMonster()[mapNum][1] = new MON_GreenSlime(gp);
+        gp.getMonster()[mapNum][1].setWorldX(23*gp.getTileSize());
+        gp.getMonster()[mapNum][1].setWorldY(37*gp.getTileSize());
     }
     
     public void setInteractiveTile(){
+        
+        int mapNum = 0;
+        
         int i = 0;
-        gp.getiTile()[i] = new IT_DryTree(gp, 27,12);
+        gp.getiTile()[mapNum][i] = new IT_DryTree(gp, 27,12);
         i++;
-        gp.getiTile()[i] = new IT_DryTree(gp,28,12);
+        gp.getiTile()[mapNum][i] = new IT_DryTree(gp,28,12);
         i++;
-        gp.getiTile()[i] = new IT_DryTree(gp,29,12);
+        gp.getiTile()[mapNum][i] = new IT_DryTree(gp,29,12);
         i++;
-        gp.getiTile()[i] = new IT_DryTree(gp,30,12);
+        gp.getiTile()[mapNum][i] = new IT_DryTree(gp,30,12);
         i++;
-        gp.getiTile()[i] = new IT_DryTree(gp,31,12);
+        gp.getiTile()[mapNum][i] = new IT_DryTree(gp,31,12);
         i++;
-        gp.getiTile()[i] = new IT_DryTree(gp,32,12);
+        gp.getiTile()[mapNum][i] = new IT_DryTree(gp,32,12);
         i++;
-        gp.getiTile()[i] = new IT_DryTree(gp,33,12);
+        gp.getiTile()[mapNum][i] = new IT_DryTree(gp,33,12);
         i++;
         
         

@@ -125,7 +125,14 @@ public class KeyHandler implements KeyListener {
 
         //recarga el mapa
         if (code == KeyEvent.VK_R) {
-            gp.getTileM().loadMap("/maps/worldV2.txt");
+            switch (gp.getCurrentMap()) {
+                case 0:
+                    gp.getTileM().loadMap("/maps/worldV3.txt", 0);
+                    break;
+                case 1:
+                    gp.getTileM().loadMap("/maps/interior01.txt", 1);
+                    break;
+            }
         }
     }
 
@@ -240,30 +247,32 @@ public class KeyHandler implements KeyListener {
         }
 
     }
-    
-    public void gameOverState(int code){
-        if(code == KeyEvent.VK_W){
-            gp.getUi().setCommandNumber(gp.getUi().getCommandNumber()-1);
-            if(gp.getUi().getCommandNumber() < 0){
+
+    public void gameOverState(int code) {
+        if (code == KeyEvent.VK_W) {
+            gp.getUi().setCommandNumber(gp.getUi().getCommandNumber() - 1);
+            if (gp.getUi().getCommandNumber() < 0) {
                 gp.getUi().setCommandNumber(1);
             }
             gp.playSE(8);
         }
-        if(code == KeyEvent.VK_S){
-            gp.getUi().setCommandNumber(gp.getUi().getCommandNumber()+1);
-            if(gp.getUi().getCommandNumber() > 1){
+        if (code == KeyEvent.VK_S) {
+            gp.getUi().setCommandNumber(gp.getUi().getCommandNumber() + 1);
+            if (gp.getUi().getCommandNumber() > 1) {
                 gp.getUi().setCommandNumber(0);
             }
             gp.playSE(8);
         }
-        
-        if(code == KeyEvent.VK_ENTER){
-            if(gp.getUi().getCommandNumber() == 0){
+
+        if (code == KeyEvent.VK_ENTER) {
+            if (gp.getUi().getCommandNumber() == 0) {
                 gp.setGameState(gp.getPlayState());
                 gp.retry();
-            }else if(gp.getUi().getCommandNumber() == 1){
+                gp.playMusic(0);
+            } else if (gp.getUi().getCommandNumber() == 1) {
                 gp.setGameState(gp.getTitleState());
                 gp.restart();
+
             }
         }
     }

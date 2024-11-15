@@ -5,18 +5,11 @@
 package entity;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
-import util.UtilityTool;
 import object.OBJ_Key;
 import object.OBJ_ShieldWood;
 import object.OBJ_SwordNormal;
@@ -49,9 +42,6 @@ public class Player extends Entity {
         solidArea.width = 32;
         solidArea.height = 32;
 
-        attackArea.width = 36;
-        attackArea.height = 36;
-
         attackCancel = false;
 
         setDefaultValues();
@@ -63,6 +53,8 @@ public class Player extends Entity {
     public void setDefaultValues() {
         worldX = gp.getTileSize() * 23;
         worldY = gp.getTileSize() * 21;
+//        worldX = gp.getTileSize() * 12;
+//        worldY = gp.getTileSize() * 13;
         speed = 4;
         direction = "down";
 
@@ -255,6 +247,7 @@ public class Player extends Entity {
         if (life <= 0) {
             gp.setGameState(gp.getGameOverState());
             gp.getUi().setCommandNumber(-1);
+            gp.stopMusic();
             gp.playSE(10);
         }
     }
@@ -318,18 +311,18 @@ public class Player extends Entity {
         if (i != 999) {
 
             //Items que solo se pueden recoger
-            if (gp.getObj()[i].getType() == type_pickUpOnly) {
+            if (gp.getObj()[gp.getCurrentMap()][i].getType() == type_pickUpOnly) {
 
-                gp.getObj()[i].use(this);
-                gp.getObj()[i] = null;
+                gp.getObj()[gp.getCurrentMap()][i].use(this);
+                gp.getObj()[gp.getCurrentMap()][i] = null;
             }//Items que van al inventario
             else {
                 String text = "";
                 if (inventory.size() != maxInventorySize) {
-                    inventory.add(gp.getObj()[i]);
+                    inventory.add(gp.getObj()[gp.getCurrentMap()][i]);
                     gp.playSE(1);
-                    text = "Recogiste " + gp.getObj()[i].getName() + "!";
-                    gp.getObj()[i] = null;
+                    text = "Recogiste " + gp.getObj()[gp.getCurrentMap()][i].getName() + "!";
+                    gp.getObj()[gp.getCurrentMap()][i] = null;
                 } else {
                     text = "Ya no puedes llevar mas!";
                 }
@@ -342,9 +335,9 @@ public class Player extends Entity {
 
     public void contactMonster(int i) {
         if (i != 999) {
-            if (!invincible && !gp.getMonster()[i].isDying()) {
+            if (!invincible && !gp.getMonster()[gp.getCurrentMap()][i].isDying()) {
                 gp.playSE(6);
-                int damage = gp.getMonster()[i].getAttack() - defense;
+                int damage = gp.getMonster()[gp.getCurrentMap()][i].getAttack() - defense;
                 if (damage < 0) {
                     damage = 0;
                 }
@@ -358,20 +351,20 @@ public class Player extends Entity {
 
     public void damageMonster(int i) {
         if (i != 999) {
-            if (!gp.getMonster()[i].isInvincible()) {
+            if (!gp.getMonster()[gp.getCurrentMap()][i].isInvincible()) {
                 gp.playSE(5);
 
-                int damage = attack - gp.getMonster()[i].getDefense();
+                int damage = attack - gp.getMonster()[gp.getCurrentMap()][i].getDefense();
                 if (damage < 0) {
                     damage = 0;
                 }
-                gp.getMonster()[i].setLife(gp.getMonster()[i].getLife() - damage);
-                gp.getMonster()[i].setInvincible(true);
-                gp.getMonster()[i].damageReaction();
+                gp.getMonster()[gp.getCurrentMap()][i].setLife(gp.getMonster()[gp.getCurrentMap()][i].getLife() - damage);
+                gp.getMonster()[gp.getCurrentMap()][i].setInvincible(true);
+                gp.getMonster()[gp.getCurrentMap()][i].damageReaction();
 
-                if (gp.getMonster()[i].getLife() <= 0) {
-                    gp.getMonster()[i].setDying(true);
-                    exp += gp.getMonster()[i].getExp();
+                if (gp.getMonster()[gp.getCurrentMap()][i].getLife() <= 0) {
+                    gp.getMonster()[gp.getCurrentMap()][i].setDying(true);
+                    exp += gp.getMonster()[gp.getCurrentMap()][i].getExp();
                     checkLevelUp();
                 }
             }
@@ -379,11 +372,11 @@ public class Player extends Entity {
     }
 
     public void damageInteractiveTile(int i) {
-        if (i != 999 && gp.getiTile()[i].isDestructible()
-                && gp.getiTile()[i].isCorrectItem(this)) {
-            gp.getiTile()[i].playSE();
-            generateParticle(gp.getiTile()[i], gp.getiTile()[i]);
-            gp.getiTile()[i] = gp.getiTile()[i].getDestroyedFrom();
+        if (i != 999 && gp.getiTile()[gp.getCurrentMap()][i].isDestructible()
+                && gp.getiTile()[gp.getCurrentMap()][i].isCorrectItem(this)) {
+            gp.getiTile()[gp.getCurrentMap()][i].playSE();
+            generateParticle(gp.getiTile()[gp.getCurrentMap()][i], gp.getiTile()[gp.getCurrentMap()][i]);
+            gp.getiTile()[gp.getCurrentMap()][i] = gp.getiTile()[gp.getCurrentMap()][i].getDestroyedFrom();
 
         }
     }
@@ -411,7 +404,7 @@ public class Player extends Entity {
             if (i != 999) {
                 attackCancel = true;
                 gp.setGameState(gp.getDialogueState());
-                gp.getNpc()[i].speak();
+                gp.getNpc()[gp.getCurrentMap()][i].speak();
 
             }
         }
