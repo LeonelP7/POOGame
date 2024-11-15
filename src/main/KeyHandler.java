@@ -54,6 +54,10 @@ public class KeyHandler implements KeyListener {
         else if (gp.getGameState() == gp.getOptionState()) {
             optionsState(code);
 
+        }//Estado: fin del juego
+        else if (gp.getGameState() == gp.getGameOverState()) {
+            gameOverState(code);
+
         }
     }
 
@@ -235,6 +239,33 @@ public class KeyHandler implements KeyListener {
             gp.getPlayer().selectItem();
         }
 
+    }
+    
+    public void gameOverState(int code){
+        if(code == KeyEvent.VK_W){
+            gp.getUi().setCommandNumber(gp.getUi().getCommandNumber()-1);
+            if(gp.getUi().getCommandNumber() < 0){
+                gp.getUi().setCommandNumber(1);
+            }
+            gp.playSE(8);
+        }
+        if(code == KeyEvent.VK_S){
+            gp.getUi().setCommandNumber(gp.getUi().getCommandNumber()+1);
+            if(gp.getUi().getCommandNumber() > 1){
+                gp.getUi().setCommandNumber(0);
+            }
+            gp.playSE(8);
+        }
+        
+        if(code == KeyEvent.VK_ENTER){
+            if(gp.getUi().getCommandNumber() == 0){
+                gp.setGameState(gp.getPlayState());
+                gp.retry();
+            }else if(gp.getUi().getCommandNumber() == 1){
+                gp.setGameState(gp.getTitleState());
+                gp.restart();
+            }
+        }
     }
 
     @Override

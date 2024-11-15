@@ -83,6 +83,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final int dialogueState = 3;
     private final int characterState = 4;
     private final int optionState = 5;
+    private final int gameOverState = 6;
 
     public GamePanel() {
 
@@ -110,20 +111,24 @@ public class GamePanel extends JPanel implements Runnable {
         //playMusic(0);
         gameState = titleState;
         
-        //setFullScreen();
     }
     
-    public void setFullScreen(){
+    public void retry(){
         
-        //obtener informacion del monitor local
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice(); 
-        gd.setFullScreenWindow(Main.window);
-        
-        //obtener el ancho y el alto de la pantalla completa, para redimencionaar la bufferedImage(tempScreen)
-        screenWidth2 = Main.window.getWidth();
-        screenHeight2 = Main.window.getHeight();
-        
+        player.setDefaultPositions();
+        player.restoreLife();
+        aSetter.setNPC();
+        aSetter.setMoster();
+        aSetter.setInteractiveTile();
+    }
+    
+    public void restart(){
+        player.setDefaultValues();
+        player.setItems();
+        aSetter.setObject();
+        aSetter.setNPC();
+        aSetter.setMoster();
+        aSetter.setInteractiveTile();
     }
 
     public void startGameThread() {
@@ -550,6 +555,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setConfig(Config config) {
         this.config = config;
+    }
+
+    public int getGameOverState() {
+        return gameOverState;
     }
 
     

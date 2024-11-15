@@ -103,6 +103,11 @@ public class UI {
         if (gp.getGameState() == gp.getOptionState()) {
             drawOptionsScreen();
         }
+        
+        // estado: fin del juego
+        if (gp.getGameState() == gp.getGameOverState()) {
+            drawGameOverScreen();
+        }
 
     }
 
@@ -262,6 +267,50 @@ public class UI {
 
         gp.getKeyH().setEnterPressed(false);
     }
+    
+    public void drawGameOverScreen(){
+        
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
+        
+        int x;
+        int y;
+        String text;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 110f));
+        
+        text = "Has muerto";
+        //sombra del texto
+        g2.setColor(Color.gray);
+        x = getXForCenteredText(text);
+        y = gp.getTileSize()*6;
+        g2.drawString(text, x, y);
+        
+        //texto
+        g2.setColor(Color.red);
+        g2.drawString(text, x-4, y-4);
+        
+        //reintentar
+        g2.setFont(g2.getFont().deriveFont(50f));
+        g2.setColor(Color.white);
+        text = "Reintentar";
+        x = getXForCenteredText(text);
+        y += gp.getTileSize()*2;
+        g2.drawString(text, x, y);
+        if (commandNumber == 0) {
+            g2.drawString(">", x-40, y);
+        }
+        
+        //volver a la pantalla de titulo
+        text = "Salir";
+        x = getXForCenteredText(text);
+        y += 55;
+        g2.drawString(text, x, y);
+        if (commandNumber == 1) {
+            g2.drawString(">", x-40, y);
+        }
+        
+        
+    }
 
     public void optionsTop(int frameX, int frameY) {
 
@@ -307,9 +356,9 @@ public class UI {
             }
         }
 
-        //finalizar juego
+        //salir de la partida
         textY += gp.getTileSize();
-        g2.drawString("Finalizar juego", textX, textY);
+        g2.drawString("Salir al menu", textX, textY);
         if (commandNumber == 4) {
             g2.drawString(">", textX - 25, textY);
             if (gp.getKeyH().isEnterPressed()) {

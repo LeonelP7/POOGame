@@ -81,7 +81,20 @@ public class Player extends Entity {
         life = maxLife;
     }
 
+    public void setDefaultPositions() {
+
+        worldX = gp.getTileSize() * 23;
+        worldY = gp.getTileSize() * 21;
+        direction = "down";
+    }
+    
+    public void restoreLife(){
+        life = maxLife;
+        
+    }
+
     public void setItems() {
+        inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Key(gp));
@@ -172,7 +185,7 @@ public class Player extends Entity {
             //revisa la colision con monstruos
             int monsterIndex = gp.getcChecker().checkEntity(this, gp.getMonster());
             contactMonster(monsterIndex);
-            
+
             //revisa la colision con tiles interactivos
             int iTileIndex = gp.getcChecker().checkEntity(this, gp.getiTile());
 
@@ -238,6 +251,12 @@ public class Player extends Entity {
         if (life > maxLife) {
             life = maxLife;
         }
+
+        if (life <= 0) {
+            gp.setGameState(gp.getGameOverState());
+            gp.getUi().setCommandNumber(-1);
+            gp.playSE(10);
+        }
     }
 
     public void attacking() {
@@ -276,7 +295,7 @@ public class Player extends Entity {
             // revisa la colision con monstruos con las actualizadas worldX, worldY y solidArea
             int monsterIndex = gp.getcChecker().checkEntity(this, gp.getMonster());
             damageMonster(monsterIndex);
-            
+
             int iTileIndex = gp.getcChecker().checkEntity(this, gp.getiTile());
             damageInteractiveTile(iTileIndex);
 
@@ -358,14 +377,14 @@ public class Player extends Entity {
             }
         }
     }
-    
-    public void damageInteractiveTile(int i){
-        if(i != 999 && gp.getiTile()[i].isDestructible() &&
-                gp.getiTile()[i].isCorrectItem(this)){
+
+    public void damageInteractiveTile(int i) {
+        if (i != 999 && gp.getiTile()[i].isDestructible()
+                && gp.getiTile()[i].isCorrectItem(this)) {
             gp.getiTile()[i].playSE();
             generateParticle(gp.getiTile()[i], gp.getiTile()[i]);
             gp.getiTile()[i] = gp.getiTile()[i].getDestroyedFrom();
-            
+
         }
     }
 
