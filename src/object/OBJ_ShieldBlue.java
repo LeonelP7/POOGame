@@ -15,12 +15,28 @@ public class OBJ_ShieldBlue extends Entity{
     
     public OBJ_ShieldBlue(GamePanel gp, int col, int row) {
         super(gp,col,row);
+        setItemValues();
+        
+    }
+
+    public OBJ_ShieldBlue(GamePanel gp) {
+        super(gp);
+        setItemValues();
+    }
+    
+     
+
+    @Override
+    public void setItemValues() {
         type = type_shield;
         name = "Escudo Azul";
         down1 = setUp("/objects/shield_blue", gp.getTileSize(), gp.getTileSize());
         defenseValue = 2;
         description = "["+name+"]"+"\nYas...";
+        price = 35;
     }
+    
+    
     
     
 }

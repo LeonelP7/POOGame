@@ -20,6 +20,7 @@ public class OBJ_ShieldWood extends Entity{
         down1 = setUp("/objects/shield_wood", gp.getTileSize(), gp.getTileSize());
         defenseValue = 1;
         description = "[" + name + "]\n Un carton Duro :/.";
+        price = 30;
     }
     
 }

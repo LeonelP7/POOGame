@@ -20,16 +20,44 @@ public class OBJ_Key extends Entity{
     
     public OBJ_Key(GamePanel gp, int col, int row) {
         super(gp, col, row);
-        name = "Llave";
-        down1 = setUp("/objects/key",gp.getTileSize(),gp.getTileSize());
-        description = "[" + name + "]\n Pa´ abrir las \npuertas de tu corazon.";
+        setItemValues();
     }
     public OBJ_Key(GamePanel gp) {
         super(gp);
+        setItemValues();
+        
+    }
+
+    @Override
+    public void setItemValues() {
         name = "Llave";
+        type = type_consumable;
         down1 = setUp("/objects/key",gp.getTileSize(),gp.getTileSize());
         description = "[" + name + "]\n Pa´ abrir las \npuertas de tu corazon.";
+        price = 10;
     }
+
+    @Override
+    public boolean use(Entity entity) {
+        gp.setGameState(gp.getDialogueState());
+        
+        int objIndex = getDetected(entity, gp.getObj(), "door");
+        
+        if (objIndex != 999) {
+            gp.getUi().setCurrentDialogue("Usas la " + name + " y abrea la puerta");
+            gp.playSE(3);
+            gp.getObj()[gp.getCurrentMap()][objIndex] = null;
+            return true;
+        }
+        else{
+            gp.getUi().setCurrentDialogue("Que haces viejo?");
+        }
+        return false;
+    }
+    
+    
+    
+    
     
     
 }

@@ -15,6 +15,18 @@ public class OBJ_Axe extends Entity{
     
     public OBJ_Axe(GamePanel gp, int col, int row) {
         super(gp,col,row);
+        setItemValues();
+    }
+
+    public OBJ_Axe(GamePanel gp) {
+        super(gp);
+        setItemValues();
+    }
+    
+    
+
+    @Override
+    public void setItemValues() {
         type = type_axe;
         name = "Hacha de leñador";
         down1 = setUp("/objects/axe", gp.getTileSize(), gp.getTileSize());
@@ -22,6 +34,9 @@ public class OBJ_Axe extends Entity{
         attackArea.width = 30;
         attackArea.height = 30;
         description = "["+name+"]"+"\nUn aShAa";
+        price = 30;
     }
+    
+    
     
 }

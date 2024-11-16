@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import main.GamePanel;
 import main.KeyHandler;
+import object.OBJ_Axe;
 import object.OBJ_Key;
 import object.OBJ_ShieldWood;
 import object.OBJ_SwordNormal;
@@ -25,8 +26,6 @@ public class Player extends Entity {
     //contador para actualizar el sprite si se queda quieto el personaje
     private int standCounter;
     private boolean attackCancel;
-    private ArrayList<Entity> inventory = new ArrayList<>();
-    private final int maxInventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -54,7 +53,7 @@ public class Player extends Entity {
         worldX = gp.getTileSize() * 23;
         worldY = gp.getTileSize() * 21;
 //        worldX = gp.getTileSize() * 12;
-//        worldY = gp.getTileSize() * 13;
+//        worldY = gp.getTileSize() * 12;
         speed = 4;
         direction = "down";
 
@@ -64,7 +63,7 @@ public class Player extends Entity {
         dexterity = 1; //entre mas destreza tenga menos daño recibe
         exp = 0;
         nextLevelExp = 5;
-        coin = 0;
+        coin = 100;
         currentWeapon = new OBJ_SwordNormal(gp);
         currentShield = new OBJ_ShieldWood(gp);
         attack = getTotalAttack();
@@ -85,12 +84,14 @@ public class Player extends Entity {
         
     }
 
+    @Override
     public void setItems() {
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Axe(gp));
     }
 
     public int getTotalAttack() {
@@ -140,6 +141,7 @@ public class Player extends Entity {
 
     }
 
+    @Override
     public void update() {
 
         if (attacking) {
@@ -315,7 +317,14 @@ public class Player extends Entity {
 
                 gp.getObj()[gp.getCurrentMap()][i].use(this);
                 gp.getObj()[gp.getCurrentMap()][i] = null;
-            }//Items que van al inventario
+            }
+            //obstaculos
+            else if(gp.getObj()[gp.getCurrentMap()][i].getType() == type_obstacle){
+                if(gp.getKeyH().isEnterPressed()){
+                    gp.getObj()[gp.getCurrentMap()][i].interact();
+                }
+            }            
+            //Items que van al inventario
             else {
                 String text = "";
                 if (inventory.size() != maxInventorySize) {
@@ -412,7 +421,7 @@ public class Player extends Entity {
     }
 
     public void selectItem() {
-        int itemIndex = gp.getUi().getItemIndexOnSlot();
+        int itemIndex = gp.getUi().getItemIndexOnSlot(gp.getUi().getPlayerSlotCol(),gp.getUi().getPlayerSlotRow());
 
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
@@ -429,8 +438,9 @@ public class Player extends Entity {
             }
 
             if (selectedItem.type == type_consumable) {
-                selectedItem.use(this);
-                inventory.remove(itemIndex);
+                if(selectedItem.use(this)){
+                    inventory.remove(itemIndex);
+                }   
             }
         }
     }
@@ -556,18 +566,6 @@ public class Player extends Entity {
 
     public void setAttackCancel(boolean attackCancel) {
         this.attackCancel = attackCancel;
-    }
-
-    public ArrayList<Entity> getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(ArrayList<Entity> inventory) {
-        this.inventory = inventory;
-    }
-
-    public int getMaxInventorySize() {
-        return maxInventorySize;
     }
 
 }

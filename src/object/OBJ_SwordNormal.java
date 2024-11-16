@@ -22,6 +22,7 @@ public class OBJ_SwordNormal extends Entity{
         attackArea.width = 36;
         attackArea.height = 36;
         description = "[" + name + "]\n El machete de \nalgun abuelo...";
+        price = 20;
     }
     
 }

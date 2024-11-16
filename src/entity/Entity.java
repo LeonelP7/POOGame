@@ -10,6 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import util.UtilityTool;
@@ -24,7 +25,6 @@ public abstract class Entity {
 
     protected int worldX;
     protected int worldY;
-    
 
     //imagenes de la entidad
     protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
@@ -55,10 +55,11 @@ public abstract class Entity {
     protected boolean alive;
     protected boolean dying;
     protected boolean hpBarOn;
-    
+
     //vector de dialogos
     protected String dialogues[] = new String[20];
     protected int dialogueIndex = 0;
+    protected int maxDialogueIndex = 0;
 
     //Atributos de la entidad
     protected String name;
@@ -75,13 +76,16 @@ public abstract class Entity {
     protected int coin;
     protected Entity currentWeapon;
     protected Entity currentShield;
-    
+    protected ArrayList<Entity> inventory = new ArrayList<>();
+    protected final int maxInventorySize = 20;
+
     //atributos de objeto
     protected int attackValue;
     protected int defenseValue;
     protected String description;
     protected int value;
-    
+    protected int price;
+
     //tipo de entidad
     protected int type;
     protected final int type_player = 0;
@@ -92,8 +96,7 @@ public abstract class Entity {
     protected final int type_shield = 5;
     protected final int type_consumable = 6;
     protected final int type_pickUpOnly = 7;
-    
-    
+    protected final int type_obstacle = 8;
 
     public Entity(GamePanel gp) {
 
@@ -118,10 +121,10 @@ public abstract class Entity {
     }
 
     public Entity(GamePanel gp, int col, int row) {
-        
+
         this.gp = gp;
-        this.worldX = col*gp.getTileSize();
-        this.worldY = row*gp.getTileSize();
+        this.worldX = col * gp.getTileSize();
+        this.worldY = row * gp.getTileSize();
 
         //direccion por defecto
         direction = "down";
@@ -138,30 +141,64 @@ public abstract class Entity {
         hpBarOn = false;
         hpBarCounter = 0;
         description = "";
-        
+
     }
     
+    public int getLeftX(){
+        return worldX+solidArea.x;
+    }
     
+    public int getrightX(){
+        return worldX+solidArea.x+solidArea.width;
+    }
+    
+    public int getTopY(){
+        return worldY+solidArea.y;
+    }
+    
+    public int getBottomY(){
+       return worldY+solidArea.y+solidArea.height;
+    }
+    
+    public int getCol(){
+        return (worldX + solidArea.x)/gp.getTileSize();
+    }
+    
+    public int getRow(){
+        return (worldY + solidArea.y)/gp.getTileSize();
+    }
 
     public void setAction() {
     }
+
+    public void damageReaction() {
+
+    }
+
+    public boolean use(Entity entity) {
+        return false;
+    }
     
-    public void damageReaction(){
+    public void setItems(){
+        
+    }
+
+    public void checkDrop() {
+
+    }
+    
+    public void setItemValues(){
         
     }
     
-    public void use(Entity entity){
+    public void interact(){
         
     }
-    
-    public void checkDrop(){
-        
-    }
-    
-    public void dropItem(Entity droppedItem){
-        
+
+    public void dropItem(Entity droppedItem) {
+
         for (int i = 0; i < gp.getObj()[1].length; i++) {
-            if(gp.getObj()[gp.getCurrentMap()][i] == null){
+            if (gp.getObj()[gp.getCurrentMap()][i] == null) {
                 gp.getObj()[gp.getCurrentMap()][i] = droppedItem;
                 gp.getObj()[gp.getCurrentMap()][i].setWorldX(worldX);
                 gp.getObj()[gp.getCurrentMap()][i].setWorldY(worldY);
@@ -169,34 +206,34 @@ public abstract class Entity {
             }
         }
     }
-    
-    public Color getParticleColor(){
+
+    public Color getParticleColor() {
         Color color = null;
         return color;
     }
-    
-    public int getParticleSize(){
+
+    public int getParticleSize() {
         int size = 0;
         return size;
     }
-    
-    public int getParticleSpeed(){
+
+    public int getParticleSpeed() {
         int particleSpeed = 0;
         return particleSpeed;
     }
-    
-    public int getParticleMaxLife(){
+
+    public int getParticleMaxLife() {
         int maxLife = 0;
         return maxLife;
     }
-    
-    public void generateParticle(Entity generator, Entity target){
-        
+
+    public void generateParticle(Entity generator, Entity target) {
+
         Color color = generator.getParticleColor();
         int size = generator.getParticleSize();
         int speed = generator.getParticleSpeed();
         int maxLife = generator.getParticleMaxLife();
-        
+
         Particle p1 = new Particle(gp, target, color, size, speed, maxLife, -2, -1);
         Particle p2 = new Particle(gp, target, color, size, speed, maxLife, 2, -1);
         Particle p3 = new Particle(gp, target, color, size, speed, maxLife, -2, 1);
@@ -207,7 +244,7 @@ public abstract class Entity {
 
     public void speak() {
         if (dialogues[dialogueIndex] == null) {
-            dialogueIndex = 4;
+            dialogueIndex = maxDialogueIndex;
         }
 
         gp.getUi().setCurrentDialogue(dialogues[dialogueIndex]);
@@ -245,14 +282,14 @@ public abstract class Entity {
 
             if (!gp.getPlayer().isInvincible()) {
                 gp.playSE(6);
-                
+
                 int damage = attack - gp.getPlayer().getDefense();
-                if(damage < 0){
+                if (damage < 0) {
                     damage = 0;
                 }
-                
-                gp.getPlayer().setLife(gp.getPlayer().getLife()-damage);
-                
+
+                gp.getPlayer().setLife(gp.getPlayer().getLife() - damage);
+
                 gp.getPlayer().setLife(gp.getPlayer().getLife() - 1);
                 gp.getPlayer().setInvincible(true);
             }
@@ -279,7 +316,7 @@ public abstract class Entity {
 
         //esto hace que el sprite cambie cada 12 frames
         spriteCounter++;
-        if (spriteCounter > 12) {
+        if (spriteCounter > 24) {
             if (spriteNum == 1) {
                 spriteNum = 2;
             } else if (spriteNum == 2) {
@@ -347,20 +384,20 @@ public abstract class Entity {
 
             //barra de vida para los monstruos
             if (type == 2 && hpBarOn) {
-                double oneScale = (double)gp.getTileSize()/maxLife;
-                double hpBarValue = oneScale*life;
-                
-                g2.setColor(new Color(35,35,35));
-                g2.fillRect(screenX-1, screenY-16, gp.getTileSize()+2, 12);
-                
+                double oneScale = (double) gp.getTileSize() / maxLife;
+                double hpBarValue = oneScale * life;
+
+                g2.setColor(new Color(35, 35, 35));
+                g2.fillRect(screenX - 1, screenY - 16, gp.getTileSize() + 2, 12);
+
                 g2.setColor(new Color(255, 0, 30));
-                g2.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
-                
+                g2.fillRect(screenX, screenY - 15, (int) hpBarValue, 10);
+
                 hpBarCounter++;
-                if (hpBarCounter > 300 ) {
+                if (hpBarCounter > 300) {
                     hpBarCounter = 0;
                     hpBarOn = false;
-                    
+
                 }
             }
 
@@ -414,7 +451,7 @@ public abstract class Entity {
         }
 
         if (dyingCounter > i * 8) {
-            
+
             alive = false;
         }
 
@@ -438,6 +475,48 @@ public abstract class Entity {
         return image;
     }
 
+    
+    /**
+     * Metodo para revisar los objetos que una entidad tiene a su al rededor
+     * @param user entidad de la que se quiere revisar sus alrededores
+     * @param target arreglo de dos dimensiones, en la que se encuentra el objeto que se quiere saber si esta cerca
+     * @param targetName nombre del objeto que se quiere saber si esta cerca
+     * @return id del objeto si lo encuentra, 999 si no
+     */
+    public int getDetected(Entity user, Entity target[][], String targetName){
+        int index = 999;
+        
+        //revisar los objetos circundantes
+        int nextWorldX = user.getLeftX();
+        int nextWorldY = user.getTopY();
+        
+        switch(user.getDirection()){
+            case "up": nextWorldY = user.getTopY()-1; break;
+            case "down": nextWorldY = user.getBottomY()+1; break;
+            case "left": nextWorldX = user.getLeftX()-1; break;
+            case "right": nextWorldX = user.getrightX()+1; break;
+        }
+        
+        int col = nextWorldX/gp.getTileSize();
+        int row = nextWorldY/gp.getTileSize();
+        
+        for (int i = 0; i < target[1].length; i++) {
+            if (target[gp.getCurrentMap()][i] != null) {
+                if (target[gp.getCurrentMap()][i].getCol() == col &&
+                        target[gp.getCurrentMap()][i].getRow() == row &&
+                        target[gp.getCurrentMap()][i].getName().equalsIgnoreCase(targetName)) {
+                    
+                    index = i;
+                    break;
+                }
+            }
+        }
+        
+        return index;
+    }
+    
+    
+    //GETTERS Y SETTERS
     public String getDirection() {
         return direction;
     }
@@ -861,7 +940,26 @@ public abstract class Entity {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    
 
+    public ArrayList<Entity> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(ArrayList<Entity> inventory) {
+        this.inventory = inventory;
+    }
+
+    public int getMaxInventorySize() {
+        return maxInventorySize;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    
 }

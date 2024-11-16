@@ -18,6 +18,10 @@ public class NPC_OldMan extends Entity {
         super(gp);
         direction = "down";
         speed = 1;
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
         solidArea.width=32;
         solidArea.height = 32;
         
@@ -45,13 +49,9 @@ public class NPC_OldMan extends Entity {
         dialogues[2] = "Asumo que has venido en \nbusqueda de tesoros patatudo.";
         dialogues[3] = "Yo una vez tuve un sueño similar... \nhasta que me dio una flecha en la rodilla.";
         dialogues[4] = "Buena suerte entonces cabeza de chorlito!";
+        
+        maxDialogueIndex = 4;
 
-    }
-
-    @Override
-    public void speak() {
-
-        super.speak();
     }
 
     @Override

@@ -4,6 +4,7 @@
  */
 package main;
 
+import entity.NPC_Merchant;
 import entity.NPC_OldMan;
 import monster.MON_GreenSlime;
 import object.OBJ_Axe;
@@ -22,6 +23,12 @@ import tiles_interactive.IT_DryTree;
  */
 public class AssetSetter {
 
+    /*
+    para calcular facilmente la fila y la columna viendo desde el ide
+    rowEvento = rowIde-1
+    colEvento = colIde/3 - 1
+     */
+    
     private GamePanel gp;
 
     public AssetSetter(GamePanel gp) {
@@ -48,15 +55,30 @@ public class AssetSetter {
         i++;
         gp.getObj()[mapNum][i] = new OBJ_Heart(gp,22,29);
         i++;
+        gp.getObj()[mapNum][i] = new OBJ_Door(gp,14,28);
+        i++;
+        gp.getObj()[mapNum][i] = new OBJ_Door(gp,12,12);
+        i++;
+        gp.getObj()[mapNum][i] = new OBJ_Chest(gp,30,29,new OBJ_Key(gp));
+        i++;
     }
     
     public void setNPC(){
         
         int mapNum = 0;
+        int i = 0;
         
-        gp.getNpc()[mapNum][0] = new NPC_OldMan(gp);
-        gp.getNpc()[mapNum][0].setWorldX(gp.getTileSize()*21);
-        gp.getNpc()[mapNum][0].setWorldY(gp.getTileSize()*21);
+        gp.getNpc()[mapNum][i] = new NPC_OldMan(gp);
+        gp.getNpc()[mapNum][i].setWorldX(gp.getTileSize()*21);
+        gp.getNpc()[mapNum][i].setWorldY(gp.getTileSize()*21);
+        i++;
+        
+        //mapa 2
+        mapNum = 1;
+        i = 0;
+        gp.getNpc()[mapNum][i] = new NPC_Merchant(gp,12,7);
+        i++;
+        
     }
 
     public void setMoster(){

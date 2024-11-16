@@ -80,6 +80,8 @@ public class GamePanel extends JPanel implements Runnable {
     private final int characterState = 4;
     private final int optionState = 5;
     private final int gameOverState = 6;
+    private final int transitionState = 7;
+    private final int tradeState = 8;
 
     public GamePanel() {
 
@@ -573,6 +575,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setCurrentMap(int currentMap) {
         this.currentMap = currentMap;
+    }
+
+    public int getTransitionState() {
+        return transitionState;
+    }
+
+    public int getTradeState() {
+        return tradeState;
     }
 
     

@@ -19,6 +19,12 @@ import util.UtilityTool;
  * @author ASUS TUF
  */
 public class TileManager {
+    
+    /*
+    para calcular facilmente la fila y la columna viendo desde el ide
+    rowEvento = rowIde-1
+    colEvento = colIde/3 - 1
+     */
 
     private GamePanel gp;
     //array que contiene los distintos tipos de tiles

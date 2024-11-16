@@ -19,4 +19,6 @@ public class OBJ_Boots extends Entity{
         down1 = setUp("/objects/boots",gp.getTileSize(),gp.getTileSize());
     }
     
+    
+    
 }

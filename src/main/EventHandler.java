@@ -4,6 +4,8 @@
  */
 package main;
 
+import entity.Entity;
+
 /**
  *
  * @author ASUS TUF
@@ -12,6 +14,7 @@ public class EventHandler {
 
     private GamePanel gp;
     private EventRect eventRect[][][];
+    private int tempMap, tempCol, tempRow;
 
     //variables para condicionar a un evento a no ocurrir repetidamente
     private int previousEventX, previousEventY;
@@ -63,14 +66,16 @@ public class EventHandler {
         }
 
         if (canTouchEvent) {
-            if (hit(0,27, 16, "right") == true) {
+            if (hit(0, 27, 16, "right") == true) {
                 damagePit(gp.getDialogueState());
-            } else if (hit(0,23, 12, "up")) {
+            } else if (hit(0, 23, 12, "up")) {
                 healingPool(gp.getDialogueState());
-            }else if(hit(0,10,39,"any")){
-                teleport(1,12,13);
-            }else if(hit(1,12,13,"any")){
-                teleport(0,10,39);
+            } else if (hit(0, 10, 39, "any")) {
+                teleport(1, 12, 13);
+            } else if (hit(1, 12, 13, "any")) {
+                teleport(0, 10, 39);
+            } else if (hit(1, 12, 9, "up")) {
+                speak(gp.getNpc()[1][0]);
             }
         }
 
@@ -136,16 +141,24 @@ public class EventHandler {
         }
 
     }
-    
-    public void teleport(int map, int col, int row){
-         
+
+    public void teleport(int map, int col, int row) {
+
+        gp.setGameState(gp.getTransitionState());
         gp.setCurrentMap(map);
-        gp.getPlayer().setWorldX(gp.getTileSize()*col);
-        gp.getPlayer().setWorldY(gp.getTileSize()*row);
-        previousEventX = gp.getPlayer().getWorldX();
-        previousEventY = gp.getPlayer().getWorldY();
+        tempMap = map;
+        tempCol = col;
+        tempRow = row;
         canTouchEvent = false;
         gp.playSE(11);
+    }
+
+    public void speak(Entity entity) {
+        if (gp.getKeyH().isEnterPressed()) {
+            gp.setGameState(gp.getDialogueState());
+            gp.getPlayer().setAttackCancel(true);
+            entity.speak();
+        }
     }
 
     //GETTERS Y SETTERS
@@ -155,6 +168,46 @@ public class EventHandler {
 
     public void setGp(GamePanel gp) {
         this.gp = gp;
+    }
+
+    public int getTempMap() {
+        return tempMap;
+    }
+
+    public void setTempMap(int tempMap) {
+        this.tempMap = tempMap;
+    }
+
+    public int getTempCol() {
+        return tempCol;
+    }
+
+    public void setTempCol(int tempCol) {
+        this.tempCol = tempCol;
+    }
+
+    public int getTempRow() {
+        return tempRow;
+    }
+
+    public void setTempRow(int tempRow) {
+        this.tempRow = tempRow;
+    }
+
+    public int getPreviousEventX() {
+        return previousEventX;
+    }
+
+    public void setPreviousEventX(int previousEventX) {
+        this.previousEventX = previousEventX;
+    }
+
+    public int getPreviousEventY() {
+        return previousEventY;
+    }
+
+    public void setPreviousEventY(int previousEventY) {
+        this.previousEventY = previousEventY;
     }
 
 }

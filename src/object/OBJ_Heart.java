@@ -38,10 +38,11 @@ public class OBJ_Heart extends Entity{
     }
 
     @Override
-    public void use(Entity entity) {
+    public boolean use(Entity entity) {
         gp.playSE(2);
         gp.getUi().addMessage("Vida + " + value);
         entity.setLife(entity.getLife()+value);
+        return true;
     }
     
      

@@ -22,9 +22,10 @@ public class OBJ_CoinBronze extends Entity{
     }
     
     @Override
-    public void use(Entity entity){
+    public boolean use(Entity entity){
         gp.playSE(1);
         gp.getUi().addMessage("Pesos + " + value);
         gp.getPlayer().setCoin(gp.getPlayer().getCoin()+value);
+        return true;
     }
 }
