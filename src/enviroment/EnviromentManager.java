@@ -22,7 +22,11 @@ public class EnviromentManager {
     
     public void setup(){
         
-        lighting = new Lighting(gp, 500);
+        lighting = new Lighting(gp);
+    }
+    
+    public void update(){
+        lighting.update();
     }
     
     public void draw(Graphics2D g2){

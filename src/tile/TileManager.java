@@ -26,11 +26,11 @@ public class TileManager {
     colEvento = colIde/3 - 1
      */
 
-    private GamePanel gp;
+    protected GamePanel gp;
     //array que contiene los distintos tipos de tiles
-    private Tile[] tile;
+    protected Tile[] tile;
 
-    private int mapTileNum[][][];
+    protected int mapTileNum[][][];
 
     public TileManager(GamePanel gp) {
         this.gp = gp;

@@ -26,6 +26,9 @@ public class Player extends Entity {
     //contador para actualizar el sprite si se queda quieto el personaje
     private int standCounter;
     private boolean attackCancel;
+    
+    //iluminacion
+    private boolean lightUpdated;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -42,6 +45,8 @@ public class Player extends Entity {
         solidArea.height = 32;
 
         attackCancel = false;
+        
+        lightUpdated = false;
 
         setDefaultValues();
         getPlayerImage();
@@ -437,6 +442,16 @@ public class Player extends Entity {
                 defense = getTotalDefense();
             }
 
+            if(selectedItem.type == type_light){
+                if (currentLight == selectedItem) {
+                    currentLight = null;
+                }
+                else{
+                    currentLight = selectedItem;
+                }
+                lightUpdated = true;
+            }
+            
             if (selectedItem.type == type_consumable) {
                 if(selectedItem.use(this)){
                     
@@ -618,4 +633,13 @@ public class Player extends Entity {
         this.attackCancel = attackCancel;
     }
 
+    public boolean isLightUpdated() {
+        return lightUpdated;
+    }
+
+    public void setLightUpdated(boolean lightUpdated) {
+        this.lightUpdated = lightUpdated;
+    }
+
+    
 }

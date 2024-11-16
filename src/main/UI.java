@@ -858,9 +858,10 @@ public class UI {
         //dibujar items del jugador
         for (int i = 0; i < entity.getInventory().size(); i++) {
 
-            //cursor para equipar
+            //cursor de equipamiento
             if (entity.getInventory().get(i) == entity.getCurrentWeapon()
-                    || entity.getInventory().get(i) == entity.getCurrentShield()) {
+                    || entity.getInventory().get(i) == entity.getCurrentShield() ||
+                    entity.getInventory().get(i) == entity.getCurrentLight()) {
                 g2.setColor(new Color(240, 190, 90));
                 g2.fillRoundRect(slotX, slotY, gp.getTileSize(), gp.getTileSize(),
                         10, 10);
@@ -1062,4 +1063,5 @@ public class UI {
         this.npcSlotRow = npcSlotRow;
     }
 
+    
 }

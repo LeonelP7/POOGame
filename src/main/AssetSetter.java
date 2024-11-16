@@ -13,6 +13,7 @@ import object.OBJ_Chest;
 import object.OBJ_Door;
 import object.OBJ_Heart;
 import object.OBJ_Key;
+import object.OBJ_Lantern;
 import object.OBJ_PotionRed;
 import object.OBJ_ShieldBlue;
 import tiles_interactive.IT_DryTree;
@@ -60,6 +61,8 @@ public class AssetSetter {
         gp.getObj()[mapNum][i] = new OBJ_Door(gp,12,12);
         i++;
         gp.getObj()[mapNum][i] = new OBJ_Chest(gp,30,29,new OBJ_Key(gp));
+        i++;
+        gp.getObj()[mapNum][i] = new OBJ_Lantern(gp,18,20);
         i++;
     }
     

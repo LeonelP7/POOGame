@@ -78,6 +78,7 @@ public abstract class Entity {
     protected Entity currentShield;
     protected ArrayList<Entity> inventory = new ArrayList<>();
     protected final int maxInventorySize = 20;
+    protected Entity currentLight;
 
     //atributos de objeto
     protected int attackValue;
@@ -87,6 +88,7 @@ public abstract class Entity {
     protected int price;
     protected boolean stackeable = false;
     protected int amount = 1;
+    protected int lightRadius;
 
     //tipo de entidad
     protected int type;
@@ -99,6 +101,7 @@ public abstract class Entity {
     protected final int type_consumable = 6;
     protected final int type_pickUpOnly = 7;
     protected final int type_obstacle = 8;
+    protected final int type_light = 9;
 
     public Entity(GamePanel gp) {
 
@@ -977,6 +980,38 @@ public abstract class Entity {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public Entity getCurrentLight() {
+        return currentLight;
+    }
+
+    public void setCurrentLight(Entity currentLight) {
+        this.currentLight = currentLight;
+    }
+
+    public int getLightRadius() {
+        return lightRadius;
+    }
+
+    public void setLightRadius(int lightRadius) {
+        this.lightRadius = lightRadius;
+    }
+
+    public int getMaxDialogueIndex() {
+        return maxDialogueIndex;
+    }
+
+    public void setMaxDialogueIndex(int maxDialogueIndex) {
+        this.maxDialogueIndex = maxDialogueIndex;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 
     

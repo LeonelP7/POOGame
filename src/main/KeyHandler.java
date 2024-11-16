@@ -62,6 +62,10 @@ public class KeyHandler implements KeyListener {
         else if (gp.getGameState() == gp.getTradeState()) {
             tradeState(code);
 
+        }//Estado: mapa
+        else if (gp.getGameState() == gp.getMapState()) {
+            mapState(code);
+
         }
     }
 
@@ -117,6 +121,17 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_ESCAPE) {
             gp.setGameState(gp.getOptionState());
+        }
+        if (code == KeyEvent.VK_M) {
+            gp.setGameState(gp.getMapState());
+        }
+        if (code == KeyEvent.VK_X) {
+            if (gp.getMap().isMiniMapOn()) {
+                gp.getMap().setMiniMapOn(false);
+            }
+            else{
+                gp.getMap().setMiniMapOn(true);
+            }
         }
         //debug
         if (code == KeyEvent.VK_T) {
@@ -293,6 +308,12 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.getUi().setSubState(0);
             }
+        }
+    }
+    
+    public void mapState(int code){
+        if(code == KeyEvent.VK_M){
+            gp.setGameState(gp.getPlayState());
         }
     }
     

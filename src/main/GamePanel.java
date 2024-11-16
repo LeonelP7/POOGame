@@ -16,6 +16,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JPanel;
+import tile.Map;
 import tile.TileManager;
 import tiles_interactive.InteractiveTile;
 
@@ -62,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
     private UI ui = new UI(this);
     private Config config = new Config(this);
     private EnviromentManager eManager = new EnviromentManager(this);
+    private Map map = new Map(this);
     private Thread gameThread;
     
 
@@ -85,6 +87,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final int gameOverState = 6;
     private final int transitionState = 7;
     private final int tradeState = 8;
+    private final int mapState = 9;
 
     public GamePanel() {
 
@@ -230,6 +233,8 @@ public class GamePanel extends JPanel implements Runnable {
                     iTile[currentMap][i].update();
                 }
             }
+            
+            eManager.update();
         }
         if (gameState == pauseState) {
             //nada por ahora
@@ -260,7 +265,13 @@ public class GamePanel extends JPanel implements Runnable {
         if (gameState == titleState) {
 
             ui.draw(g2);
-        } //OTROS
+        }
+        //ESTADO: MAPA
+        else if(gameState == mapState){
+            map.drawFullMapScreen(g2);
+        }
+        
+        //OTROS
         else {
 
             //dibuja los Tiles en pantalla
@@ -310,6 +321,9 @@ public class GamePanel extends JPanel implements Runnable {
 
             //dibuja el entorno
             eManager.draw(g2);
+            
+            //dibuja el minimapa
+            map.drawMiniMap(g2);
             
             //dibuja la UI
             ui.draw(g2);
@@ -598,6 +612,18 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void seteManager(EnviromentManager eManager) {
         this.eManager = eManager;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
+
+    public int getMapState() {
+        return mapState;
     }
 
     
