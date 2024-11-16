@@ -7,6 +7,7 @@ package main;
 import util.ComparatorByWorldY;
 import entity.Entity;
 import entity.Player;
+import enviroment.EnviromentManager;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -59,8 +60,10 @@ public class GamePanel extends JPanel implements Runnable {
     private AssetSetter aSetter = new AssetSetter(this);
     private EventHandler eHandler = new EventHandler(this);
     private UI ui = new UI(this);
-    private Thread gameThread;
     private Config config = new Config(this);
+    private EnviromentManager eManager = new EnviromentManager(this);
+    private Thread gameThread;
+    
 
     //Entidad y objetos
     private Player player = new Player(this, keyH);
@@ -104,6 +107,7 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setNPC();
         aSetter.setMoster();
         aSetter.setInteractiveTile();
+        eManager.setup();
 
         //reproduce BlueBoyAdveture.wav
         //playMusic(0);
@@ -304,6 +308,9 @@ public class GamePanel extends JPanel implements Runnable {
             }
             entityList.clear();
 
+            //dibuja el entorno
+            eManager.draw(g2);
+            
             //dibuja la UI
             ui.draw(g2);
         }
@@ -583,6 +590,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     public int getTradeState() {
         return tradeState;
+    }
+
+    public EnviromentManager geteManager() {
+        return eManager;
+    }
+
+    public void seteManager(EnviromentManager eManager) {
+        this.eManager = eManager;
     }
 
     
