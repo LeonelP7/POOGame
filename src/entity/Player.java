@@ -89,9 +89,10 @@ public class Player extends Entity {
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Axe(gp));
+        canObtainItem(new OBJ_Axe(gp));
+        canObtainItem(new OBJ_Key(gp));
+        canObtainItem(new OBJ_Key(gp));
+        canObtainItem(new OBJ_Key(gp));
     }
 
     public int getTotalAttack() {
@@ -327,8 +328,7 @@ public class Player extends Entity {
             //Items que van al inventario
             else {
                 String text = "";
-                if (inventory.size() != maxInventorySize) {
-                    inventory.add(gp.getObj()[gp.getCurrentMap()][i]);
+                if (canObtainItem(gp.getObj()[gp.getCurrentMap()][i])) {
                     gp.playSE(1);
                     text = "Recogiste " + gp.getObj()[gp.getCurrentMap()][i].getName() + "!";
                     gp.getObj()[gp.getCurrentMap()][i] = null;
@@ -439,12 +439,62 @@ public class Player extends Entity {
 
             if (selectedItem.type == type_consumable) {
                 if(selectedItem.use(this)){
-                    inventory.remove(itemIndex);
+                    
+                    if (selectedItem.getAmount() > 1) {
+                        selectedItem.setAmount(selectedItem.getAmount()-1);
+                    }
+                    else {
+                        inventory.remove(itemIndex);
+                    }
                 }   
             }
         }
     }
+    
+    public int searchItemInInventory(String itemName){
+        
+        int itemIndex = 999;
+        for (int i = 0; i < inventory.size(); i++) {
+            
+            if (inventory.get(i).getName().equalsIgnoreCase(itemName)) {
+                itemIndex = i;
+                break;
+            }
+        }
+        
+        return itemIndex;
+    }
 
+    public boolean canObtainItem(Entity item){
+        
+        boolean canObtain = false;
+        
+        //revisa si es stackeable (apilable)
+        if (item.isStackeable()) {
+            int index = searchItemInInventory(item.getName());
+            
+            //revisa si el item ya esta en el inventario
+            if(index != 999){
+                inventory.get(index).setAmount(inventory.get(index).getAmount()+1);
+                canObtain = true;
+            }
+            else {
+                if (inventory.size() != maxInventorySize) {
+                    inventory.add(item);
+                    canObtain = true;
+                }
+            }
+        }
+        else {//si no es stackeable entonces vemos si hay espacio en el inventario
+            if (inventory.size() != maxInventorySize) {
+                    inventory.add(item);
+                    canObtain = true;
+                }
+        }
+        
+        return canObtain;
+    }
+    
     @Override
     public void draw(Graphics2D g2) {
 //        g2.setColor(Color.white);

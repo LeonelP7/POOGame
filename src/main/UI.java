@@ -419,29 +419,28 @@ public class UI {
             width = (int) (gp.getTileSize() * 2.5);
             height = gp.getTileSize();
             drawSubWindow(x, y, width, height);
-            g2.drawImage(coin, x+10, y+7, 32, 32, null);
-            
+            g2.drawImage(coin, x + 10, y + 7, 32, 32, null);
+
             int price = npc.getInventory().get(itemIndex).getPrice();
-            String text = ""+price;
-            x = getXForAlignToRightText(text, (gp.getTileSize()*8)-20);
-            g2.drawString(text, x, y+32);
-            
+            String text = "" + price;
+            x = getXForAlignToRightText(text, (gp.getTileSize() * 8) - 20);
+            g2.drawString(text, x, y + 32);
+
             //comprar un objeto
-            if(gp.getKeyH().isEnterPressed()){
-                if(npc.getInventory().get(itemIndex).getPrice() > gp.getPlayer().getCoin()){
+            if (gp.getKeyH().isEnterPressed()) {
+                if (npc.getInventory().get(itemIndex).getPrice() > gp.getPlayer().getCoin()) {
                     subState = 0;
                     gp.setGameState(gp.getDialogueState());
                     currentDialogue = "Te falta plata pelao!";
-                }
-                else if(gp.getPlayer().getInventory().size() == gp.getPlayer().getMaxInventorySize()){
-                    subState = 0;
-                    gp.setGameState(gp.getDialogueState());
-                    currentDialogue = "No puedes llevar mas!";
-                }
-                else{
-                    gp.getPlayer().setCoin(gp.getPlayer().getCoin()-npc.getInventory().get(itemIndex).getPrice());
-                    gp.getPlayer().getInventory().add(npc.getInventory().get(itemIndex));
-                    gp.playSE(1);
+                } else {
+                    if (gp.getPlayer().canObtainItem(npc.getInventory().get(itemIndex))) {
+                        gp.getPlayer().setCoin(gp.getPlayer().getCoin() - npc.getInventory().get(itemIndex).getPrice());
+                        gp.playSE(1);
+                    } else {
+                        subState = 0;
+                        gp.setGameState(gp.getDialogueState());
+                        currentDialogue = "No puedes llevar mas!";
+                    }
                 }
             }
         }
@@ -449,10 +448,10 @@ public class UI {
     }
 
     public void trade_sell() {
-        
+
         //dibuja el inventario del jugador
         drawInventory(gp.getPlayer(), true);
-        
+
         //dibuja ventana de sugerencia 
         int x = gp.getTileSize() * 2;
         int y = gp.getTileSize() * 9;
@@ -478,25 +477,29 @@ public class UI {
             width = (int) (gp.getTileSize() * 2.5);
             height = gp.getTileSize();
             drawSubWindow(x, y, width, height);
-            g2.drawImage(coin, x+10, y+7, 32, 32, null);
-            
-            int price = gp.getPlayer().getInventory().get(itemIndex).getPrice()/2;
-            String text = ""+price;
-            x = getXForAlignToRightText(text, (gp.getTileSize()*18)-20);
-            g2.drawString(text, x, y+32);
-            
-            //comprar un objeto
-            if(gp.getKeyH().isEnterPressed()){
-                if(gp.getPlayer().getInventory().get(itemIndex) == gp.getPlayer().getCurrentWeapon() ||
-                        gp.getPlayer().getInventory().get(itemIndex) == gp.getPlayer().getCurrentShield()){
+            g2.drawImage(coin, x + 10, y + 7, 32, 32, null);
+
+            int price = gp.getPlayer().getInventory().get(itemIndex).getPrice() / 2;
+            String text = "" + price;
+            x = getXForAlignToRightText(text, (gp.getTileSize() * 18) - 20);
+            g2.drawString(text, x, y + 32);
+
+            //vender un objeto
+            if (gp.getKeyH().isEnterPressed()) {
+                if (gp.getPlayer().getInventory().get(itemIndex) == gp.getPlayer().getCurrentWeapon()
+                        || gp.getPlayer().getInventory().get(itemIndex) == gp.getPlayer().getCurrentShield()) {
                     commandNumber = 0;
                     subState = 0;
                     gp.setGameState(gp.getDialogueState());
                     currentDialogue = "No puedes vender un objeto equipado";
-                }
-                else{
-                    gp.getPlayer().getInventory().remove(itemIndex);
-                    gp.getPlayer().setCoin(gp.getPlayer().getCoin()+price);
+                } else {
+                    if(gp.getPlayer().getInventory().get(itemIndex).getAmount() > 1){
+                        gp.getPlayer().getInventory().get(itemIndex).setAmount(gp.getPlayer().getInventory().get(itemIndex).getAmount()-1);
+                    }
+                    else{
+                        gp.getPlayer().getInventory().remove(itemIndex);
+                    }
+                    gp.getPlayer().setCoin(gp.getPlayer().getCoin() + price);
                     gp.playSE(1);
                 }
             }
@@ -865,6 +868,25 @@ public class UI {
 
             g2.drawImage(entity.getInventory().get(i).getDown1(),
                     slotX, slotY, null);
+
+            if (entity== gp.getPlayer() && entity.getInventory().get(i).getAmount() > 1) {
+                g2.setFont(g2.getFont().deriveFont(32f));
+                int amountX;
+                int amountY;
+
+                String s = "" + entity.getInventory().get(i).getAmount();
+                amountX = getXForAlignToRightText(s, slotX + 44);
+                amountY = slotY + gp.getTileSize();
+
+                //sombra de la cantidad
+                g2.setColor(new Color(60, 60, 60));
+                g2.drawString(s, amountX, amountY);
+
+                //cantidad
+                g2.setColor(Color.WHITE);
+                g2.drawString(s, amountX - 3, amountY - 3);
+            }
+
             slotX += slotSize;
 
             if (i == 4 || i == 9 || i == 14) {

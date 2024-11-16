@@ -57,12 +57,11 @@ public class OBJ_Chest extends Entity{
             StringBuilder sb = new StringBuilder();
             sb.append("Abres el cofre y encuentras " + loot.getName() + "!");
             
-            if(gp.getPlayer().getInventory().size() == gp.getPlayer().getMaxInventorySize()){
+            if(!gp.getPlayer().canObtainItem(loot)){
                 sb.append("\n...Pero ya no puedes llevar mas!");
             }
             else {
                 sb.append("\nHas obtenido " + loot.getName() + "!");
-                gp.getPlayer().getInventory().add(loot);
                 down1 = image2;
                 opened = true;
             }

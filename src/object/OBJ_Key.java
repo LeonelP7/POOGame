@@ -35,6 +35,7 @@ public class OBJ_Key extends Entity{
         down1 = setUp("/objects/key",gp.getTileSize(),gp.getTileSize());
         description = "[" + name + "]\n Pa´ abrir las \npuertas de tu corazon.";
         price = 10;
+        stackeable = true;
     }
 
     @Override

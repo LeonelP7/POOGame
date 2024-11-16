@@ -85,6 +85,8 @@ public abstract class Entity {
     protected String description;
     protected int value;
     protected int price;
+    protected boolean stackeable = false;
+    protected int amount = 1;
 
     //tipo de entidad
     protected int type;
@@ -961,5 +963,22 @@ public abstract class Entity {
         this.price = price;
     }
 
+    public boolean isStackeable() {
+        return stackeable;
+    }
+
+    public void setStackeable(boolean stackeable) {
+        this.stackeable = stackeable;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    
     
 }

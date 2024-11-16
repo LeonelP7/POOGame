@@ -31,6 +31,7 @@ public class OBJ_PotionRed extends Entity{
         down1 = setUp("/objects/potion_red", gp.getTileSize(), gp.getTileSize());
         description = "["+name+"]"+"\nTomémonos un tinto...\nSana 2.5 corazones.";
         price = 15;
+        stackeable = true;
     }
     
     @Override
