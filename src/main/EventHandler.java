@@ -135,9 +135,10 @@ public class EventHandler {
         if (gp.getKeyH().isEnterPressed()) {
             gp.setGameState(gameState);
             gp.getPlayer().setAttackCancel(true);
-            gp.getUi().setCurrentDialogue("Haz recuperado salud! :)");
+            gp.getUi().setCurrentDialogue("Haz recuperado salud! :)\nTu progreso se ha guardado");
             gp.getPlayer().setLife(gp.getPlayer().getMaxLife());
             gp.getaSetter().setMoster();
+            gp.getSaveLoad().save();
         }
 
     }

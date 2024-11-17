@@ -89,6 +89,8 @@ public abstract class Entity {
     protected boolean stackeable = false;
     protected int amount = 1;
     protected int lightRadius;
+    protected Entity loot;
+    protected boolean opened = false;
 
     //tipo de entidad
     protected int type;
@@ -148,29 +150,29 @@ public abstract class Entity {
         description = "";
 
     }
-    
-    public int getLeftX(){
-        return worldX+solidArea.x;
+
+    public int getLeftX() {
+        return worldX + solidArea.x;
     }
-    
-    public int getrightX(){
-        return worldX+solidArea.x+solidArea.width;
+
+    public int getrightX() {
+        return worldX + solidArea.x + solidArea.width;
     }
-    
-    public int getTopY(){
-        return worldY+solidArea.y;
+
+    public int getTopY() {
+        return worldY + solidArea.y;
     }
-    
-    public int getBottomY(){
-       return worldY+solidArea.y+solidArea.height;
+
+    public int getBottomY() {
+        return worldY + solidArea.y + solidArea.height;
     }
-    
-    public int getCol(){
-        return (worldX + solidArea.x)/gp.getTileSize();
+
+    public int getCol() {
+        return (worldX + solidArea.x) / gp.getTileSize();
     }
-    
-    public int getRow(){
-        return (worldY + solidArea.y)/gp.getTileSize();
+
+    public int getRow() {
+        return (worldY + solidArea.y) / gp.getTileSize();
     }
 
     public void setAction() {
@@ -183,21 +185,21 @@ public abstract class Entity {
     public boolean use(Entity entity) {
         return false;
     }
-    
-    public void setItems(){
-        
+
+    public void setItems() {
+
     }
 
     public void checkDrop() {
 
     }
-    
-    public void setItemValues(){
-        
+
+    public void setItemValues() {
+
     }
-    
-    public void interact(){
-        
+
+    public void interact() {
+
     }
 
     public void dropItem(Entity droppedItem) {
@@ -480,47 +482,55 @@ public abstract class Entity {
         return image;
     }
 
-    
     /**
      * Metodo para revisar los objetos que una entidad tiene a su al rededor
+     *
      * @param user entidad de la que se quiere revisar sus alrededores
-     * @param target arreglo de dos dimensiones, en la que se encuentra el objeto que se quiere saber si esta cerca
+     * @param target arreglo de dos dimensiones, en la que se encuentra el
+     * objeto que se quiere saber si esta cerca
      * @param targetName nombre del objeto que se quiere saber si esta cerca
      * @return id del objeto si lo encuentra, 999 si no
      */
-    public int getDetected(Entity user, Entity target[][], String targetName){
+    public int getDetected(Entity user, Entity target[][], String targetName) {
         int index = 999;
-        
+
         //revisar los objetos circundantes
         int nextWorldX = user.getLeftX();
         int nextWorldY = user.getTopY();
-        
-        switch(user.getDirection()){
-            case "up": nextWorldY = user.getTopY()-1; break;
-            case "down": nextWorldY = user.getBottomY()+1; break;
-            case "left": nextWorldX = user.getLeftX()-1; break;
-            case "right": nextWorldX = user.getrightX()+1; break;
+
+        switch (user.getDirection()) {
+            case "up":
+                nextWorldY = user.getTopY() - gp.getPlayer().getSpeed();
+                break;
+            case "down":
+                nextWorldY = user.getBottomY() + gp.getPlayer().getSpeed();
+                break;
+            case "left":
+                nextWorldX = user.getLeftX() - gp.getPlayer().getSpeed();
+                break;
+            case "right":
+                nextWorldX = user.getrightX() + gp.getPlayer().getSpeed();
+                break;
         }
-        
-        int col = nextWorldX/gp.getTileSize();
-        int row = nextWorldY/gp.getTileSize();
-        
+
+        int col = nextWorldX / gp.getTileSize();
+        int row = nextWorldY / gp.getTileSize();
+
         for (int i = 0; i < target[1].length; i++) {
             if (target[gp.getCurrentMap()][i] != null) {
-                if (target[gp.getCurrentMap()][i].getCol() == col &&
-                        target[gp.getCurrentMap()][i].getRow() == row &&
-                        target[gp.getCurrentMap()][i].getName().equalsIgnoreCase(targetName)) {
-                    
+                if (target[gp.getCurrentMap()][i].getCol() == col
+                        && target[gp.getCurrentMap()][i].getRow() == row
+                        && target[gp.getCurrentMap()][i].getName().equalsIgnoreCase(targetName)) {
+
                     index = i;
                     break;
                 }
             }
         }
-        
+
         return index;
     }
-    
-    
+
     //GETTERS Y SETTERS
     public String getDirection() {
         return direction;
@@ -625,6 +635,32 @@ public abstract class Entity {
     public void setLife(int life) {
         this.life = life;
     }
+
+    public void setDown1(BufferedImage down1) {
+        this.down1 = down1;
+    }
+
+    public void setDown2(BufferedImage down2) {
+        this.down2 = down2;
+    }
+
+    public void setLeft1(BufferedImage left1) {
+        this.left1 = left1;
+    }
+
+    public void setLeft2(BufferedImage left2) {
+        this.left2 = left2;
+    }
+
+    public void setRight1(BufferedImage right1) {
+        this.right1 = right1;
+    }
+
+    public void setRight2(BufferedImage right2) {
+        this.right2 = right2;
+    }
+    
+    
 
     public BufferedImage getUp1() {
         return up1;
@@ -1014,6 +1050,22 @@ public abstract class Entity {
         this.value = value;
     }
 
+    public Entity getLoot() {
+        return loot;
+    }
+
+    public void setLoot(Entity loot) {
+        this.loot = loot;
+    }
+
+    public boolean isOpened() {
+        return opened;
+    }
+
+    public void setOpened(boolean opened) {
+        this.opened = opened;
+    }
     
     
+
 }

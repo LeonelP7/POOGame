@@ -4,6 +4,7 @@
  */
 package main;
 
+import data.SaveLoad;
 import util.ComparatorByWorldY;
 import entity.Entity;
 import entity.Player;
@@ -64,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Config config = new Config(this);
     private EnviromentManager eManager = new EnviromentManager(this);
     private Map map = new Map(this);
+    private SaveLoad saveLoad = new SaveLoad(this);
     private Thread gameThread;
     
 
@@ -118,23 +120,23 @@ public class GamePanel extends JPanel implements Runnable {
         
     }
     
-    public void retry(){
+    public void retry(boolean restart){
         
         player.setDefaultPositions();
         player.restoreLife();
+        player.setLightUpdated(true);
         aSetter.setNPC();
         aSetter.setMoster();
         aSetter.setInteractiveTile();
+        if (restart) {
+            aSetter.setObject();
+            player.setItems();
+            player.setDefaultValues();
+            eManager.getLighting().resetDay();
+        }
+        
     }
     
-    public void restart(){
-        player.setDefaultValues();
-        player.setItems();
-        aSetter.setObject();
-        aSetter.setNPC();
-        aSetter.setMoster();
-        aSetter.setInteractiveTile();
-    }
 
     public void startGameThread() {
 
@@ -624,6 +626,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     public int getMapState() {
         return mapState;
+    }
+
+    public SaveLoad getSaveLoad() {
+        return saveLoad;
+    }
+
+    public void setSaveLoad(SaveLoad saveLoad) {
+        this.saveLoad = saveLoad;
     }
 
     

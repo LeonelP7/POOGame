@@ -32,4 +32,17 @@ public class EnviromentManager {
     public void draw(Graphics2D g2){
         lighting.draw(g2);
     }
+    
+    
+    
+    //GETTERS Y SETTERS
+
+    public Lighting getLighting() {
+        return lighting;
+    }
+
+    public void setLighting(Lighting lighting) {
+        this.lighting = lighting;
+    }
+    
 }

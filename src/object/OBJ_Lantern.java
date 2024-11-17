@@ -26,7 +26,7 @@ public class OBJ_Lantern extends Entity{
     @Override
     public void setItemValues() {
         type = type_light;
-        name = "Lantern";
+        name = "Linterna";
         down1 = setUp("/objects/lantern", gp.getTileSize(), gp.getTileSize());
         description = "["+name+"]"+"\nIlumina sonso";
         price = 80;

@@ -667,6 +667,7 @@ public class UI {
             if (gp.getKeyH().isEnterPressed()) {
                 subState = 0;
                 gp.setGameState(gp.getTitleState());
+                gp.retry(true);
                 gp.stopMusic();
             }
         }

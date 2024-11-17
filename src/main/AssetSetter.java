@@ -60,7 +60,8 @@ public class AssetSetter {
         i++;
         gp.getObj()[mapNum][i] = new OBJ_Door(gp,12,12);
         i++;
-        gp.getObj()[mapNum][i] = new OBJ_Chest(gp,30,29,new OBJ_Key(gp));
+        gp.getObj()[mapNum][i] = new OBJ_Chest(gp,30,29);
+        gp.getObj()[mapNum][i].setLoot(new OBJ_Key(gp));
         i++;
         gp.getObj()[mapNum][i] = new OBJ_Lantern(gp,18,20);
         i++;

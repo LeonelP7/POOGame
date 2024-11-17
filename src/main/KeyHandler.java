@@ -89,7 +89,10 @@ public class KeyHandler implements KeyListener {
                 gp.playMusic(0);
             }
             if (gp.getUi().getCommandNumber() == 1) {
-                //añadir luego
+                gp.getSaveLoad().load();
+                gp.setGameState(gp.getPlayState());
+                gp.playMusic(0);
+                
             }
             if (gp.getUi().getCommandNumber() == 2) {
                 System.exit(0);
@@ -263,11 +266,11 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_ENTER) {
             if (gp.getUi().getCommandNumber() == 0) {
                 gp.setGameState(gp.getPlayState());
-                gp.retry();
+                gp.retry(false);
                 gp.playMusic(0);
             } else if (gp.getUi().getCommandNumber() == 1) {
                 gp.setGameState(gp.getTitleState());
-                gp.restart();
+                gp.retry(true);
 
             }
         }

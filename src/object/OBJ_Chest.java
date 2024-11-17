@@ -13,18 +13,13 @@ import main.GamePanel;
  */
 public class OBJ_Chest extends Entity{
     
-    private Entity loot;
-    private boolean opened;
-    
-    public OBJ_Chest(GamePanel gp, Entity loot) {
+    public OBJ_Chest(GamePanel gp) {
         super(gp);
-        this.loot = loot;
         setItemValues();
     }
 
-    public OBJ_Chest(GamePanel gp, int col, int row, Entity loot) {
+    public OBJ_Chest(GamePanel gp, int col, int row) {
         super(gp, col, row);
-        this.loot = loot;
         setItemValues();
     }
     
