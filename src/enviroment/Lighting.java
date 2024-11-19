@@ -46,7 +46,7 @@ public class Lighting {
         Graphics2D g2 = (Graphics2D) darknessFilter.getGraphics();
         
         if (gp.getPlayer().getCurrentLight() == null) {
-            g2.setColor(new Color(0, 0, 1f, 0.98f));
+            g2.setColor(new Color(0, 0, 0.01f, 0.98f));
         } else {
             //Obtenemos el centro en "x" y el centro en "y" del circulo de luz
             int centerX = gp.getPlayer().getScreenX() + (gp.getTileSize()) / 2;
@@ -56,11 +56,11 @@ public class Lighting {
             Color color[] = new Color[5]; //colores para la graduacion
             float fraction[] = new float[5]; //distancia entre colores
             
-            color[0] = new Color(0, 0, 1f, 0f);
-            color[1] = new Color(0, 0, 1f, 0.25f);
-            color[2] = new Color(0, 0, 1f, 0.5f);
-            color[3] = new Color(0, 0, 1f, 0.75f);
-            color[4] = new Color(0, 0, 1f, 0.98f);
+            color[0] = new Color(0, 0, 0.01f, 0f);
+            color[1] = new Color(0, 0, 0.01f, 0.25f);
+            color[2] = new Color(0, 0, 0.01f, 0.5f);
+            color[3] = new Color(0, 0, 0.01f, 0.75f);
+            color[4] = new Color(0, 0, 0.01f, 0.98f);
 
             //estos dos arreglos tienen que ser del mismo tamaño
             fraction[0] = 0f;
