@@ -24,8 +24,8 @@ public class Sound {
     private float volume;
     
     public Sound() {
-        //soundURL[0] = getClass().getResource("/sound/pixsouls.wav");
-        soundURL[0] = getClass().getResource("/sound/deutschland.wav");
+        soundURL[0] = getClass().getResource("/sound/pixsouls.wav");
+        //soundURL[0] = getClass().getResource("/sound/deutschland.wav");
         soundURL[1] = getClass().getResource("/sound/coin.wav");
         soundURL[2] = getClass().getResource("/sound/powerup.wav");
         soundURL[3] = getClass().getResource("/sound/unlock.wav");
